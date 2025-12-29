@@ -1,0 +1,184 @@
+Xây dựng chức năng, thiết kế giao diện đẹp, hiện đại. Đây là mô tả trang chủ của tôi, 💡 Rất hay — bạn đang yêu cầu **xây dựng mô tả tổng thể giao diện trang chủ** cho **Tạp chí Nghiên cứu Khoa học Hậu cần Quân sự**, vừa mang tính học thuật – trang trọng, vừa thân thiện – hiện đại.
+Dưới đây là bản mô tả chi tiết **bố cục giao diện (UI layout + UX logic)** được tối ưu cho web tạp chí khoa học quân sự.
+
+---
+
+# 🏠 **MÔ TẢ GIAO DIỆN TRANG CHỦ TẠP CHÍ NGHIÊN CỨU KHOA HỌC HẬU CẦN QUÂN SỰ**
+
+---
+
+## 🎖️ **1. Phần đầu trang (Header & Banner)**
+
+### 🧱 Thành phần:
+
+* **Ảnh banner:**
+  Dùng hình bạn đã cung cấp (có logo Học viện, tên tạp chí, huy chương, song ngữ Việt – Anh).
+  👉 Đây là **yếu tố nhận diện thương hiệu học thuật & quân sự**.
+
+  * Kích thước khuyến nghị: ~1600×400px.
+  * Nền giữ nguyên sắc **cam – vàng nhạt** với họa tiết ngôi sao, giúp tạo độ trang trọng.
+
+* **Menu ngang:**
+  Ngay bên dưới banner, có **thanh menu màu xanh quân đội (#0b3b2e)**, chữ **trắng đậm**.
+  Các mục:
+
+  ```
+  TRANG CHỦ | GIỚI THIỆU | QUY TRÌNH XUẤT BẢN | SỐ MỚI NHẤT | LƯU TRỮ | GỬI BÀI | TIN TỨC | LIÊN HỆ
+  ```
+
+  * Góc phải: ô tìm kiếm + icon 🔍.
+  * Khi cuộn xuống, menu **cố định (sticky)** để truy cập nhanh.
+
+* **Dòng chữ chạy (marquee)**:
+  Ngay dưới menu, chạy ngang dòng:
+
+  ```
+  “Bài viết mới nhất: Ứng dụng AI trong bảo đảm kỹ thuật hậu cần | Đổi mới mô hình đào tạo sĩ quan tài chính | Kỷ niệm 80 năm Cách mạng tháng Tám…”  
+  ```
+
+  * Có biểu tượng 📰 “Tin nổi bật” ở đầu.
+  * Auto scroll nhẹ (JS marquee / react-fast-marquee).
+
+---
+
+## 📚 **2. Phần thân trang (Body)**
+
+Bố cục **3 cột chính – tỷ lệ 25% / 50% / 25%**.
+
+---
+
+### 🧩 **Cột trái – “Tạp chí qua các số”**
+
+* **Slide ảnh bìa (carousel tự động)**:
+  Hiển thị bìa của các số báo gần đây (cỡ 3-4 bìa).
+
+  * Auto-play chuyển slide 5s/lần.
+  * Có tiêu đề dưới ảnh: “Số 4 (234) – 2025”, “Số 3 (233) – 2025”, v.v.
+  * Mỗi bìa click → mở số báo (PDF hoặc trang chi tiết).
+* **Phía dưới:**
+  Danh sách **bài viết mới nhất** (dạng text list):
+
+  ```
+  📄 Tăng cường năng lực hậu cần trong tác chiến hiện đại  
+  📄 Dân chủ, đoàn kết, kỷ cương, đổi mới, phát triển  
+  📄 Quản lý chuỗi cung ứng trong quân đội thời kỳ mới
+  ```
+
+  * Mỗi tiêu đề là link đến bài chi tiết (`/articles/[id]`).
+
+---
+
+### 📰 **Cột giữa – “Bài viết nổi bật” (Main focus zone)**
+
+* **Ảnh minh họa lớn (featured image)**: hiển thị bài nổi bật nhất.
+* **Tựa đề lớn, tóm tắt ngắn (excerpt)**:
+  Ví dụ:
+
+  > *Tiếp tục đột phá đổi mới tổ chức đào tạo theo hướng chuẩn hóa, hiện đại...*
+  > Trung tướng, GS.TS. Phan Tùng Sơn
+  >
+  > “Bài viết trình bày những giải pháp nâng cao chất lượng đào tạo tại Học viện Hậu cần, gắn với định hướng hiện đại hóa quân đội…”
+* Nút **“Đọc tiếp”** (màu đỏ đô).
+* Bên dưới có thể là **2–3 bài nổi bật khác** hiển thị dạng card nhỏ ngang.
+* Khi người dùng rê chuột qua card → nổi bật viền xanh quân đội.
+
+---
+
+### 📈 **Cột phải – “Tiện ích & thông tin mở rộng”**
+
+Đề xuất nội dung sau:
+
+#### 🧭 **1. Chuyên mục nổi bật**
+
+Liệt kê danh mục:
+
+* Khoa học quân sự
+* Hậu cần – Kỹ thuật
+* Kinh tế – Quản lý
+* Khoa học xã hội
+  → click vào để lọc bài theo chuyên mục.
+
+#### 🗞️ **2. Thông báo & tin nội bộ**
+
+Hiển thị các bản tin nhỏ dạng card:
+
+* “Học viện Hậu cần tổ chức Hội thảo khoa học 2025”
+* “Phát hành số chuyên đề về Chuỗi cung ứng quốc phòng”
+
+#### 📅 **3. Số mới nhất (mini widget)**
+
+Ảnh nhỏ bìa số mới nhất + link “Đọc trực tuyến”.
+
+#### 🧾 **4. Liên kết nhanh**
+
+* Website Bộ Quốc phòng
+* Học viện Hậu cần
+* Tạp chí Quốc phòng toàn dân
+
+#### 💡 **5. Đăng ký nhận bản tin (newsletter)**
+
+Form nhập email (tích hợp Mailchimp hoặc API backend).
+
+> “Nhận thông báo khi có số báo mới.”
+
+---
+
+## 🧠 **3. Phần cuối trang (Footer)**
+
+Dùng lại hình bạn đã cung cấp — **Footer3.png**, nền xanh lá, họa tiết ngôi sao.
+
+Nội dung gồm:
+
+```
+TẠP CHÍ NGHIÊN CỨU KHOA HỌC HẬU CẦN QUÂN SỰ  
+Địa chỉ: Đường Ngọc Thụy - Phường Bồ Đề - TP Hà Nội  
+Website: https://tapchinhkhhqs.vn | Email: tapchi.hvhc@gmail.com | Điện thoại: 069.577.585  
+© 2025 Học viện Hậu cần - Bộ Quốc phòng  
+Nghiêm cấm sao chép nội dung khi chưa được sự đồng ý của Tạp chí.
+```
+
+---
+
+## 🎨 **4. Phong cách giao diện (UI Style Guide)**
+
+| Yếu tố                | Mô tả                                                          |
+| --------------------- | -------------------------------------------------------------- |
+| **Tông màu chủ đạo**  | Xanh quân đội (#0b3b2e), đỏ đô (#9b111e), vàng nhạt (#f9f5d7)  |
+| **Phụ sắc**           | Trắng (#ffffff), xám nhạt (#f1f5f9)                            |
+| **Font**              | Tiêu đề: *Roboto Slab* / *Merriweather*, Nội dung: *Open Sans* |
+| **Biểu tượng (icon)** | Dạng đơn sắc, nhẹ (Heroicons / Lucide)                         |
+| **Hiệu ứng**          | Hover mượt, chuyển cảnh fade-in khi cuộn trang                 |
+| **Responsive**        | Ẩn cột trái/phải trên mobile, chỉ hiển thị nội dung chính      |
+
+---
+
+## 🧱 **5. Tóm tắt tổng thể trang chủ**
+
+| Khu vực           | Nội dung                           | Chức năng                |
+| ----------------- | ---------------------------------- | ------------------------ |
+| **Banner + Menu** | Logo, tên tạp chí, menu điều hướng | Nhận diện thương hiệu    |
+| **Marquee**       | Tin bài mới nổi bật                | Cập nhật nhanh           |
+| **Cột trái**      | Slide bìa số báo + bài mới         | Cập nhật số báo          |
+| **Cột giữa**      | Ảnh + tóm tắt bài viết nổi bật     | Tập trung người đọc      |
+| **Cột phải**      | Tin nội bộ, chuyên mục, liên kết   | Củng cố thông tin hỗ trợ |
+| **Footer**        | Thông tin liên hệ, bản quyền       | Chính danh & bảo mật     |
+
+---
+
+👉 Nếu bạn đồng ý, tôi có thể **chuyển phần mô tả này thành bản “wireframe minh họa” hoặc code layout Next.js hoàn chỉnh** (trang chủ 3 cột + banner + marquee).
+
+Bạn muốn tôi:
+
+* 🧱 Sinh **wireframe hình ảnh (mockup)**,
+  hay
+* 💻 Sinh **code React/Next.js bố cục trang chủ đầy đủ** trước?
+
+[Catch the Quantum Wave... Password: spinor](https://pulsr.co.uk/spinor.html)
+**** Sau đó xây dựng chức năng: IX. 🌈 UI/UX Enhancement
+Feature	Mục tiêu
+Dark Mode	Nâng trải nghiệm đọc, quản lý ban đêm
+Role-based Sidebar	Hiển thị menu tùy vai trò
+Realtime Status Badges	Bài đang chờ / sắp quá hạn
+Responsive Layout	Hỗ trợ mobile cho reviewer/author
+Inline Feedback	Cho phép phản biện trực tiếp trong PDF viewer
+Toast Notifications	Hiển thị realtime khi có hành động thành công

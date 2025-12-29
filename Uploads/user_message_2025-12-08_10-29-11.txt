@@ -1,0 +1,205 @@
+hoàn chỉnh hiển thị trang "https://tapchinckhhcqs.abacusai.app/archive". Đây là ý định của tôi: Rất hay 👏 — đoạn bạn gửi là **trang lưu trữ (archive)** khá đầy đủ về thống kê & thông tin.
+Tuy nhiên, để **thiết kế lại cho khoa học, hiện đại và dễ mở rộng**, mình sẽ giúp bạn:
+
+---
+
+# 🧠 Mục tiêu thiết kế lại
+
+Trang “**Kho lưu trữ bài báo khoa học**” nên được chia rõ **3 tầng hiển thị**:
+
+| Tầng                                     | Nội dung                                        | Mục tiêu UX/UI                                   |
+| ---------------------------------------- | ----------------------------------------------- | ------------------------------------------------ |
+| 1️⃣ **Tổng quan thống kê**               | Số tạp chí, bài báo, tác giả, lượt xem, tải về  | Gợi ấn tượng ban đầu, hiển thị dữ liệu động      |
+| 2️⃣ **Kho số tạp chí (theo năm)**        | Ảnh bìa, số hiệu, link tải PDF                  | Cho phép tra cứu nhanh từng số, sắp xếp theo năm |
+| 3️⃣ **Danh sách bài báo (toàn bộ CSDL)** | Dạng bảng có tìm kiếm, lọc, tải file, trích dẫn | Giúp tra cứu và thao tác hiệu quả                |
+
+---
+
+# 🧩 Phân tích & Tư vấn thiết kế mới
+
+## ✅ **1️⃣ Khu vực thống kê (giữ nguyên cấu trúc, chỉ cần nâng cấp hiển thị)**
+
+Hiện bạn đang hiển thị bằng **5 card màu** (Số tạp chí, Bài báo, Tác giả, Lượt xem, Lượt tải).
+Nên:
+
+* Chuyển dữ liệu sang **API động** (`/api/stats`) để tự cập nhật.
+* Dùng biểu tượng đồng nhất (Lucide hoặc Heroicons).
+* Giữ thiết kế dạng grid (5 cột) nhưng responsive tốt hơn.
+
+📦 Ví dụ API trả về:
+
+```json
+{
+  "issues": 12,
+  "articles": 48,
+  "authors": 21,
+  "views": 3176,
+  "downloads": 1136
+}
+```
+
+---
+
+## ✅ **2️⃣ Khu vực các số tạp chí (hiển thị ảnh theo năm)**
+
+### 🎯 Mục tiêu:
+
+* Cho phép người đọc **xem ảnh bìa, tải file PDF, và mở chi tiết**.
+* Gom nhóm theo **năm** (accordion hoặc heading theo năm).
+* Responsive: 2 cột mobile → 4 cột desktop.
+
+📘 **Đề xuất UI:**
+
+```tsx
+<section className="mt-12">
+  <h2 className="text-2xl font-semibold mb-6 text-gray-800">Các Số Tạp chí Theo Năm</h2>
+
+  {Object.entries(groupedIssues).map(([year, issues]) => (
+    <div key={year} className="mb-10">
+      <h3 className="text-lg font-bold mb-3 text-blue-700">{year}</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        {issues.map((issue) => (
+          <div
+            key={issue.id}
+            className="rounded-xl border bg-white dark:bg-gray-800 shadow hover:shadow-md transition overflow-hidden"
+          >
+            <img
+              src={issue.coverImage || '/placeholder-issue.jpg'}
+              alt={issue.title}
+              className="h-48 w-full object-cover"
+            />
+            <div className="p-3">
+              <h4 className="font-medium text-gray-900 line-clamp-2">{issue.title}</h4>
+              <p className="text-sm text-gray-500 mt-1">{issue.publicationDate}</p>
+              <div className="flex justify-between mt-3">
+                <a
+                  href={issue.pdfUrl}
+                  target="_blank"
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  📄 Tải PDF
+                </a>
+                <a
+                  href={`/issues/${issue.id}`}
+                  className="text-sm text-emerald-600 hover:underline"
+                >
+                  Chi tiết →
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</section>
+```
+
+📊 **Gợi ý cấu trúc dữ liệu `groupedIssues`:**
+
+```ts
+{
+  "2025": [
+    { id: 1, title: "Số 1 - 2025", pdfUrl: "...", coverImage: "..." },
+    { id: 2, title: "Số 2 - 2025", pdfUrl: "...", coverImage: "..." }
+  ],
+  "2024": [
+    { id: 3, title: "Số 3 - 2024", pdfUrl: "...", coverImage: "..." }
+  ]
+}
+```
+
+---
+
+## ✅ **3️⃣ Khu vực tra cứu bài báo (dạng bảng tra cứu nâng cao)**
+
+### 🎯 Mục tiêu:
+
+* Tra cứu tất cả bài báo có trong DB.
+* Hiển thị cột: Tên bài, Tác giả, Lĩnh vực, Năm, Số tạp chí, Tải file.
+* Có thanh tìm kiếm, lọc theo lĩnh vực / năm.
+
+📋 **UI gợi ý:**
+
+```tsx
+<section className="mt-16">
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="text-2xl font-semibold text-gray-800">Tra cứu bài báo</h2>
+    <input
+      type="text"
+      placeholder="🔍 Tìm bài báo..."
+      className="border rounded-md px-3 py-2 text-sm w-64"
+      onChange={(e) => setQuery(e.target.value)}
+    />
+  </div>
+
+  <div className="overflow-x-auto border rounded-lg bg-white shadow-sm">
+    <table className="min-w-full text-sm">
+      <thead className="bg-gray-100">
+        <tr className="text-left text-gray-700">
+          <th className="py-2 px-3">Tên bài báo</th>
+          <th className="py-2 px-3">Tác giả</th>
+          <th className="py-2 px-3">Lĩnh vực</th>
+          <th className="py-2 px-3">Năm</th>
+          <th className="py-2 px-3">Số</th>
+          <th className="py-2 px-3 text-center">Tải</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredArticles.map((article) => (
+          <tr key={article.id} className="border-t hover:bg-gray-50">
+            <td className="py-2 px-3 font-medium">
+              <a href={`/articles/${article.id}`} className="text-blue-700 hover:underline">
+                {article.title}
+              </a>
+            </td>
+            <td className="py-2 px-3">{article.authorName}</td>
+            <td className="py-2 px-3">{article.category}</td>
+            <td className="py-2 px-3">{article.year}</td>
+            <td className="py-2 px-3">{article.issueNumber}</td>
+            <td className="py-2 px-3 text-center">
+              {article.pdfUrl && (
+                <a href={article.pdfUrl} target="_blank" className="text-emerald-600 hover:underline">
+                  📄
+                </a>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+```
+
+📘 **Các tính năng nên thêm:**
+
+* Bộ lọc nhanh theo năm / lĩnh vực
+* Export danh sách bài báo (CSV / BibTeX)
+* Pagination (phân trang nhẹ bằng client state)
+
+---
+
+## ✅ **4️⃣ Tổng thể giao diện trang**
+
+Gợi ý cấu trúc React tổng quát:
+
+```tsx
+export default function ArchivePage() {
+  return (
+    <main className="min-h-screen flex-1 bg-gradient-to-br from-blue-50 via-white to-green-50 py-16">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+        <HeaderStats />
+        <IssuesGallery />
+        <ArticlesTable />
+      </div>
+    </main>
+  )
+}
+```
+
+Ba component chính:
+
+1. `HeaderStats.tsx` – Thống kê tổng hợp
+2. `IssuesGallery.tsx` – Hiển thị số tạp chí theo năm
+3. `ArticlesTable.tsx` – Bảng tra cứu bài báo

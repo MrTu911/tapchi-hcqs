@@ -1,0 +1,303 @@
+Tiếp tục hoàn thiện chức năng  theo tư vấn và phân tích kỹ thuật. Chú ý các giao diện phải hiện đại, đẹp. Đây là phân tích giai đoạn 2 của tôi "Tuyệt vời 🧠 — bạn đang bước vào **🔮 Giai đoạn 2: Tầng Dữ Liệu & Truy Xuất Thông Minh**,
+gồm 3 module trọng yếu để **tra cứu, phân tích, và báo cáo dữ liệu học thuật**.
+
+Mục tiêu giai đoạn này là:
+
+> “Xây dựng hệ thống tra cứu, lọc, và xuất báo cáo mạnh mẽ — phục vụ người đọc, nhà nghiên cứu, và quản trị viên tạp chí.”
+
+---
+
+# ⚙️ GIAI ĐOẠN 2 — CHI TIẾT KỸ THUẬT & CODE TRIỂN KHAI
+
+**(Priority 2 – Tuần 3–4)**
+
+---
+
+## 🟡 Module 1: SEARCH ENGINE (PostgreSQL Full-Text Search)
+
+### 🎯 Mục tiêu
+
+Tạo hệ thống tìm kiếm toàn văn **nhanh, chính xác và không tốn tài nguyên**, sử dụng native **PostgreSQL Full-Text Search (FTS)**.
+
+---
+
+### 🧱 1️⃣ Thiết kế CSDL (Prisma Schema)
+
+```prisma
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  authors     String
+  abstract    String?
+  keywords    String?
+  fullText    String?   // dùng cho FTS
+  publishedAt DateTime?
+  doi         String?
+  issueId     String?
+  issue       Issue?    @relation(fields: [issueId], references: [id])
+  status      String    @default("PUBLISHED")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+```
+
+---
+
+### ⚙️ 2️⃣ Cấu hình PostgreSQL Full-Text Index
+
+Tạo index (migration script hoặc SQL thủ công):
+
+```sql
+CREATE INDEX article_search_idx
+ON "Article"
+USING GIN (to_tsvector('simple', title || ' ' || coalesce(abstract, '') || ' ' || coalesce(keywords, '')));
+```
+
+---
+
+### 🧩 3️⃣ API: `/api/search`
+
+```ts
+// app/api/search/route.ts
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const q = searchParams.get("q") || "";
+
+  const result = await prisma.$queryRawUnsafe(`
+    SELECT id, title, authors, abstract, doi, publishedAt
+    FROM "Article"
+    WHERE to_tsvector('simple', title || ' ' || coalesce(abstract, '') || ' ' || coalesce(keywords, ''))
+          @@ plainto_tsquery($1)
+    ORDER BY publishedAt DESC
+    LIMIT 50;
+  `, q);
+
+  return NextResponse.json(result);
+}
+```
+
+---
+
+### 🧠 4️⃣ Giao diện tra cứu `/search`
+
+```tsx
+// app/search/page.tsx
+"use client";
+import { useState } from "react";
+
+export default function SearchPage() {
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState([]);
+
+  async function handleSearch(e) {
+    e.preventDefault();
+    const res = await fetch(`/api/search?q=${q}`);
+    setResults(await res.json());
+  }
+
+  return (
+    <main className="max-w-5xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">🔍 Tra cứu bài báo</h1>
+      <form onSubmit={handleSearch}>
+        <input className="border p-2 rounded w-96" placeholder="Tìm theo tiêu đề, tác giả..." value={q} onChange={(e) => setQ(e.target.value)} />
+        <button className="ml-2 bg-emerald-600 text-white px-3 py-2 rounded">Tìm kiếm</button>
+      </form>
+      <ul className="mt-6 space-y-4">
+        {results.map((a) => (
+          <li key={a.id} className="border-b pb-3">
+            <a href={`/articles/${a.id}`} className="font-semibold text-blue-700 hover:underline">{a.title}</a>
+            <p className="text-gray-600 text-sm">{a.authors}</p>
+            <p className="text-gray-500 text-xs">{a.abstract?.slice(0, 120)}...</p>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+---
+
+## 🟡 Module 2: ADVANCED FILTERING (Faceted Search)
+
+### 🎯 Mục tiêu
+
+Bổ sung bộ lọc thông minh để **lọc bài báo theo nhiều tiêu chí**: năm, chủ đề, tác giả, DOI, số tạp chí.
+
+---
+
+### ⚙️ 1️⃣ Backend – API `/api/search/filter`
+
+```ts
+// app/api/search/filter/route.ts
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const year = searchParams.get("year");
+  const keyword = searchParams.get("keyword");
+  const author = searchParams.get("author");
+
+  const where: any = { status: "PUBLISHED" };
+  if (year) where.publishedAt = { gte: new Date(`${year}-01-01`), lte: new Date(`${year}-12-31`) };
+  if (keyword) where.keywords = { contains: keyword, mode: "insensitive" };
+  if (author) where.authors = { contains: author, mode: "insensitive" };
+
+  const articles = await prisma.article.findMany({
+    where,
+    select: { id: true, title: true, authors: true, doi: true, publishedAt: true },
+    orderBy: { publishedAt: "desc" },
+  });
+
+  return NextResponse.json(articles);
+}
+```
+
+---
+
+### 🧩 2️⃣ Frontend – Bộ lọc động
+
+```tsx
+// components/SearchFilter.tsx
+"use client";
+import { useState } from "react";
+
+export default function SearchFilter({ onFilter }) {
+  const [filters, setFilters] = useState({ year: "", keyword: "", author: "" });
+
+  function handleChange(e) {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  }
+
+  async function apply() {
+    const params = new URLSearchParams(filters);
+    const res = await fetch(`/api/search/filter?${params}`);
+    onFilter(await res.json());
+  }
+
+  return (
+    <div className="p-4 bg-gray-50 rounded mb-4 flex gap-3">
+      <input name="year" placeholder="Năm" className="border p-2 w-24" onChange={handleChange} />
+      <input name="keyword" placeholder="Từ khóa" className="border p-2" onChange={handleChange} />
+      <input name="author" placeholder="Tác giả" className="border p-2" onChange={handleChange} />
+      <button onClick={apply} className="bg-emerald-600 text-white px-3 py-2 rounded">Lọc</button>
+    </div>
+  );
+}
+```
+
+---
+
+## 🟡 Module 3: EXPORT REPORTS (PDF / Excel)
+
+### 🎯 Mục tiêu
+
+Cho phép **Admin hoặc Biên tập viên** xuất danh sách bài báo đã tra cứu hoặc thống kê thành **file PDF / Excel**.
+
+---
+
+### ⚙️ 1️⃣ API xuất báo cáo PDF
+
+```ts
+// app/api/export/pdf/route.ts
+import { NextResponse } from "next/server";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { prisma } from "@/lib/prisma";
+
+export async function GET() {
+  const articles = await prisma.article.findMany({
+    where: { status: "PUBLISHED" },
+    select: { title: true, authors: true, doi: true, publishedAt: true },
+  });
+
+  const doc = new jsPDF();
+  autoTable(doc, {
+    head: [["Tiêu đề", "Tác giả", "DOI", "Năm"]],
+    body: articles.map(a => [a.title, a.authors, a.doi || "-", new Date(a.publishedAt).getFullYear()]),
+  });
+
+  const pdfBytes = doc.output("arraybuffer");
+  return new NextResponse(Buffer.from(pdfBytes), {
+    headers: { "Content-Type": "application/pdf" },
+  });
+}
+```
+
+---
+
+### ⚙️ 2️⃣ API xuất Excel
+
+```ts
+// app/api/export/excel/route.ts
+import ExcelJS from "exceljs";
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Articles");
+
+  sheet.columns = [
+    { header: "Tiêu đề", key: "title" },
+    { header: "Tác giả", key: "authors" },
+    { header: "DOI", key: "doi" },
+    { header: "Năm xuất bản", key: "year" },
+  ];
+
+  const articles = await prisma.article.findMany({
+    where: { status: "PUBLISHED" },
+  });
+
+  articles.forEach(a =>
+    sheet.addRow({
+      title: a.title,
+      authors: a.authors,
+      doi: a.doi || "-",
+      year: new Date(a.publishedAt).getFullYear(),
+    })
+  );
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  return new NextResponse(Buffer.from(buffer), {
+    headers: { "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+  });
+}
+```
+
+---
+
+## 🧠 Tổng hợp: Lộ trình kỹ thuật tuần 3–4
+
+| Tuần         | Mục tiêu               | Task                                              | Công nghệ              |
+| ------------ | ---------------------- | ------------------------------------------------- | ---------------------- |
+| **Tuần 3**   | Xây dựng Search Engine | API `/api/search`, index PostgreSQL, UI `/search` | Next.js + Prisma + SQL |
+| **Tuần 3–4** | Advanced Filtering     | Bộ lọc nhiều tiêu chí + UI `SearchFilter`         | Prisma Query Builder   |
+| **Tuần 4**   | Export Reports         | PDF + Excel xuất danh sách bài                    | jsPDF + ExcelJS        |
+
+---
+
+## ⚡ Tối ưu & Kiểm thử
+
+| Phần       | Cần test                    | Gợi ý                 |
+| ---------- | --------------------------- | --------------------- |
+| API Search | Query tốc độ & độ chính xác | Jest + Benchmark      |
+| FTS Index  | Hiệu năng khi >10,000 bài   | EXPLAIN ANALYZE       |
+| PDF/Excel  | Định dạng bảng              | Kiểm tra font Unicode |
+| UI Filter  | Xử lý debounce input        | 300ms delay khi gõ    |
+
+---
+
+## ✅ Kết quả sau giai đoạn 2
+
+| Thành phần                        | Kết quả                                   |
+| --------------------------------- | ----------------------------------------- |
+| 🔍 Tra cứu toàn văn               | Có thể tìm theo tiêu đề, tác giả, từ khóa |
+| 🧩 Bộ lọc thông minh              | Lọc theo năm, chủ đề, DOI, tác giả        |
+| 📊 Báo cáo xuất PDF/Excel         | Chuẩn định dạng, tải nhanh                |
+| ⚙️ API tối ưu                     | Cache + truy vấn song song                |
+| 📈 Chuẩn bị nền cho Plagiarism AI | Có dữ liệu toàn văn phục vụ so khớp       |

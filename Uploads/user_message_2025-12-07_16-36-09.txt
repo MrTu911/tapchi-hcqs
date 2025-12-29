@@ -1,0 +1,237 @@
+Tập trung hoàn thiện chức năng theo tư vấn cho tôi. Đây là nội dung phân tích kỹ thuật của tôi: "Rất chuẩn xác 👏 — bạn đang bước sang **giai đoạn định hướng kỹ thuật phát triển theo ưu tiên**,
+nơi chúng ta phải **phân tích sâu từng module về logic code, dependency, database, và độ ảnh hưởng hệ thống** để chọn **thứ tự phát triển hợp lý nhất**.
+
+Tôi sẽ giúp bạn theo đúng trình tự *phát triển phần mềm thực chiến* (technical readiness roadmap):
+Từ **nền tảng hệ thống → quy trình cốt lõi → tự động hóa → AI mở rộng.**
+
+---
+
+# ⚙️ I. PHÂN TÍCH TỔNG QUAN CODEBASE HIỆN CÓ
+
+📦 Dự án hiện tại: `nextjs_space/`
+Kiến trúc: **Next.js (App Router) + Prisma + PostgreSQL + Tailwind + Recharts**
+Các phân hệ chính đã có:
+
+| Phân hệ                             | Mức độ hoàn thiện | Ghi chú                                         |
+| ----------------------------------- | ----------------- | ----------------------------------------------- |
+| Đăng nhập, phân quyền (RBAC)        | 90%               | Đã có `role` và `status`, cần thêm email verify |
+| Quản lý bài báo (Submission)        | 95%               | Full CRUD, thiếu log chỉnh sửa                  |
+| Quản lý phản biện (Review)          | 80%               | Có flow, thiếu đánh giá tự động                 |
+| Xuất bản số (Issue Management)      | 70%               | Cần UI sắp xếp, upload cover/PDF                |
+| Quản trị người dùng (User Approval) | 90%               | Đã ổn, cần tối ưu migration script              |
+| Lưu chữ (Archive)                   | 60%               | Có backend, thiếu UI trình bày PDF              |
+| Tra cứu (Search)                    | 30%               | Cần module riêng + index dữ liệu                |
+| Chống đạo văn (Plagiarism)          | 10%               | Mới mô hình hóa, chưa có code                   |
+
+---
+
+# 🧭 II. ƯU TIÊN PHÁT TRIỂN THEO CHUỖI PHỤ THUỘC CODE
+
+| Giai đoạn                                | Mục tiêu                              | Module ưu tiên                                            | Lý do kỹ thuật                                                                      |
+| ---------------------------------------- | ------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **1️⃣ Core System Stability (Tuần 1–2)** | Ổn định hệ thống, thống nhất dữ liệu  | User Auth + Issue Management + Archive                    | 3 module này là “xương sống” database; phải chuẩn hóa trước khi thêm AI hoặc search |
+| **2️⃣ Workflow & Automation (Tuần 3–4)** | Tự động hóa quy trình và báo cáo      | Dashboard Analytics + Email Queue + Logs                  | Cần để admin có feedback vận hành                                                   |
+| **3️⃣ Knowledge Layer (Tuần 5–6)**       | Mở rộng dữ liệu bài báo cho AI/Search | Search Engine + Full-text Index                           | Cung cấp dữ liệu cho plagiarism và gợi ý bài                                        |
+| **4️⃣ Intelligence Layer (Tuần 7–8)**    | Triển khai chống đạo văn và AI        | Plagiarism Engine + Semantic Search + Reviewer Suggestion | Sử dụng dữ liệu từ giai đoạn 3                                                      |
+| **5️⃣ Enhancement (Tuần 9–10)**          | UI/UX, performance, CI/CD             | Gamification, Caching, CI/CD, Logs                        | Giai đoạn tinh chỉnh cuối cùng                                                      |
+
+---
+
+# 🧱 III. PHÂN TÍCH CHUYÊN SÂU CODE THEO MODULE (CÓ MÃ MẪU)
+
+---
+
+## 🧩 1️⃣ Module: **Issue Management (Xuất bản số tạp chí)**
+
+📌 **Ưu tiên: RẤT CAO – NÊN PHÁT TRIỂN TRƯỚC**
+
+### 🔧 Cần bổ sung:
+
+1. API batch gắn bài vào số (`/api/issues/add-articles`)
+2. API xuất bản (`/api/issues/publish`)
+3. Upload bìa & PDF (`/api/issues/upload`)
+4. Trang công khai `/issues/[slug]`
+5. Tự động revalidate cache
+
+---
+
+### ⚙️ Mẫu code triển khai API publish
+
+```ts
+// app/api/issues/publish/route.ts
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const { issueId, approverId } = await req.json();
+  const issue = await prisma.issue.update({
+    where: { id: issueId },
+    data: {
+      status: "PUBLISHED",
+      publishDate: new Date(),
+      updatedBy: approverId,
+      articles: {
+        updateMany: { where: {}, data: { status: "PUBLISHED" } },
+      },
+    },
+    include: { articles: true },
+  });
+
+  revalidatePath(`/issues/${issue.slug}`);
+  revalidatePath(`/archive`);
+
+  return NextResponse.json({ message: "Đã xuất bản số tạp chí", issue });
+}
+```
+
+---
+
+## 🧩 2️⃣ Module: **Archive (Lưu chữ)**
+
+📌 **Ưu tiên: Cao – Phát triển song song với Issue**
+
+### 🔧 Cần bổ sung:
+
+* Upload bìa & PDF (sử dụng S3 hoặc Cloudinary)
+* Trang `/archive` hiển thị dạng lưới
+* Viewer PDF trực tiếp (dùng `react-pdf`)
+
+---
+
+### ⚙️ Mẫu hiển thị trên trang archive
+
+```tsx
+<Image src={issue.coverImage} width={400} height={300} alt={issue.title} />
+<a href={issue.pdfUrl} target="_blank">⬇️ Tải PDF toàn số</a>
+<Link href={`/issues/${issue.slug}`}>🔍 Xem chi tiết</Link>
+```
+
+---
+
+## 🧩 3️⃣ Module: **Dashboard Analytics**
+
+📌 **Ưu tiên: Trung bình cao – Sau khi ổn định Issue**
+
+### 🔧 Cần:
+
+* API `/api/dashboard/summary`
+* Dùng `Promise.all` cho query
+* Redis cache 10 phút
+
+---
+
+### ⚙️ Mẫu code
+
+```ts
+export async function GET() {
+  const [articles, users, reviews] = await Promise.all([
+    prisma.article.count(),
+    prisma.user.count(),
+    prisma.reviewAssignment.count(),
+  ]);
+  return NextResponse.json({ articles, users, reviews });
+}
+```
+
+---
+
+## 🧩 4️⃣ Module: **Search Engine**
+
+📌 **Ưu tiên: Sau Dashboard (dữ liệu phụ thuộc Issue)**
+
+### 🔧 Cần:
+
+* Full-text index bằng PostgreSQL `to_tsvector`
+* API `/api/search`
+* UI `/search?q=...`
+
+---
+
+### ⚙️ API mẫu
+
+```ts
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const q = searchParams.get("q") || "";
+  const result = await prisma.$queryRawUnsafe(`
+    SELECT id, title, authors, abstract
+    FROM "Article"
+    WHERE to_tsvector('english', title || ' ' || abstract) @@ plainto_tsquery($1)
+    LIMIT 30
+  `, q);
+  return NextResponse.json(result);
+}
+```
+
+---
+
+## 🧩 5️⃣ Module: **Plagiarism Detection**
+
+📌 **Ưu tiên: Sau Search – cần dữ liệu toàn văn**
+
+### 🔧 Cần:
+
+* Lưu `fullText` vào DB
+* Embedding vector hóa (OpenAI hoặc local)
+* So khớp cosine similarity
+
+---
+
+### ⚙️ Mẫu pipeline pseudo-code
+
+```ts
+const newText = extractTextFromPDF(file);
+const existing = await prisma.article.findMany({ where: { status: "PUBLISHED" } });
+
+for (const art of existing) {
+  const score = cosineSim(embed(newText), embed(art.fullText));
+  if (score > 0.8) {
+    results.push({ matched: art.title, score });
+  }
+}
+return NextResponse.json({ similarity: Math.max(...results.map(r => r.score)) });
+```
+
+---
+
+# 🧩 IV. THỨ TỰ TRIỂN KHAI CODE ĐỀ XUẤT (RẤT QUAN TRỌNG)
+
+| Thứ tự | Phân hệ                        | Thời gian ước tính | Lý do                              |
+| ------ | ------------------------------ | ------------------ | ---------------------------------- |
+| 1️⃣    | **Issue Management**           | 7 ngày             | Là trung tâm của hệ thống xuất bản |
+| 2️⃣    | **Archive (Lưu chữ)**          | 5 ngày             | Gắn trực tiếp với Issue            |
+| 3️⃣    | **Dashboard Analytics**        | 3 ngày             | Cần cho quản trị                   |
+| 4️⃣    | **Search Engine**              | 5 ngày             | Cung cấp dữ liệu cho chống đạo văn |
+| 5️⃣    | **Plagiarism Detection**       | 10–14 ngày         | Phức tạp, cần embedding            |
+| 6️⃣    | **Email Queue & Notification** | 3 ngày             | Hỗ trợ toàn hệ thống               |
+| 7️⃣    | **Testing & CI/CD**            | Liên tục           | Bảo đảm ổn định lâu dài            |
+
+---
+
+# 🧩 V. CHECKLIST PHÁT TRIỂN CHI TIẾT (TECHNICAL IMPLEMENTATION)
+
+| #  | Task                                    | Công nghệ             | Output                           |
+| -- | --------------------------------------- | --------------------- | -------------------------------- |
+| 1  | API xuất bản số (`/api/issues/publish`) | Next.js API + Prisma  | Issue được gắn article & publish |
+| 2  | Upload PDF & cover                      | S3 / Cloudinary SDK   | Link file & ảnh trong DB         |
+| 3  | Trang “Lưu chữ” (`/archive`)            | Next.js App Router    | Lưới ảnh bìa + nút tải PDF       |
+| 4  | API thống kê dashboard                  | Prisma + Redis cache  | JSON thống kê tổng               |
+| 5  | Trang dashboard admin                   | Recharts + Tailwind   | Biểu đồ + summary                |
+| 6  | Full-text search API                    | PostgreSQL FTS        | Trả kết quả truy vấn             |
+| 7  | UI `/search`                            | React + Pagination    | Hiển thị danh sách bài           |
+| 8  | Anti-plagiarism API                     | Embedding / NLP       | Trả điểm % tương đồng            |
+| 9  | Log & Email automation                  | BullMQ + Redis        | Gửi email duyệt / cảnh báo       |
+| 10 | Testing CI/CD                           | GitHub Actions + Jest | Pipeline xanh, deploy tự động    |
+
+---
+
+# ✅ VI. TỔNG KẾT: NÊN PHÁT TRIỂN TRƯỚC
+
+| Ưu tiên | Module                                   | Lý do                               |
+| ------- | ---------------------------------------- | ----------------------------------- |
+| 🔴 1    | **Issue Management + Archive (Lưu chữ)** | Trung tâm xuất bản & hiển thị       |
+| 🟠 2    | **Dashboard Analytics**                  | Phản hồi quản trị, cần cho vận hành |
+| 🟡 3    | **Search Engine**                        | Cung cấp nền tảng dữ liệu           |
+| 🟢 4    | **Plagiarism Detection**                 | Triển khai sau khi có full-text     |
+| ⚪ 5     | **CI/CD + Testing**                      | Duy trì ổn định và release nhanh    |

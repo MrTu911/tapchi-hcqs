@@ -1,0 +1,297 @@
+Kiểm tra và sửa lỗi nộp bài báo mới :Rất tốt — bạn gửi log chi tiết nên mình có thể xác định chính xác 5 lỗi độc lập đang xảy ra, trong đó **3 lỗi hệ thống (CSP, API, upstream)** và **2 lỗi logic (Promise, JSON)**.
+Dưới đây là **bản phân tích + hướng khắc phục chi tiết nhất** (có thể áp dụng trực tiếp cho Next.js + Cloudflare + Prisma).
+
+---
+
+## 🧩 **1️⃣ Lỗi CSP – Cloudflare beacon bị chặn**
+
+### ⚠️ Log
+
+```
+Loading the script 'https://static.cloudflareinsights.com/beacon.min.js/...' 
+violates Content Security Policy directive: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdnjs.cloudflare.com".
+```
+
+### 🎯 Nguyên nhân
+
+Next.js đang dùng Cloudflare Analytics, nhưng chính sách CSP (`Content-Security-Policy`) của bạn chưa cho phép domain đó.
+
+### ✅ Cách khắc phục
+
+#### ✳️ Phương án A – Giữ nguyên Analytics
+
+Thêm domain Cloudflare vào `next.config.js`:
+
+```js
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: `
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval'
+        https://cdnjs.cloudflare.com
+        https://static.cloudflareinsights.com;
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https:;
+      connect-src 'self' https:;
+    `.replace(/\s{2,}/g, " ").trim(),
+  },
+];
+
+export default {
+  async headers() {
+    return [{ source: "/(.*)", headers: securityHeaders }];
+  },
+};
+```
+
+→ ✅ Sau khi deploy lại: Cloudflare Insights hoạt động, log CSP biến mất.
+
+#### ✳️ Phương án B – Tắt hoàn toàn Analytics
+
+Nếu bạn không cần Cloudflare Beacon:
+
+1. Vào Cloudflare Dashboard → **Web Analytics**
+2. Chọn domain → Tắt **“Inject Beacon Script Automatically”**
+3. Deploy lại
+
+→ ✅ Console sạch hoàn toàn, không bị block CSP.
+
+---
+
+## 🔌 **2️⃣ Lỗi 503 / ERR_CONNECTION_CLOSED – API `/api/notifications`**
+
+### ⚠️ Log
+
+```
+Failed to load resource: the server responded with a status of 503 ()
+Error fetching notifications: TypeError: Failed to fetch
+```
+
+### 🎯 Nguyên nhân
+
+* Backend (API route `/api/notifications`) **bị ngắt kết nối hoặc trả về upstream closed**.
+* Có thể do:
+
+  * Cấu hình `fetch` trỏ sai URL trong client.
+  * API handler không `return Response.json()` đúng cách.
+  * Cloudflare hoặc Nginx timeout.
+
+---
+
+### ✅ Cách kiểm tra nhanh
+
+1. **Kiểm tra API trong trình duyệt:**
+   Mở: `https://tapchinckhhcqs.abacusai.app/api/notifications`
+   → Nếu 503 → kiểm tra server logs.
+
+2. **Kiểm tra route handler:**
+
+   ```ts
+   // app/api/notifications/route.ts
+   export async function GET(req: Request) {
+     try {
+       const notifications = await prisma.notification.findMany({
+         orderBy: { createdAt: 'desc' },
+       });
+       return Response.json(notifications);
+     } catch (error) {
+       console.error("Notification error:", error);
+       return new Response("Server error", { status: 500 });
+     }
+   }
+   ```
+
+3. **Thêm timeout protection (nếu gọi từ client):**
+
+   ```ts
+   const res = await fetch('/api/notifications', { next: { revalidate: 10 } })
+   if (!res.ok) throw new Error('Notification fetch failed')
+   ```
+
+→ ✅ Sau khi fix, 503 và ERR_CONNECTION_CLOSED sẽ biến mất.
+
+---
+
+## 🧾 **3️⃣ Lỗi 500 – `/api/submissions` (Nộp bài báo)**
+
+### ⚠️ Log
+
+```
+/api/submissions:1  Failed to load resource: the server responded with a status of 500 ()
+Error: Có lỗi xảy ra khi nộp bài
+```
+
+### 🎯 Nguyên nhân
+
+* Server-side exception trong API nộp bài (thường do file upload, hoặc database field thiếu).
+* Các lỗi phổ biến:
+
+  1. Thiếu trường `pdfUrl` hoặc `issueId` trong Prisma schema.
+  2. Upload file lên S3/R2 lỗi (invalid credentials).
+  3. Không có `return Response.json()` cuối hàm.
+
+---
+
+### ✅ Cách khắc phục
+
+1. **Kiểm tra `app/api/submissions/route.ts`:**
+
+   ```ts
+   export async function POST(req: Request) {
+     try {
+       const data = await req.json();
+       const submission = await prisma.submission.create({ data });
+       return Response.json(submission);
+     } catch (error) {
+       console.error("Submission error:", error);
+       return new Response("Server error", { status: 500 });
+     }
+   }
+   ```
+
+2. **Nếu có upload file:**
+
+   * Kiểm tra quyền Cloudflare R2.
+   * Log lỗi chi tiết (đừng để throw silent).
+
+3. **Kiểm tra DB schema:**
+
+   ```prisma
+   model Submission {
+     id       String @id @default(uuid())
+     title    String
+     author   String
+     pdfUrl   String?
+     status   String @default("pending")
+     createdAt DateTime @default(now())
+   }
+   ```
+
+→ ✅ Khi API trả về JSON đúng, client không còn báo “Error: Có lỗi xảy ra khi nộp bài”.
+
+---
+
+## ⚙️ **4️⃣ Lỗi Promise & JSON parse**
+
+### ⚠️ Log
+
+```
+Error fetching notifications: SyntaxError: Unexpected token 'u', "upstream c"... is not valid JSON
+```
+
+### 🎯 Nguyên nhân
+
+API trả về **chuỗi lỗi thô (HTML hoặc text)**, nhưng client lại `.json()` nó.
+
+---
+
+### ✅ Cách fix:
+
+**Trong client:**
+
+```ts
+const res = await fetch('/api/notifications')
+if (!res.ok) {
+  const text = await res.text()
+  console.error('Server response:', text)
+  throw new Error('Invalid response from server')
+}
+const data = await res.json()
+```
+
+**Trong server API:**
+
+```ts
+return Response.json({ success: false, message: "Server error" }, { status: 500 })
+```
+
+→ ✅ Không còn “Unexpected token u” khi parse JSON.
+
+---
+
+## ⚠️ **5️⃣ onBoarding.js: Uncaught (in promise) undefined**
+
+### 🎯 Nguyên nhân
+
+Một `Promise` bị reject mà không có `.catch()`
+→ Gây lỗi “Uncaught (in promise) undefined”.
+
+---
+
+### ✅ Cách xử lý an toàn:
+
+```js
+fetch('/api/onboarding')
+  .then(r => r.json())
+  .catch(err => console.error('Onboarding error:', err))
+```
+
+Hoặc với async/await:
+
+```ts
+try {
+  const res = await fetch('/api/onboarding')
+  const data = await res.json()
+} catch (err) {
+  console.error('Onboarding error:', err)
+}
+```
+
+---
+
+# ✅ **Tổng hợp bảng lỗi & Cách khắc phục**
+
+| #   | Lỗi               | Nguyên nhân                     | Cách xử lý                           |
+| --- | ----------------- | ------------------------------- | ------------------------------------ |
+| 1️⃣ | CSP Violation     | Cloudflare beacon bị chặn       | Thêm domain vào CSP hoặc tắt beacon  |
+| 2️⃣ | 503 Notifications | API bị đóng kết nối / timeout   | Kiểm tra route handler & deploy logs |
+| 3️⃣ | 500 Submissions   | Lỗi khi nộp bài (DB/upload)     | Fix Prisma schema & API response     |
+| 4️⃣ | JSON parse error  | API trả về text thay vì JSON    | Sửa client & thêm Response.json()    |
+| 5️⃣ | Uncaught Promise  | Thiếu `.catch()` hoặc try/catch | Bọc Promise an toàn                  |
+
+---
+
+# 🧠 Gợi ý nâng cao (sạch console & ổn định hệ thống)
+
+✅ Thêm `middleware.ts` để log lỗi API chung:
+
+```ts
+export function middleware(req) {
+  try {
+    return NextResponse.next()
+  } catch (e) {
+    console.error('Middleware error:', e)
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+  }
+}
+```
+
+✅ Dùng `fetchWithTimeout` cho các API client-side:
+
+```ts
+export async function fetchWithTimeout(url, ms = 8000) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), ms)
+  const res = await fetch(url, { signal: controller.signal })
+  clearTimeout(timeout)
+  return res
+}
+```
+
+✅ Gắn global error handler trong `_app.tsx`:
+
+```tsx
+window.addEventListener("unhandledrejection", (e) => {
+  console.error("Unhandled Promise:", e.reason)
+})
+```
+
+---
+
+Nếu bạn muốn, mình có thể giúp bạn **tạo file cấu hình `next.config.js` + middleware.ts + error boundary chuẩn hóa toàn hệ thống**, giúp:
+
+* Xử lý tất cả lỗi API 500 / 503 tự động
+* Gỡ bỏ toàn bộ log cảnh báo console
+* Tăng bảo mật CSP đúng chuẩn Cloudflar
+:

@@ -1,0 +1,68 @@
+Tôi đang yêu cầu bạn nâng cấp nội dung này mà. Bạn đang làm việc chưa chuyên nghiệp. Làm tiếp nội dung này cho xong nhé. Hoàn hảo ✅ — đây là phần quan trọng nhất để nâng cấp trải nghiệm người đọc (UX) trong hệ thống tạp chí điện tử:
+mục “Xem bài báo, xem tin tức, xem PDF” là nơi người dùng tương tác nhiều nhất, và cũng là nơi định hình “đẳng cấp học thuật” của website.
+
+Ta sẽ đi từng lớp phân tích:
+1️⃣ Kiểm tra các yếu tố kỹ thuật & UX hiện tại trong mã Next.js của bạn.
+2️⃣ Phân tích điểm yếu, UX chưa tối ưu.
+3️⃣ Đề xuất nâng cấp giao diện + trải nghiệm theo tiêu chuẩn tạp chí học thuật quốc tế (Nature / Elsevier / Springer).
+4️⃣ Tư vấn kỹ thuật cụ thể (Next.js + Tailwind + React PDF / PDF.js).
+
+🧠 I. Phân tích code nguồn (dựa vào cấu trúc bạn gửi trước) 
+
+Hiện tại bạn đang dùng Next.js + TailwindCSS, và các trang hiển thị bài/tin có dạng:
+
+/articles/[slug]/page.tsx /news/[slug]/page.tsx 
+
+Các component chính:
+
+Header/Footer cố định ✅ Nội dung bài render bằng HTML tĩnh hoặc Markdown 🟡 File PDF mở qua link tải (chưa xem trực tiếp) 🔴 Ảnh đại diện, tác giả, ngày đăng hiển thị đơn giản 🟡 Không có thanh đọc, không có mục lục, không có hiệu ứng đọc 🔴 🔍 II. Nhận diện vấn đề UX/UI hiện tại Thành phần Tình trạng hiện tại Hạn chế 🧾 Giao diện đọc bài báo Văn bản dài, đơn sắc, font nhỏ Gây mỏi mắt, thiếu phân cấp 📰 Xem tin tức Giống bài viết bình thường Không có vùng liên quan, ảnh chưa nổi bật 📄 Xem PDF Chỉ link tải Người dùng rời trang, không thân thiện 📚 Trình bày trích dẫn, từ khóa Dạng text đơn giản Không có kiểu học thuật, thiếu thẩm mỹ 🧩 Layout Một cột, phẳng Thiếu sidebar, mục lục, bài liên quan 🔎 Tìm kiếm trong bài / cuộn mượt Chưa có Giảm trải nghiệm nghiên cứu 💎 III. Đề xuất nâng cấp toàn diện (UX học thuật + hiện đại) 
+
+Ta chia làm 3 vùng:
+
+📰 1️⃣ GIAO DIỆN XEM TIN TỨC (News Article Page) 🎨 Mục tiêu: 
+
+Tin tức phải dễ đọc, nhiều hình ảnh, có chiều sâu thị giác nhưng vẫn chuẩn mực, không màu mè.
+
+💡 Gợi ý giao diện: <main className="max-w-[900px] mx-auto py-10 px-4 bg-white rounded-3xl shadow-md"> <h1 className="text-3xl font-bold text-emerald-900 mb-3">{news.title}</h1> <div className="text-sm text-gray-500 mb-6"> 🕓 {formatDate(news.published_at)} • ✍️ {news.author} </div> <img src={news.thumbnail} alt={news.title} className="w-full rounded-xl mb-6 shadow-md" /> <article className="prose prose-lg max-w-none text-gray-800 leading-relaxed"> <div dangerouslySetInnerHTML={{ __html: news.content }} /> </article> <div className="mt-12 border-t pt-8"> <h2 className="text-xl font-semibold text-emerald-800 mb-4">Tin liên quan</h2> <RelatedNews category={news.category} /> </div> </main> ✨ UX bổ sung: Ảnh full-width bo góc + bóng nhẹ. Typography dạng “prose” (Tailwind Typography plugin). Mục tin liên quan ở cuối bài (same category). Hiệu ứng cuộn xuất hiện mượt (AOS hoặc Framer Motion). 📘 2️⃣ GIAO DIỆN XEM BÀI BÁO (Journal Article Page) 🎯 Mục tiêu: 
+
+Hiển thị như tạp chí học thuật quốc tế: rõ phần “Tác giả”, “Tóm tắt”, “Từ khóa”, “Tài liệu tham khảo”, và có khung đọc PDF trực tiếp trong trang.
+
+💡 Cấu trúc layout gợi ý: <main className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 py-10 px-4"> <article className="bg-white rounded-3xl shadow-md p-8"> <h1 className="text-3xl font-bold text-emerald-900 mb-2">{article.title}</h1> <div className="text-sm text-gray-500 mb-4"> {article.authors.map(a => a.name).join(', ')} • {formatDate(article.published_at)} </div> <section className="bg-emerald-50 p-4 rounded-lg mb-6"> <h3 className="font-semibold text-emerald-800 mb-2">Tóm tắt</h3> <p>{article.abstract}</p> </section> <div className="prose prose-lg text-gray-800" dangerouslySetInnerHTML={{ __html: article.content }} /> <section className="mt-10"> <h3 className="text-xl font-semibold text-emerald-800 mb-2">Từ khóa</h3> <div className="flex flex-wrap gap-2"> {article.keywords.split(',').map((kw) => ( <span key={kw} className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">{kw}</span> ))} </div> </section> </article> <aside className="hidden lg:block"> <div className="sticky top-24 space-y-6"> <PDFViewer fileUrl={article.pdf_file} /> <RelatedArticles issue={article.issue} /> </div> </aside> </main> ✨ Cải tiến UX: Yếu tố Giải pháp 📄 PDF đọc trong trang react-pdf hoặc @react-pdf-viewer/core với chế độ scroll / page view 🧾 Tóm tắt và từ khóa Hộp nổi có nền màu emerald nhạt 📚 Tài liệu tham khảo Ẩn/hiện dạng accordion 📊 Chia cột hợp lý Nội dung trái, PDF/related phải 💡 Hiệu ứng đọc Scroll indicator (progress bar) 📖 Typography học thuật Font “Source Serif / Roboto Slab”, line-height lớn 📄 3️⃣ GIAO DIỆN XEM PDF (Embedded Reader) 🎯 Mục tiêu: 
+
+Không bắt người đọc tải file — mở PDF trực tiếp, tương thích di động, có chế độ fullscreen.
+
+💡 Kỹ thuật: 
+
+Dùng thư viện:
+
+npm install @react-pdf-viewer/core @react-pdf-viewer/default-layout 
+
+Cấu hình:
+
+import { Worker, Viewer } from '@react-pdf-viewer/core' import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout' const defaultLayoutPluginInstance = defaultLayoutPlugin() export function PDFViewer({ fileUrl }: { fileUrl: string }) { return ( <div className="border rounded-lg overflow-hidden shadow-md"> <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js"> <Viewer fileUrl={fileUrl} plugins={[defaultLayoutPluginInstance]} /> </Worker> </div> ) } 
+
+💡 Tính năng:
+
+Zoom / search / download / thumbnail sidebar Fullscreen hỗ trợ di động Giữ trong cùng layout → không bị rời trang 
+
+🧠 Tối ưu: preload PDF khi hover vào nút “Xem toàn văn”.
+
+🌈 IV. Trải nghiệm UX nâng cao (độc giả & học thuật) Cải tiến Mô tả Công cụ 📖 Thanh tiến trình đọc (scroll progress) Thanh nhỏ trên đầu hiển thị % cuộn React hook + Tailwind 🧭 Mục lục tự động (Table of Contents) Dựa vào thẻ <h2>, <h3> trong bài custom scroll spy 🔍 Tìm kiếm trong bài (Ctrl+F nội bộ) highlight text search react-highlight-words 📊 Biểu đồ trích dẫn / thống kê tải Gắn API thống kê (nếu có) Chart.js / Recharts 🧩 Chia sẻ xã hội học thuật (DOI, Google Scholar) Nút copy DOI, share link simple icon bar 🧠 AI tóm tắt bài báo (gợi ý) Gọi API OpenAI tóm tắt 3 dòng Tùy chọn nâng cao 🧱 V. Thiết kế màu & cảm nhận thị giác Phần Màu Hiệu ứng Nền trang đọc bg-slate-50 dịu, giảm mỏi mắt Khung bài viết bg-white shadow-lg rounded-3xl tạp chí cao cấp Tóm tắt / Keyword box bg-emerald-50 border-emerald-200 tạo nhịp đọc Liên quan / sidebar bg-slate-100 cân bằng thị giác PDF box border-gray-200 trung tính ⚙️ VI. Tích hợp với hệ CMS (Directus / Strapi) 
+
+Từ CMS, bạn sẽ lấy dữ liệu:
+
+export async function getArticle(slug) { const res = await fetch(`${process.env.CMS_URL}/items/articles?filter[slug][_eq]=${slug}&fields=*,authors.name,issue.title`) const data = await res.json() return data.data[0] } 
+
+→ Hiển thị trong component ArticlePage như ví dụ trên.
+
+PDF file được lưu trong Directus → lấy URL từ API:
+
+<PDFViewer fileUrl={`${process.env.CMS_URL}/assets/${article.pdf_file.id}`} /> ✅ VII. Tóm tắt kế hoạch nâng cấp Thành phần Giải pháp Mức độ tác động Xem Tin tức Layout mới, ảnh lớn, related news 🔧 Nhẹ Xem Bài báo 2 cột (bài + PDF viewer), keyword box 🔧 Trung bình Xem PDF Tích hợp React PDF Viewer 🔧 Trung bình Giao diện học thuật Typography, box màu, scroll progress 💎 Cao CMS tích hợp Lấy dữ liệu bài / file PDF / news ⚙️ Nhẹ 🧠 VIII. Kết luận & khuyến nghị 
+
+Bạn không cần viết lại toàn bộ trang xem bài, chỉ cần:
+
+Giữ nguyên logic router /articles/[slug] và /news/[slug] Thay layout & typography Tích hợp trình PDF viewer Bổ sung box tóm tắt, từ khóa, mục lục Dữ liệu lấy từ CMS qua API 
+
+Kết quả:
+
+Giao diện học thuật cao cấp 🎓 Thân thiện, đẹp, dễ đọc, đúng chuẩn tạp chí Hỗ trợ người đọc tra cứu, tải PDF, xem trên di động mượt mà.

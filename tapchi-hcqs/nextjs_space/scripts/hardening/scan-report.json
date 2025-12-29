@@ -1,0 +1,6741 @@
+{
+  "timestamp": "2025-12-28T07:08:29.649Z",
+  "summary": {
+    "total": 176,
+    "withAuth": 131,
+    "withLogger": 2,
+    "withErrorHandler": 1,
+    "withValidator": 1
+  },
+  "byCategory": {
+    "Other": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/categories/[id]/route.ts",
+        "relativePath": "admin/categories/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/comments/route.ts",
+        "relativePath": "admin/comments/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/dashboard-stats/route.ts",
+        "relativePath": "admin/dashboard-stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/[id]/route.ts",
+        "relativePath": "admin/deadlines/[id]/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/route.ts",
+        "relativePath": "admin/deadlines/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/[id]/route.ts",
+        "relativePath": "admin/featured-articles/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/route.ts",
+        "relativePath": "admin/featured-articles/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/monitor/route.ts",
+        "relativePath": "admin/monitor/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/[id]/route.ts",
+        "relativePath": "admin/role-escalation/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/route.ts",
+        "relativePath": "admin/role-escalation/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/approve/route.ts",
+        "relativePath": "admin/users/approve/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/pending/route.ts",
+        "relativePath": "admin/users/pending/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/stats/route.ts",
+        "relativePath": "admin/users/stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/toggle-active/route.ts",
+        "relativePath": "admin/users/toggle-active/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/analytics/route.ts",
+        "relativePath": "analytics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/approve/route.ts",
+        "relativePath": "articles/[id]/approve/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/assign-issue/route.ts",
+        "relativePath": "articles/[id]/assign-issue/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/citation/route.ts",
+        "relativePath": "articles/[id]/citation/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/pdf/route.ts",
+        "relativePath": "articles/[id]/pdf/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/route.ts",
+        "relativePath": "articles/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/versions/route.ts",
+        "relativePath": "articles/[id]/versions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/route.ts",
+        "relativePath": "articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/route.ts",
+        "relativePath": "audit-logs/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/stats/route.ts",
+        "relativePath": "audit-logs/stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/route.ts",
+        "relativePath": "auth/2fa/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/send-otp/route.ts",
+        "relativePath": "auth/2fa/send-otp/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/verify-otp/route.ts",
+        "relativePath": "auth/2fa/verify-otp/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/[...nextauth]/route.ts",
+        "relativePath": "auth/[...nextauth]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/csrf/route.ts",
+        "relativePath": "auth/csrf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/forgot-password/route.ts",
+        "relativePath": "auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/login/route.ts",
+        "relativePath": "auth/login/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/logout/route.ts",
+        "relativePath": "auth/logout/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/me/route.ts",
+        "relativePath": "auth/me/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/callback/route.ts",
+        "relativePath": "auth/orcid/callback/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/route.ts",
+        "relativePath": "auth/orcid/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/refresh/route.ts",
+        "relativePath": "auth/refresh/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/register/route.ts",
+        "relativePath": "auth/register/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/reset-password/route.ts",
+        "relativePath": "auth/reset-password/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/signin/route.ts",
+        "relativePath": "auth/signin/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/verify-email/route.ts",
+        "relativePath": "auth/verify-email/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/statistics/route.ts",
+        "relativePath": "author/statistics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/analytics/route.ts",
+        "relativePath": "banners/[id]/analytics/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/image-url/route.ts",
+        "relativePath": "banners/[id]/image-url/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/route.ts",
+        "relativePath": "banners/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/bulk-update-order/route.ts",
+        "relativePath": "banners/bulk-update-order/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/reorder/route.ts",
+        "relativePath": "banners/reorder/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/route.ts",
+        "relativePath": "banners/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/clear/route.ts",
+        "relativePath": "cache/clear/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/revalidate/route.ts",
+        "relativePath": "cache/revalidate/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/[id]/route.ts",
+        "relativePath": "categories/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/alias/route.ts",
+        "relativePath": "categories/alias/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/route.ts",
+        "relativePath": "categories/by-slug/[slug]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/route.ts",
+        "relativePath": "categories/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/[id]/route.ts",
+        "relativePath": "chat/conversations/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/route.ts",
+        "relativePath": "chat/conversations/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/messages/route.ts",
+        "relativePath": "chat/messages/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/[id]/route.ts",
+        "relativePath": "comments/[id]/route.ts",
+        "methods": [
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/route.ts",
+        "relativePath": "comments/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/[id]/route.ts",
+        "relativePath": "copyediting/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/history/[articleId]/route.ts",
+        "relativePath": "copyediting/history/[articleId]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/route.ts",
+        "relativePath": "copyediting/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/check-overdue/route.ts",
+        "relativePath": "cron/check-overdue/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/reminders/route.ts",
+        "relativePath": "cron/reminders/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/run-jobs/route.ts",
+        "relativePath": "cron/run-jobs/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/csrf/route.ts",
+        "relativePath": "csrf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/dashboard/summary/route.ts",
+        "relativePath": "dashboard/summary/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/deadlines/route.ts",
+        "relativePath": "deadlines/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/excel/route.ts",
+        "relativePath": "export/excel/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/pdf/route.ts",
+        "relativePath": "export/pdf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/[id]/route.ts",
+        "relativePath": "featured-articles/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/route.ts",
+        "relativePath": "featured-articles/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/[id]/route.ts",
+        "relativePath": "files/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/download/route.ts",
+        "relativePath": "files/download/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/route.ts",
+        "relativePath": "files/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/upload/route.ts",
+        "relativePath": "files/upload/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/health/route.ts",
+        "relativePath": "health/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": true,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/[id]/route.ts",
+        "relativePath": "homepage-sections/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/route.ts",
+        "relativePath": "homepage-sections/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/images/proxy/route.ts",
+        "relativePath": "images/proxy/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/download/route.ts",
+        "relativePath": "issues/[id]/download/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/route.ts",
+        "relativePath": "issues/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/add-articles/route.ts",
+        "relativePath": "issues/add-articles/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/latest/route.ts",
+        "relativePath": "issues/latest/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/publish/route.ts",
+        "relativePath": "issues/publish/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/route.ts",
+        "relativePath": "issues/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/upload/route.ts",
+        "relativePath": "issues/upload/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/[id]/route.ts",
+        "relativePath": "keywords/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/route.ts",
+        "relativePath": "keywords/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/[id]/route.ts",
+        "relativePath": "media/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/route.ts",
+        "relativePath": "media/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/messages/route.ts",
+        "relativePath": "messages/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metadata/route.ts",
+        "relativePath": "metadata/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metrics/article/[articleId]/route.ts",
+        "relativePath": "metrics/article/[articleId]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/[id]/route.ts",
+        "relativePath": "navigation/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/bulk-update/route.ts",
+        "relativePath": "navigation/bulk-update/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/route.ts",
+        "relativePath": "navigation/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/[id]/route.ts",
+        "relativePath": "news/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/route.ts",
+        "relativePath": "news/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/slug-backup/route.ts",
+        "relativePath": "news/slug-backup/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/upload-image/route.ts",
+        "relativePath": "news/upload-image/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/notifications/route.ts",
+        "relativePath": "notifications/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/key-backup/route.ts",
+        "relativePath": "page-blocks/key-backup/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/reorder/route.ts",
+        "relativePath": "page-blocks/reorder/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/route.ts",
+        "relativePath": "page-blocks/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/role/route.ts",
+        "relativePath": "permissions/role/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/route.ts",
+        "relativePath": "permissions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/seed/route.ts",
+        "relativePath": "permissions/seed/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/plagiarism/route.ts",
+        "relativePath": "plagiarism/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/[id]/route.ts",
+        "relativePath": "production/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/publish/route.ts",
+        "relativePath": "production/publish/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/route.ts",
+        "relativePath": "production/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/[id]/route.ts",
+        "relativePath": "public-pages/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/route.ts",
+        "relativePath": "public-pages/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/push/subscribe/route.ts",
+        "relativePath": "push/subscribe/route.ts",
+        "methods": [
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/[id]/expertise/route.ts",
+        "relativePath": "reviewers/[id]/expertise/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/match/route.ts",
+        "relativePath": "reviewers/match/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/profile/route.ts",
+        "relativePath": "reviewers/profile/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/suggest/route.ts",
+        "relativePath": "reviewers/suggest/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/complete/route.ts",
+        "relativePath": "reviews/[id]/complete/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/route.ts",
+        "relativePath": "reviews/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/route.ts",
+        "relativePath": "reviews/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/advanced/route.ts",
+        "relativePath": "search/advanced/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/filter/route.ts",
+        "relativePath": "search/filter/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/route.ts",
+        "relativePath": "search/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/semantic/route.ts",
+        "relativePath": "search/semantic/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/[id]/route.ts",
+        "relativePath": "security/alerts/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/route.ts",
+        "relativePath": "security/alerts/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/[id]/route.ts",
+        "relativePath": "security/api-tokens/[id]/route.ts",
+        "methods": [
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/route.ts",
+        "relativePath": "security/api-tokens/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/retention/route.ts",
+        "relativePath": "security/retention/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/sessions/route.ts",
+        "relativePath": "sessions/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/signup/route.ts",
+        "relativePath": "signup/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/[key]/route.ts",
+        "relativePath": "site-settings/[key]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/route.ts",
+        "relativePath": "site-settings/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/dashboard/route.ts",
+        "relativePath": "statistics/dashboard/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor-performance/route.ts",
+        "relativePath": "statistics/editor-performance/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/overview/route.ts",
+        "relativePath": "statistics/overview/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/review-monthly/route.ts",
+        "relativePath": "statistics/review-monthly/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers/route.ts",
+        "relativePath": "statistics/reviewers/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers-advanced/route.ts",
+        "relativePath": "statistics/reviewers-advanced/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/system/route.ts",
+        "relativePath": "statistics/system/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/trends/route.ts",
+        "relativePath": "statistics/trends/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/user-roles/route.ts",
+        "relativePath": "statistics/user-roles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/users/route.ts",
+        "relativePath": "statistics/users/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/workflow/route.ts",
+        "relativePath": "statistics/workflow/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/assign-reviewers/route.ts",
+        "relativePath": "submissions/[id]/assign-reviewers/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/comments/route.ts",
+        "relativePath": "submissions/[id]/comments/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/decision/route.ts",
+        "relativePath": "submissions/[id]/decision/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/route.ts",
+        "relativePath": "submissions/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/status/route.ts",
+        "relativePath": "submissions/[id]/status/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/revise/route.ts",
+        "relativePath": "submissions/revise/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/route.ts",
+        "relativePath": "submissions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": true,
+        "hasErrorHandler": true,
+        "hasValidator": true,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/ui-config/route.ts",
+        "relativePath": "ui-config/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/reset-password/route.ts",
+        "relativePath": "users/[id]/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/route.ts",
+        "relativePath": "users/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/export/route.ts",
+        "relativePath": "users/export/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/password/route.ts",
+        "relativePath": "users/password/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/profile/route.ts",
+        "relativePath": "users/profile/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/route.ts",
+        "relativePath": "users/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/search/route.ts",
+        "relativePath": "users/search/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/sessions/route.ts",
+        "relativePath": "users/sessions/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/[id]/route.ts",
+        "relativePath": "videos/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/route.ts",
+        "relativePath": "videos/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/[id]/route.ts",
+        "relativePath": "volumes/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/route.ts",
+        "relativePath": "volumes/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/auto-assign/route.ts",
+        "relativePath": "workflow/auto-assign/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/route.ts",
+        "relativePath": "workflow/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/timeline/route.ts",
+        "relativePath": "workflow/timeline/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      }
+    ],
+    "Articles": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/autosave/route.ts",
+        "relativePath": "author/articles/[id]/autosave/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/route.ts",
+        "relativePath": "author/articles/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/route.ts",
+        "relativePath": "author/articles/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/articles/route.ts",
+        "relativePath": "categories/by-slug/[slug]/articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/[id]/route.ts",
+        "relativePath": "public/articles/[id]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/route.ts",
+        "relativePath": "public/articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      }
+    ],
+    "Editor": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor/route.ts",
+        "relativePath": "statistics/editor/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "HIGH",
+        "category": "Editor"
+      }
+    ],
+    "Submissions": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/submissions/route.ts",
+        "relativePath": "statistics/submissions/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "HIGH",
+        "category": "Submissions"
+      }
+    ]
+  },
+  "byPriority": {
+    "MEDIUM": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/categories/[id]/route.ts",
+        "relativePath": "admin/categories/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/comments/route.ts",
+        "relativePath": "admin/comments/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/dashboard-stats/route.ts",
+        "relativePath": "admin/dashboard-stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/[id]/route.ts",
+        "relativePath": "admin/deadlines/[id]/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/route.ts",
+        "relativePath": "admin/deadlines/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/[id]/route.ts",
+        "relativePath": "admin/featured-articles/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/route.ts",
+        "relativePath": "admin/featured-articles/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/monitor/route.ts",
+        "relativePath": "admin/monitor/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/[id]/route.ts",
+        "relativePath": "admin/role-escalation/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/route.ts",
+        "relativePath": "admin/role-escalation/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/approve/route.ts",
+        "relativePath": "admin/users/approve/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/pending/route.ts",
+        "relativePath": "admin/users/pending/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/stats/route.ts",
+        "relativePath": "admin/users/stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/toggle-active/route.ts",
+        "relativePath": "admin/users/toggle-active/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/analytics/route.ts",
+        "relativePath": "analytics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/approve/route.ts",
+        "relativePath": "articles/[id]/approve/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/assign-issue/route.ts",
+        "relativePath": "articles/[id]/assign-issue/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/citation/route.ts",
+        "relativePath": "articles/[id]/citation/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/pdf/route.ts",
+        "relativePath": "articles/[id]/pdf/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/route.ts",
+        "relativePath": "articles/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/versions/route.ts",
+        "relativePath": "articles/[id]/versions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/route.ts",
+        "relativePath": "articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/route.ts",
+        "relativePath": "audit-logs/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/stats/route.ts",
+        "relativePath": "audit-logs/stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/route.ts",
+        "relativePath": "auth/2fa/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/send-otp/route.ts",
+        "relativePath": "auth/2fa/send-otp/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/verify-otp/route.ts",
+        "relativePath": "auth/2fa/verify-otp/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/[...nextauth]/route.ts",
+        "relativePath": "auth/[...nextauth]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/csrf/route.ts",
+        "relativePath": "auth/csrf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/forgot-password/route.ts",
+        "relativePath": "auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/login/route.ts",
+        "relativePath": "auth/login/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/logout/route.ts",
+        "relativePath": "auth/logout/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/me/route.ts",
+        "relativePath": "auth/me/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/callback/route.ts",
+        "relativePath": "auth/orcid/callback/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/route.ts",
+        "relativePath": "auth/orcid/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/refresh/route.ts",
+        "relativePath": "auth/refresh/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/register/route.ts",
+        "relativePath": "auth/register/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/reset-password/route.ts",
+        "relativePath": "auth/reset-password/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/signin/route.ts",
+        "relativePath": "auth/signin/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/verify-email/route.ts",
+        "relativePath": "auth/verify-email/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/autosave/route.ts",
+        "relativePath": "author/articles/[id]/autosave/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/route.ts",
+        "relativePath": "author/articles/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/route.ts",
+        "relativePath": "author/articles/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/statistics/route.ts",
+        "relativePath": "author/statistics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/analytics/route.ts",
+        "relativePath": "banners/[id]/analytics/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/image-url/route.ts",
+        "relativePath": "banners/[id]/image-url/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/route.ts",
+        "relativePath": "banners/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/bulk-update-order/route.ts",
+        "relativePath": "banners/bulk-update-order/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/reorder/route.ts",
+        "relativePath": "banners/reorder/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/route.ts",
+        "relativePath": "banners/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/clear/route.ts",
+        "relativePath": "cache/clear/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/revalidate/route.ts",
+        "relativePath": "cache/revalidate/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/[id]/route.ts",
+        "relativePath": "categories/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/alias/route.ts",
+        "relativePath": "categories/alias/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/articles/route.ts",
+        "relativePath": "categories/by-slug/[slug]/articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/route.ts",
+        "relativePath": "categories/by-slug/[slug]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/route.ts",
+        "relativePath": "categories/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/[id]/route.ts",
+        "relativePath": "chat/conversations/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/route.ts",
+        "relativePath": "chat/conversations/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/messages/route.ts",
+        "relativePath": "chat/messages/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/[id]/route.ts",
+        "relativePath": "comments/[id]/route.ts",
+        "methods": [
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/route.ts",
+        "relativePath": "comments/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/[id]/route.ts",
+        "relativePath": "copyediting/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/history/[articleId]/route.ts",
+        "relativePath": "copyediting/history/[articleId]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/route.ts",
+        "relativePath": "copyediting/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/check-overdue/route.ts",
+        "relativePath": "cron/check-overdue/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/reminders/route.ts",
+        "relativePath": "cron/reminders/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/run-jobs/route.ts",
+        "relativePath": "cron/run-jobs/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/csrf/route.ts",
+        "relativePath": "csrf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/dashboard/summary/route.ts",
+        "relativePath": "dashboard/summary/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/deadlines/route.ts",
+        "relativePath": "deadlines/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/excel/route.ts",
+        "relativePath": "export/excel/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/pdf/route.ts",
+        "relativePath": "export/pdf/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/[id]/route.ts",
+        "relativePath": "featured-articles/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/route.ts",
+        "relativePath": "featured-articles/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/[id]/route.ts",
+        "relativePath": "files/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/download/route.ts",
+        "relativePath": "files/download/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/route.ts",
+        "relativePath": "files/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/upload/route.ts",
+        "relativePath": "files/upload/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/health/route.ts",
+        "relativePath": "health/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": true,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/[id]/route.ts",
+        "relativePath": "homepage-sections/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/route.ts",
+        "relativePath": "homepage-sections/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/images/proxy/route.ts",
+        "relativePath": "images/proxy/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/download/route.ts",
+        "relativePath": "issues/[id]/download/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/route.ts",
+        "relativePath": "issues/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/add-articles/route.ts",
+        "relativePath": "issues/add-articles/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/latest/route.ts",
+        "relativePath": "issues/latest/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/publish/route.ts",
+        "relativePath": "issues/publish/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/route.ts",
+        "relativePath": "issues/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/upload/route.ts",
+        "relativePath": "issues/upload/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/[id]/route.ts",
+        "relativePath": "keywords/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/route.ts",
+        "relativePath": "keywords/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/[id]/route.ts",
+        "relativePath": "media/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/route.ts",
+        "relativePath": "media/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/messages/route.ts",
+        "relativePath": "messages/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metadata/route.ts",
+        "relativePath": "metadata/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metrics/article/[articleId]/route.ts",
+        "relativePath": "metrics/article/[articleId]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/[id]/route.ts",
+        "relativePath": "navigation/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/bulk-update/route.ts",
+        "relativePath": "navigation/bulk-update/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/route.ts",
+        "relativePath": "navigation/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/[id]/route.ts",
+        "relativePath": "news/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/route.ts",
+        "relativePath": "news/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/slug-backup/route.ts",
+        "relativePath": "news/slug-backup/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/upload-image/route.ts",
+        "relativePath": "news/upload-image/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/notifications/route.ts",
+        "relativePath": "notifications/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/key-backup/route.ts",
+        "relativePath": "page-blocks/key-backup/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/reorder/route.ts",
+        "relativePath": "page-blocks/reorder/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/route.ts",
+        "relativePath": "page-blocks/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/role/route.ts",
+        "relativePath": "permissions/role/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/route.ts",
+        "relativePath": "permissions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/seed/route.ts",
+        "relativePath": "permissions/seed/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/plagiarism/route.ts",
+        "relativePath": "plagiarism/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/[id]/route.ts",
+        "relativePath": "production/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/publish/route.ts",
+        "relativePath": "production/publish/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/route.ts",
+        "relativePath": "production/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/[id]/route.ts",
+        "relativePath": "public/articles/[id]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/route.ts",
+        "relativePath": "public/articles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Articles"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/[id]/route.ts",
+        "relativePath": "public-pages/[id]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/route.ts",
+        "relativePath": "public-pages/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/push/subscribe/route.ts",
+        "relativePath": "push/subscribe/route.ts",
+        "methods": [
+          "POST",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/[id]/expertise/route.ts",
+        "relativePath": "reviewers/[id]/expertise/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/match/route.ts",
+        "relativePath": "reviewers/match/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/profile/route.ts",
+        "relativePath": "reviewers/profile/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/suggest/route.ts",
+        "relativePath": "reviewers/suggest/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/complete/route.ts",
+        "relativePath": "reviews/[id]/complete/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/route.ts",
+        "relativePath": "reviews/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/route.ts",
+        "relativePath": "reviews/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/advanced/route.ts",
+        "relativePath": "search/advanced/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/filter/route.ts",
+        "relativePath": "search/filter/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/route.ts",
+        "relativePath": "search/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/semantic/route.ts",
+        "relativePath": "search/semantic/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/[id]/route.ts",
+        "relativePath": "security/alerts/[id]/route.ts",
+        "methods": [
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/route.ts",
+        "relativePath": "security/alerts/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/[id]/route.ts",
+        "relativePath": "security/api-tokens/[id]/route.ts",
+        "methods": [
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/route.ts",
+        "relativePath": "security/api-tokens/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/retention/route.ts",
+        "relativePath": "security/retention/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/sessions/route.ts",
+        "relativePath": "sessions/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/signup/route.ts",
+        "relativePath": "signup/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/[key]/route.ts",
+        "relativePath": "site-settings/[key]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/route.ts",
+        "relativePath": "site-settings/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/dashboard/route.ts",
+        "relativePath": "statistics/dashboard/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor-performance/route.ts",
+        "relativePath": "statistics/editor-performance/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/overview/route.ts",
+        "relativePath": "statistics/overview/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/review-monthly/route.ts",
+        "relativePath": "statistics/review-monthly/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers/route.ts",
+        "relativePath": "statistics/reviewers/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers-advanced/route.ts",
+        "relativePath": "statistics/reviewers-advanced/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/system/route.ts",
+        "relativePath": "statistics/system/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/trends/route.ts",
+        "relativePath": "statistics/trends/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/user-roles/route.ts",
+        "relativePath": "statistics/user-roles/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/users/route.ts",
+        "relativePath": "statistics/users/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/workflow/route.ts",
+        "relativePath": "statistics/workflow/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/assign-reviewers/route.ts",
+        "relativePath": "submissions/[id]/assign-reviewers/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/comments/route.ts",
+        "relativePath": "submissions/[id]/comments/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/decision/route.ts",
+        "relativePath": "submissions/[id]/decision/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/route.ts",
+        "relativePath": "submissions/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/status/route.ts",
+        "relativePath": "submissions/[id]/status/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/revise/route.ts",
+        "relativePath": "submissions/revise/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/route.ts",
+        "relativePath": "submissions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": true,
+        "hasErrorHandler": true,
+        "hasValidator": true,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/ui-config/route.ts",
+        "relativePath": "ui-config/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/reset-password/route.ts",
+        "relativePath": "users/[id]/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/route.ts",
+        "relativePath": "users/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/export/route.ts",
+        "relativePath": "users/export/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/password/route.ts",
+        "relativePath": "users/password/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/profile/route.ts",
+        "relativePath": "users/profile/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/route.ts",
+        "relativePath": "users/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/search/route.ts",
+        "relativePath": "users/search/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/sessions/route.ts",
+        "relativePath": "users/sessions/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/[id]/route.ts",
+        "relativePath": "videos/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/route.ts",
+        "relativePath": "videos/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/[id]/route.ts",
+        "relativePath": "volumes/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/route.ts",
+        "relativePath": "volumes/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/auto-assign/route.ts",
+        "relativePath": "workflow/auto-assign/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/route.ts",
+        "relativePath": "workflow/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/timeline/route.ts",
+        "relativePath": "workflow/timeline/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "MEDIUM",
+        "category": "Other"
+      }
+    ],
+    "HIGH": [
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor/route.ts",
+        "relativePath": "statistics/editor/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": true,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "HIGH",
+        "category": "Editor"
+      },
+      {
+        "path": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/submissions/route.ts",
+        "relativePath": "statistics/submissions/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "hasAuth": false,
+        "hasLogger": false,
+        "hasErrorHandler": false,
+        "hasValidator": false,
+        "priority": "HIGH",
+        "category": "Submissions"
+      }
+    ]
+  },
+  "needHardening": [
+    {
+      "path": "admin/categories/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/comments/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/dashboard-stats/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/deadlines/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/deadlines/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/featured-articles/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/featured-articles/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/monitor/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/role-escalation/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/role-escalation/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/users/approve/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/users/pending/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/users/stats/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "admin/users/toggle-active/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "analytics/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/approve/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/assign-issue/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/citation/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/pdf/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/[id]/versions/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "articles/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "audit-logs/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "audit-logs/stats/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/2fa/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/2fa/send-otp/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/2fa/verify-otp/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/[...nextauth]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/csrf/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/forgot-password/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/login/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/logout/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/me/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/orcid/callback/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/orcid/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/refresh/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/register/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/reset-password/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/signin/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "auth/verify-email/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "author/articles/[id]/autosave/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "author/articles/[id]/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "author/articles/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "author/statistics/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/[id]/analytics/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/[id]/image-url/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/bulk-update-order/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/reorder/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "banners/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "cache/clear/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "cache/revalidate/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "categories/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "categories/alias/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "categories/by-slug/[slug]/articles/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "categories/by-slug/[slug]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "categories/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "chat/conversations/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "chat/conversations/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "chat/messages/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "comments/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "comments/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "copyediting/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "copyediting/history/[articleId]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "copyediting/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "cron/check-overdue/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "cron/reminders/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "cron/run-jobs/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "csrf/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "dashboard/summary/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "deadlines/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "export/excel/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "export/pdf/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "featured-articles/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "featured-articles/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "files/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "files/download/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "files/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "files/upload/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "health/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": false,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "homepage-sections/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "homepage-sections/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "images/proxy/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/[id]/download/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/add-articles/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/latest/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/publish/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "issues/upload/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "keywords/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "keywords/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "media/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "media/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "messages/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "metadata/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "metrics/article/[articleId]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "navigation/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "navigation/bulk-update/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "navigation/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "news/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "news/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "news/slug-backup/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "news/upload-image/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "notifications/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "page-blocks/key-backup/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "page-blocks/reorder/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "page-blocks/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "permissions/role/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "permissions/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "permissions/seed/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "plagiarism/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "production/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "production/publish/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "production/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "public/articles/[id]/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "public/articles/route.ts",
+      "category": "Articles",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "public-pages/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "public-pages/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "push/subscribe/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviewers/[id]/expertise/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviewers/match/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviewers/profile/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviewers/suggest/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviews/[id]/complete/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviews/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "reviews/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "search/advanced/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "search/filter/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "search/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "search/semantic/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "security/alerts/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "security/alerts/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "security/api-tokens/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "security/api-tokens/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "security/retention/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "sessions/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "signup/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "site-settings/[key]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "site-settings/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/dashboard/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/editor/route.ts",
+      "category": "Editor",
+      "priority": "HIGH",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/editor-performance/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/overview/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/review-monthly/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/reviewers/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/reviewers-advanced/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/submissions/route.ts",
+      "category": "Submissions",
+      "priority": "HIGH",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/system/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/trends/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/user-roles/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/users/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "statistics/workflow/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": true,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/[id]/assign-reviewers/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/[id]/comments/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/[id]/decision/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/[id]/status/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "submissions/revise/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "ui-config/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/[id]/reset-password/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/export/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/password/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/profile/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/search/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "users/sessions/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "videos/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "videos/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "volumes/[id]/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "volumes/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "workflow/auto-assign/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "workflow/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    },
+    {
+      "path": "workflow/timeline/route.ts",
+      "category": "Other",
+      "priority": "MEDIUM",
+      "missing": {
+        "auth": false,
+        "logger": true,
+        "errorHandler": true,
+        "validator": true
+      }
+    }
+  ]
+}

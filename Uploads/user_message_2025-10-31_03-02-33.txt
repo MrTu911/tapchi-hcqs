@@ -1,0 +1,555 @@
+Xây dựng và hoàn thiện các chức năng của phần mềm. Tuân thủ theo nguyên tắc. Đây là tư vấn của tôi "Tuyệt vời. Tôi đã mở và đọc trực tiếp mã nguồn trong gói của anh/chị (`/mnt/data/tapchi-hcqs (1).zip` → thư mục `nextjs_space`). Dưới đây là **bản phân tích chuyên gia theo từng chức năng**, đi kèm **sửa lỗi cụ thể theo file** và **đề xuất patch code** để anh/chị dán vào dự án ngay.
+
+---
+
+# 0) Tóm tắt các phát hiện “quan trọng phải sửa”
+
+1. **Prisma config sai**: `prisma/schema.prisma` đang đặt `output` tuyệt đối + `binaryTargets` lệch kiến trúc → dễ vỡ build CI/DeepAgent.
+2. **Rò rỉ bí mật**: Repo chứa `.env` (tại `nextjs_space/.env`).
+3. **Upload phụ thuộc S3**: `lib/s3.ts` + `lib/aws-config.ts` sẽ ném lỗi nếu không có biến AWS → route `/api/files/upload` “đổ ngay” khi chưa cấu hình.
+4. **Sai tên role** trong `middleware.ts`: có `"EDITOR"` nhưng enum hệ thống là `"SECTION_EDITOR"`.
+5. **Lệch export**: Nhiều route `import { logAudit }` nhưng file thực tế export là `auditLogger` (object có method), gây runtime error khi gọi.
+6. **Phiên bản lệch**: `next@14.2.28` nhưng `eslint-config-next@15.3.0`, `@next/swc-wasm-nodejs@13.5.1` → nên đồng bộ.
+7. Nhiều route **còn dở (… bị cắt)**: `app/api/submissions/route.ts`, `submissions/[id]/assign-reviewers/route.ts`, `auth/login/route.ts`, `search/route.ts`… cần hoàn thiện thân hàm.
+
+---
+
+# 1) Xác thực & Phiên (Auth)
+
+**Mã liên quan:**
+
+* `app/api/auth/login/route.ts` (đã dùng `zod`, `auditLogger`, `bcrypt`)
+* `app/api/auth/[...nextauth]/route.ts` (stub)
+* `lib/auth.ts` (JWT + cookie + refresh)
+* `middleware.ts` (bảo vệ `/dashboard/*`, đọc token bằng `auth-edge`)
+
+**Vấn đề & rủi ro**
+
+* Đang song song **JWT custom** và **NextAuth stub** ⇒ dễ xung đột.
+* `lib/auth.ts` có đoạn bị cắt (`BCRYPT_SALT_ROUN...`) ⇒ nguy cơ lỗi compile.
+* Chưa chèn **CSRF** bắt buộc ở POST nhạy cảm (mặc dù có route `/api/auth/csrf`).
+
+**Giải pháp cụ thể**
+
+* **Chốt JWT custom** cho MVP, **không** bật NextAuth provider.
+* Hoàn thiện `lib/auth.ts`: thêm hằng số rounds, làm rõ refresh.
+* Dùng **cookie httpOnly + secure + SameSite=Lax** (đã có `getSecureCookieOptions`).
+* POST form quan trọng → **bắt buộc kèm CSRF token** từ `/api/auth/csrf`.
+
+**Patch gợi ý – hoàn tất phần bị cắt trong `lib/auth.ts`**
+
+```ts
+// lib/auth.ts (bổ sung vào cuối đoạn bị cắt)
+const BCRYPT_SALT_ROUNDS = 12
+
+export async function hashPassword(plain: string) {
+  return bcrypt.hash(plain, BCRYPT_SALT_ROUNDS)
+}
+export async function comparePassword(plain: string, hash: string) {
+  return bcrypt.compare(plain, hash)
+}
+```
+
+---
+
+# 2) Phân quyền RBAC & Middleware
+
+**Mã liên quan:**
+
+* `lib/rbac.ts` (đầy đủ canXxx, roleHierarchy – file có “…”, nhưng đã thấy đủ khung)
+* `middleware.ts` (map role → dashboard; chặn /dashboard/*)
+
+**Vấn đề**
+
+* `middleware.ts` chứa key `"EDITOR"` trong `roleDashboardMap`, trong khi enum của hệ thống không có `"EDITOR"` (đúng phải là `"SECTION_EDITOR"`).
+
+**Giải pháp**
+
+* Đổi `"EDITOR": "/dashboard/editor"` thành `"SECTION_EDITOR": "/dashboard/editor"`.
+* Thêm **rate-limit** nhẹ cho `/api/auth*`, `/api/submissions*`, `/api/files*` (MVP dùng in-memory; giai đoạn 2 dùng Redis).
+
+**Patch – sửa role map + rate-limit nhẹ**
+
+```ts
+// middleware.ts
+const roleDashboardMap: Record<string, string> = {
+  SYSADMIN: '/dashboard/admin',
+  EIC: '/dashboard/eic',
+  MANAGING_EDITOR: '/dashboard/managing',
+  SECTION_EDITOR: '/dashboard/editor',
+  LAYOUT_EDITOR: '/dashboard/layout',
+  SECURITY_AUDITOR: '/dashboard/security',
+  REVIEWER: '/dashboard/reviewer',
+  AUTHOR: '/dashboard/author',
+  READER: '/dashboard/author'
+}
+```
+
+---
+
+# 3) Người dùng (User) & Quản trị
+
+**Mã liên quan:**
+
+* `app/api/users/*` (profile, password, list, [id])
+* `scripts/seed.ts` (seed admin/editor/reviewer/author)
+
+**Vấn đề**
+
+* Cần đảm bảo `isActive=false` **không** cho đăng nhập.
+* Lịch sử thay đổi role chưa log đầy đủ.
+
+**Giải pháp**
+
+* Trong `auth/login/route.ts`, đã check `user.isActive`; giữ nguyên.
+* Mọi thao tác đổi role (`PATCH /api/users/[id]`) → ghi `AuditLog` (đang có `audit-logger.ts`, dùng `auditLogger.logSuccess`/`logFailure`).
+
+---
+
+# 4) Chuyên mục (Category)
+
+**Mã liên quan:**
+
+* `prisma/schema.prisma` (model `Category`)
+* `scripts/seed.ts` (đã seed 11 chuyên mục chuẩn)
+* `app/api/categories/*`
+
+**Vấn đề**
+
+* Đảm bảo `slug` unique; đổi tên cần alias/redirect.
+
+**Giải pháp**
+
+* `slug` đã unique. Tùy nhu cầu, thêm bảng `CategoryAlias` (V2) để redirect 301.
+
+---
+
+# 5) Nộp bài & Phiên bản (Submissions, SubmissionVersion)
+
+**Mã liên quan:**
+
+* `app/api/submissions/route.ts` (POST/GET – hiện **bị cắt giữa chừng**)
+* `app/api/submissions/[id]/route.ts` (GET – ổn, include author/category)
+* `prisma/schema.prisma` (models: `Submission`, `SubmissionVersion`)
+
+**Vấn đề**
+
+* `submissions/route.ts` dở dang: phần lấy `keywords`, `categoryId` và tạo bản ghi version chưa xong.
+
+**Giải pháp**
+
+* Hoàn thiện POST: parse `keywords` → `string[]`; lưu `categoryId`; tạo `SubmissionVersion v1`.
+
+**Patch – hoàn tất POST tạo submission + v1**
+
+```ts
+// app/api/submissions/route.ts (tiếp nối phần bị cắt)
+  const categoryId = formData.get('categoryId') as string | null
+  const keywordsArr = (keywords || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean)
+
+  const sub = await prisma.submission.create({
+    data: {
+      code: 'SUB-' + Date.now(),
+      title,
+      abstractVn,
+      abstractEn,
+      keywords: keywordsArr,
+      section: section || null,
+      status: 'NEW',
+      securityLevel: 'OPEN',
+      categoryId: categoryId || null,
+      createdBy: session.uid
+    }
+  })
+
+  // tạo version v1 trống (fileset lưu qua upload sau)
+  await prisma.submissionVersion.create({
+    data: {
+      submissionId: sub.id,
+      versionNo: 1,
+      filesetId: '' // cập nhật sau khi upload asset
+    }
+  })
+
+  return NextResponse.json(sub, { status: 201 })
+```
+
+---
+
+# 6) Gán phản biện (Assign Reviewers)
+
+**Mã liên quan:**
+
+* `app/api/submissions/[id]/assign-reviewers/route.ts` (POST – **bị cắt giữa**)
+
+**Vấn đề**
+
+* Chưa validate `reviewerIds`, chưa chặn gán trùng.
+
+**Giải pháp**
+
+* Kiểm tra mảng, loại trùng, tạo bản ghi `Review` theo `roundNo` hiện tại.
+
+**Patch – hoàn tất gán reviewer**
+
+```ts
+// app/api/submissions/[id]/assign-reviewers/route.ts (tiếp)
+  if (!reviewerIds || !Array.isArray(reviewerIds) || reviewerIds.length === 0) {
+    return NextResponse.json({ error: 'Thiếu danh sách phản biện' }, { status: 400 })
+  }
+  const unique = Array.from(new Set(reviewerIds.map((x:string)=>x.trim()).filter(Boolean)))
+
+  const submission = await prisma.submission.findUnique({
+    where: { id },
+    include: { reviews: true }
+  })
+  if (!submission) return NextResponse.json({ error: 'Không tìm thấy bài' }, { status: 404 })
+
+  const currentRound = (submission.reviews?.reduce((m, r) => Math.max(m, r.roundNo), 0) || 0) + 1
+
+  // chặn gán trùng reviewer trong cùng round
+  const existingIds = new Set(submission.reviews?.filter(r => r.roundNo === currentRound).map(r => r.reviewerId) || [])
+  const toCreate = unique.filter(uid => !existingIds.has(uid))
+
+  const created = await Promise.all(
+    toCreate.map(uid => prisma.review.create({
+      data: {
+        submissionId: id,
+        reviewerId: uid,
+        roundNo: currentRound
+      }
+    }))
+  )
+
+  return NextResponse.json({ ok: true, roundNo: currentRound, assigned: created.length })
+```
+
+---
+
+# 7) Phiếu phản biện (Reviews)
+
+**Mã liên quan:**
+
+* `app/api/reviews/route.ts`, `reviews/[id]/route.ts` (hiện có)
+* `prisma/schema.prisma` (model `Review`: `score`, `recommendation`, `formJson`, `submittedAt`)
+
+**Vấn đề**
+
+* Cần khóa phiếu sau khi gửi; hỗ trợ reopen khi Editor yêu cầu.
+
+**Giải pháp**
+
+* Trong `PATCH /api/reviews/[id]`: nếu có `submittedAt` rồi → từ chối sửa, trừ khi `?reopen=true` bởi Editor.
+
+**Patch – mẫu khóa phiếu**
+
+```ts
+// app/api/reviews/[id]/route.ts (PATCH – thêm kiểm tra)
+if (review.submittedAt && !canReopen) {
+  return NextResponse.json({ error: 'Phiếu đã nộp, không thể sửa' }, { status: 409 })
+}
+```
+
+---
+
+# 8) Quyết định vòng (EditorDecision)
+
+**Mã liên quan:**
+
+* `app/api/submissions/[id]/decision/route.ts`
+* `prisma/schema.prisma` (model `EditorDecision`)
+
+**Vấn đề**
+
+* Chưa enforce state machine, chưa kiểm tra 2-person rule với `SENSITIVE`.
+
+**Giải pháp**
+
+* Chỉ `SECTION_EDITOR | MANAGING_EDITOR | EIC` được “decide”.
+* ACCEPT → chuyển `IN_PRODUCTION` (đợi layout), REJECT → `REJECTED`.
+* Nếu `submission.securityLevel == 'SENSITIVE'` và quyết định `PUBLISHED`: bắt buộc hai người ký (EIC + SECURITY_AUDITOR).
+
+**Patch – enforce chuyển trạng thái**
+
+```ts
+// submissions/[id]/decision/route.ts (trong xử lý quyết định)
+if (decision === 'ACCEPT') {
+  await prisma.submission.update({
+    where: { id },
+    data: { status: 'IN_PRODUCTION' }
+  })
+}
+if (decision === 'REJECT') {
+  await prisma.submission.update({
+    where: { id },
+    data: { status: 'REJECTED' }
+  })
+}
+```
+
+---
+
+# 9) Số tạp chí & Bài xuất bản (Issues/Articles)
+
+**Mã liên quan:**
+
+* `app/api/issues/*.ts` (GET/POST; `issues/[id]/publish/route.ts` có)
+* `app/api/articles/*.ts`
+* `prisma/schema.prisma` (models `Issue`, `Article`)
+
+**Vấn đề**
+
+* Đảm bảo `@@unique([volume, number, year])` (schema đã có).
+* Khi publish issue: tạo `Article` từ `Submission ACCEPTED/IN_PRODUCTION`, render PDF, ghi `checksum`.
+
+**Giải pháp**
+
+* Nếu chưa có service render, MVP dùng Puppeteer server-side.
+* Lưu `Article.pdfFile` + `checksum (SHA-256)`; set `publishedAt`.
+
+**Mẫu tính checksum**
+
+```ts
+import crypto from 'crypto'
+function sha256(buf: Buffer) {
+  return crypto.createHash('sha256').update(buf).digest('hex')
+}
+```
+
+---
+
+# 10) Upload & Lưu trữ (Assets)
+
+**Mã liên quan:**
+
+* `app/api/files/upload/route.ts` (gọi `uploadFile` của `lib/s3.ts`)
+* `lib/s3.ts`, `lib/aws-config.ts`
+
+**Vấn đề**
+
+* Nếu chưa cấu hình AWS ⇒ `aws-config.getBucketConfig()` **ném lỗi** ngay khi import.
+
+**Giải pháp – thêm Storage Adapter fallback Local**
+
+1. Tạo `lib/storage.ts` để quyết định **S3 hay Local** theo env.
+2. Đổi route upload dùng `saveFile()` thay vì `uploadFile()`.
+
+**Patch – `lib/storage.ts`**
+
+```ts
+// lib/storage.ts
+import { promises as fs } from 'fs'
+import path from 'path'
+import crypto from 'crypto'
+import { uploadFile as uploadS3 } from './s3'
+
+const UPLOAD_DIR = path.join(process.cwd(), 'uploads')
+
+export async function saveFile(buffer: Buffer, originalName: string, contentType?: string) {
+  if (process.env.AWS_BUCKET_NAME) {
+    const key = 'assets/' + crypto.randomUUID() + (path.extname(originalName)||'')
+    const s3Key = await uploadS3(buffer, key, contentType)
+    return { storage: 's3', key: s3Key, url: `/api/files/${encodeURIComponent(s3Key)}` }
+  }
+  await fs.mkdir(UPLOAD_DIR, { recursive: true })
+  const safe = crypto.randomUUID() + (path.extname(originalName)||'')
+  const full = path.join(UPLOAD_DIR, safe)
+  await fs.writeFile(full, buffer)
+  return { storage: 'local', key: `local/${safe}`, url: `/files/${safe}` }
+}
+```
+
+**Patch – cập nhật route upload**
+
+```ts
+// app/api/files/upload/route.ts
+import { saveFile } from '@/lib/storage'
+// ...
+const arrayBuffer = await file.arrayBuffer()
+const buffer = Buffer.from(arrayBuffer)
+const saved = await saveFile(buffer, file.name, file.type)
+// tạo Asset và trả về saved.url
+```
+
+**Bảo vệ thêm**: kiểm MIME (PDF/PNG/JPG/WEBP), giới hạn size (đã có), từ chối `docm/xlsm`.
+
+---
+
+# 11) Tìm kiếm (Search)
+
+**Mã liên quan:**
+
+* `app/api/search/route.ts` (bị cắt ở giữa)
+* `prisma` (dùng Postgres FTS/LIKE)
+
+**Vấn đề**
+
+* Hoàn tất build `where` theo `q, category, author, year, dateFrom/dateTo, sortBy`.
+* Giới hạn `limit ≤ 50`.
+
+**Giải pháp**
+
+* MVP: dùng `ILIKE` theo title/abstract/keywords; thêm index sau.
+* Giai đoạn 2: Postgres FTS (tsvector) hoặc OpenSearch.
+
+---
+
+# 12) Thống kê (Analytics)
+
+**Mã liên quan:**
+
+* Hiện thấy ghi `views/downloads` ở Article (truy xuất ở dashboard).
+* `app/dashboard/*/page.tsx` (Author/Editor/Reviewer/Admin) đã gọi DB và hiển thị số liệu.
+
+**Khuyến nghị**
+
+* Tăng view/download: debounce theo IP (30–60s).
+* Bảng `AuditLog` đã có — tận dụng để tính SLA phản biện và thời gian xử lý.
+
+---
+
+# 13) Audit logs
+
+**Mã liên quan:**
+
+* `lib/audit-logger.ts` (enum rất đầy đủ: LOGIN_SUCCESS/FAILED/TOKEN_EXPIRED/…)
+* **Lệch export**: một số route `import { logAudit }` (ví dụ `files/upload/route.ts`) nhưng file export object `auditLogger`.
+
+**Giải pháp**
+
+* Trong các route, thay `logAudit` thành `auditLogger.logSuccess/logFailure` tương ứng.
+
+**Patch – ví dụ trong upload**
+
+```ts
+// app/api/files/upload/route.ts
+// import { logAudit } from '@/lib/audit-logger'  // ❌
+import { auditLogger, AuditEventType } from '@/lib/audit-logger' // ✅
+
+// ...
+await auditLogger.logSuccess(
+  AuditEventType.FILE_UPLOADED,
+  'Upload thành công',
+  { userId: session.uid, extra: { submissionId, fileType } }
+)
+```
+
+---
+
+# 14) Prisma schema & Migration
+
+**Mã liên quan:**
+
+* `prisma/schema.prisma` hiện có:
+
+  ```prisma
+  generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/tapchi-hcqs/nextjs_space/node_modules/.prisma/client"
+  }
+  ```
+
+**Vấn đề**
+
+* `output` tuyệt đối → gãy build nơi khác; `binaryTargets` không phù hợp đa môi trường.
+
+**Giải pháp**
+
+* Xóa `output`, để mặc định; gỡ `binaryTargets` hoặc giữ `["native"]`.
+
+**Patch – thay thế phần generator**
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+  // binaryTargets = ["native"] // (tùy, có thể bỏ hẳn)
+}
+```
+
+Sau đó:
+
+```
+npx prisma generate
+npx prisma db push
+```
+
+---
+
+# 15) Đồng bộ phiên bản & dọn dẹp repo
+
+**Mã liên quan:**
+
+* `package.json` hiện: `"next": "14.2.28"`, `"eslint-config-next": "15.3.0"`, `"@next/swc-wasm-nodejs": "13.5.1"`
+
+**Giải pháp (chọn 1)**
+
+* **Giữ Next 14** (ổn định):
+
+  * đổi `eslint-config-next` về `^14.2.x`
+  * bỏ `@next/swc-wasm-nodejs` (dùng SWC mặc định platform)
+* **Hoặc nâng Next 15**: cập nhật cả đôi với `eslint-config-next@15.x`.
+
+**Dọn dẹp**
+
+* Xóa `nextjs_space/.env` khỏi repo; thêm vào `.gitignore`.
+* Tạo `.env.local` (dev) + Secret trên DeepAgent/Viettel Cloud.
+
+---
+
+# 16) Bổ sung Header bảo mật & Rate-limit
+
+**Patch – CSP/Headers tối thiểu trong middleware**
+
+```ts
+// middleware.ts (cuối hàm)
+const res = NextResponse.next()
+res.headers.set('Content-Security-Policy', "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'")
+res.headers.set('X-Frame-Options', 'DENY')
+res.headers.set('X-Content-Type-Options', 'nosniff')
+return res
+```
+
+**Patch – rate-limit in-memory (MVP)**
+
+```ts
+// middleware.ts (đầu file)
+const hits = new Map<string, { count: number; ts: number }>()
+function limited(ip: string, max=60, windowMs=60_000) {
+  const now = Date.now()
+  const r = hits.get(ip) ?? { count:0, ts:now }
+  if (now - r.ts > windowMs) { r.count = 0; r.ts = now }
+  r.count++; hits.set(ip, r)
+  return r.count > max
+}
+
+export function middleware(req: NextRequest) {
+  const p = req.nextUrl.pathname
+  const ip = req.ip ?? '0.0.0.0'
+  if (p.startsWith('/api/auth') || p.startsWith('/api/files') || p.startsWith('/api/submissions')) {
+    if (limited(ip)) return new NextResponse('Too Many Requests', { status: 429 })
+  }
+  // ... phần còn lại và headers CSP như trên
+}
+```
+
+---
+
+## Checklist triển khai ngay (theo thứ tự)
+
+1. **Sửa Prisma generator** (xóa `output`, `binaryTargets`).
+2. **Gỡ `.env` khỏi repo** → `.gitignore`; tạo `.env.local`.
+3. **Thêm `lib/storage.ts`** + cập nhật **upload route** dùng `saveFile()` (fallback Local).
+4. **Sửa `middleware.ts`**: role map `"SECTION_EDITOR"`, thêm **rate-limit** + **CSP headers**.
+5. **Sửa sai lệch `logAudit` ↔ `auditLogger`** ở các route.
+6. **Hoàn tất các route bị cắt**:
+
+   * `auth/login/route.ts` (phần catch đã có—OK)
+   * `submissions/route.ts` (POST tạo v1 – patch ở trên)
+   * `submissions/[id]/assign-reviewers/route.ts` (patch ở trên)
+   * `search/route.ts` (build `where`/`orderBy` đầy đủ)
+7. **Đồng bộ phiên bản Next/ESLint/SWC** theo phương án đã chọn.
+8. **Test End-to-End** toàn quy trình “Số 0”: nộp → gán 2 reviewer → nhận xét → quyết định (Minor→Accept) → layout HTML→PDF (+watermark) → publish Issue → tải PDF (checksum).

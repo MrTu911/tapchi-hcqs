@@ -1,0 +1,10 @@
+SECURITY SCAN SUMMARY
+Generated: 08:43:21 28/12/2025
+Total Routes: 176
+
+FULL: 0
+PARTIAL: 12
+BASIC: 20
+NONE: 144
+
+Overall Coverage: 0%

@@ -1,0 +1,247 @@
+Bổ sung chức năng trong quản lý tài khoản : Rất tuyệt 👏 — bây giờ ta đi sâu vào **phân tích và thiết kế chức năng “Đăng ký người dùng & Duyệt tài khoản”** của hệ thống Tạp chí điện tử nghiên cứu khoa học hậu cần quân sự.
+
+Đây là **phân hệ nền tảng cho toàn bộ hệ thống**, vì nó quyết định *quy trình tạo, xét duyệt và phân quyền người dùng (Admin / Tổng biên tập / Biên tập viên / Tác giả / Phản biện)*.
+
+---
+
+# 🧩 I. MỤC TIÊU CHÍNH
+
+| Mục tiêu                                 | Giải thích                                                                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------ |
+| 👤 **Quản lý người dùng tập trung**      | Mỗi người có một tài khoản duy nhất, dùng cho mọi phân hệ                                  |
+| 🪪 **Đăng ký tự nguyện (self-register)** | Cho phép người ngoài đăng ký tài khoản tác giả hoặc phản biện                              |
+| 🔍 **Quy trình duyệt**                   | Tài khoản phải được duyệt bởi **Biên tập viên** hoặc **Tổng biên tập** trước khi kích hoạt |
+| 🔐 **Phân quyền chặt chẽ (RBAC)**        | Hệ thống phân quyền rõ: Admin / Tổng biên tập / Biên tập viên / Phản biện / Tác giả        |
+| 📜 **Lưu vết duyệt và hoạt động**        | Ghi lại lịch sử phê duyệt và người thực hiện                                               |
+| 📧 **Thông báo tự động**                 | Gửi email khi đăng ký / được duyệt / bị từ chối                                            |
+
+---
+
+# ⚙️ II. QUY TRÌNH ĐĂNG KÝ & DUYỆT NGƯỜI DÙNG
+
+### 🔁 **1️⃣ Người dùng tự đăng ký**
+
+* Điền form đăng ký:
+
+  * Họ tên
+  * Email (xác thực)
+  * Mật khẩu
+  * Vai trò mong muốn (Tác giả, Phản biện, Biên tập viên)
+  * Đơn vị / Cơ quan công tác
+  * Số điện thoại
+  * File minh chứng (CV / thẻ công tác – tùy chọn)
+
+→ Hệ thống tạo **tài khoản trạng thái `PENDING`**.
+
+---
+
+### 🔁 **2️⃣ Quản trị viên (hoặc Tổng biên tập) duyệt**
+
+* Truy cập trang: **/dashboard/admin/users/pending**
+* Xem danh sách người đăng ký chờ duyệt
+* Có thể:
+
+  * ✅ Duyệt và cấp vai trò tương ứng (`role = AUTHOR | REVIEWER | EDITOR`)
+  * ❌ Từ chối kèm lý do
+  * 🕓 Giữ nguyên ở trạng thái chờ xác minh
+
+→ Khi duyệt, hệ thống gửi **email thông báo kết quả**.
+
+---
+
+### 🔁 **3️⃣ Sau khi duyệt**
+
+* Tài khoản được **kích hoạt (`isActive = true`)**.
+* Có thể **đăng nhập và truy cập theo quyền hạn**.
+* Hệ thống ghi lại log phê duyệt:
+
+  ```json
+  {
+    "approvedBy": "Editor123",
+    "approvedAt": "2025-11-04T10:15:00Z"
+  }
+  ```
+
+---
+
+# 🧠 III. MÔ HÌNH DỮ LIỆU (Prisma Schema)
+
+📄 `schema.prisma`
+
+```prisma
+model User {
+  id             String   @id @default(uuid())
+  fullName       String
+  email          String   @unique
+  passwordHash   String
+  role           Role     @default(AUTHOR)
+  organization   String?
+  phone          String?
+  cvUrl          String?
+  status         String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  isActive       Boolean  @default(false)
+  approvedBy     String?
+  approvedAt     DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR_IN_CHIEF
+  EDITOR
+  REVIEWER
+  AUTHOR
+}
+```
+
+---
+
+# 🧱 IV. CHỨC NĂNG CHI TIẾT
+
+| Chức năng                                   | Mô tả                                                | Người thực hiện                       |
+| ------------------------------------------- | ---------------------------------------------------- | ------------------------------------- |
+| **1️⃣ Đăng ký tài khoản**                   | Người dùng tạo tài khoản mới, chọn vai trò mong muốn | Tác giả, phản biện                    |
+| **2️⃣ Xác thực email**                      | Gửi email xác nhận link kích hoạt                    | Hệ thống                              |
+| **3️⃣ Quản lý danh sách đăng ký chờ duyệt** | Liệt kê tài khoản `status = PENDING`                 | Biên tập viên / Tổng biên tập / Admin |
+| **4️⃣ Duyệt hoặc từ chối đăng ký**          | Cập nhật trạng thái `APPROVED` / `REJECTED`          | Biên tập viên hoặc Tổng biên tập      |
+| **5️⃣ Gửi thông báo kết quả**               | Gửi email chấp thuận hoặc từ chối                    | Hệ thống                              |
+| **6️⃣ Kích hoạt tài khoản**                 | `isActive = true` khi được duyệt                     | Hệ thống                              |
+| **7️⃣ Lưu log phê duyệt**                   | Lưu người duyệt, thời gian                           | Hệ thống                              |
+| **8️⃣ Phân quyền đăng nhập**                | Chỉ cho phép truy cập phân hệ phù hợp                | Middleware RBAC                       |
+| **9️⃣ Tạm khóa / mở khóa tài khoản**        | Admin có quyền tạm đình chỉ tài khoản                | Admin                                 |
+
+---
+
+# 🔐 V. QUY TẮC PHÂN QUYỀN SAU KHI DUYỆT
+
+| Vai trò                | Quyền hạn                                    |
+| ---------------------- | -------------------------------------------- |
+| **Admin**              | Toàn quyền hệ thống                          |
+| **Tổng biên tập**      | Duyệt tài khoản, gán vai trò, xuất bản số    |
+| **Biên tập viên**      | Duyệt tài khoản (reviewer/author), duyệt bài |
+| **Phản biện**          | Truy cập bài được giao                       |
+| **Tác giả**            | Gửi bài, theo dõi phản biện                  |
+| **Khách (chưa duyệt)** | Chỉ xem công khai                            |
+
+---
+
+# ⚙️ VI. LUỒNG NGHIỆP VỤ TỐI ƯU (Workflow)
+
+```text
+[Người dùng đăng ký] 
+      ↓
+[Tài khoản PENDING trong DB]
+      ↓
+[Admin/Editor kiểm duyệt → APPROVED / REJECTED]
+      ↓
+[Hệ thống gửi email thông báo kết quả]
+      ↓
+[Tài khoản kích hoạt → có thể đăng nhập]
+```
+
+---
+
+# 🧩 VII. API CHỨC NĂNG CHÍNH
+
+## 🪪 Đăng ký tài khoản
+
+```ts
+// app/api/auth/register/route.ts
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const data = await req.json();
+  const hash = await bcrypt.hash(data.password, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      fullName: data.fullName,
+      email: data.email,
+      passwordHash: hash,
+      organization: data.organization,
+      phone: data.phone,
+      role: data.requestedRole || "AUTHOR",
+      status: "PENDING",
+    },
+  });
+
+  return NextResponse.json({ message: "Đăng ký thành công. Vui lòng chờ duyệt." });
+}
+```
+
+---
+
+## ✅ Duyệt tài khoản
+
+```ts
+// app/api/admin/approve-user/route.ts
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const { userId, status, approverId, role } = await req.json();
+
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      status,
+      role,
+      isActive: status === "APPROVED",
+      approvedBy: approverId,
+      approvedAt: new Date(),
+    },
+  });
+
+  // (Tùy chọn) Gửi email thông báo duyệt
+  return NextResponse.json({ message: `Tài khoản ${status}` });
+}
+```
+
+---
+
+# 🧠 VIII. TỐI ƯU HIỆU NĂNG VÀ TRẢI NGHIỆM
+
+| Vấn đề                    | Giải pháp                                                         |
+| ------------------------- | ----------------------------------------------------------------- |
+| Quá nhiều người chờ duyệt | Phân trang danh sách chờ                                          |
+| Trễ phản hồi khi duyệt    | Sử dụng `Promise.all` để cập nhật nhiều user                      |
+| UX phê duyệt              | Hiển thị badge trạng thái, filter “PENDING / APPROVED / REJECTED” |
+| An ninh email             | Token JWT 15 phút cho link kích hoạt                              |
+| Ghi log                   | Bảng `AuditLog` lưu thao tác phê duyệt                            |
+
+---
+
+# 🔒 IX. BẢO MẬT
+
+✅ Bảo vệ API đăng ký & duyệt:
+
+* Hash mật khẩu bằng bcrypt
+* Cấm đăng ký trùng email
+* RBAC middleware kiểm tra vai trò khi duyệt
+* Gửi email xác minh để tránh spam
+* Giới hạn tần suất đăng ký (`rate limit`)
+
+---
+
+# 🧾 X. LỢI ÍCH SAU TỐI ƯU
+
+| Khía cạnh              | Hiệu quả đạt được               |
+| ---------------------- | ------------------------------- |
+| 🧠 Quy trình phê duyệt | Rõ ràng, kiểm soát dễ dàng      |
+| 🔒 Bảo mật             | Đảm bảo an toàn tài khoản       |
+| 📊 Quản trị            | Có lịch sử, phân quyền chi tiết |
+| 🚀 Tốc độ              | Đăng ký nhẹ, duyệt nhanh        |
+| 💬 Giao tiếp           | Gửi thông báo email tự động     |
+
+---
+
+✅ **Kết quả:**
+Sau khi triển khai đầy đủ quy trình này, hệ thống có thể:
+
+* Cho phép **đăng ký mở cho cộng đồng khoa học**,
+* Duyệt theo cấp **Biên tập viên / Tổng biên tập**,
+* Đảm bảo **phân quyền chặt chẽ và bảo mật tài khoản**,
+* Giảm 70% rủi ro sai sót thủ công trong quản lý người dùng.

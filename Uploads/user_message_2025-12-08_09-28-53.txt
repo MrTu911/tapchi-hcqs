@@ -1,0 +1,211 @@
+Xây dựng chức năng quản lý catalog theo tư vấn. Bạn thấy có phù hợp không? Hãy tư vấn cho tôi trước "Rất chuẩn hướng 👏 — bạn đang chọn cách **xây nền tảng quản lý Catalog vững chắc trước khi tích hợp AI**.
+Vì vậy, ta sẽ tập trung vào **mô tả chức năng (Functional Specification)** của **“Hệ thống quản lý Catalog”** trong phần mềm tạp chí, **không bao gồm AI**, nhưng vẫn chuẩn hoá cho việc mở rộng sau này.
+
+---
+
+# 🧭 **Mô tả chức năng: Hệ thống Quản lý Catalog**
+
+## 🎯 **Mục tiêu tổng quát**
+
+Hệ thống **Quản lý Catalog** cho phép quản trị viên và biên tập viên quản lý, sắp xếp, lưu trữ và hiển thị có tổ chức toàn bộ nội dung số của tạp chí, bao gồm:
+
+* **Số báo (Issue)**
+* **Bài báo (Article)**
+* **Tác giả (Author)**
+* **Từ khóa (Keyword / Chủ đề)**
+* **Tư liệu đa phương tiện (Media: ảnh, video, file)**
+
+---
+
+## 🧩 **I. Cấu trúc chức năng tổng thể**
+
+```
+Quản lý Catalog
+├── 1. Quản lý Số báo (Issue Management)
+├── 2. Quản lý Bài báo (Article Management)
+├── 3. Quản lý Tác giả (Author Management)
+├── 4. Quản lý Từ khóa / Chủ đề (Keyword Management)
+└── 5. Quản lý Tư liệu (Media Management)
+```
+
+---
+
+## 📘 **1. Quản lý Số báo (Issue Management)**
+
+### **Mục đích:**
+
+Quản trị các số phát hành của tạp chí (ấn phẩm định kỳ), bao gồm ảnh bìa, PDF toàn số, ngày phát hành và trạng thái.
+
+### **Chức năng chính:**
+
+| Chức năng                          | Mô tả chi tiết                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------ |
+| ➕ **Tạo số báo mới**               | Nhập tiêu đề, mô tả, số hiệu, ngày phát hành, upload ảnh bìa và file PDF |
+| 🖼️ **Upload ảnh bìa**             | Chọn hoặc tải lên hình ảnh (PNG/JPG/WebP)                                |
+| 📄 **Upload file PDF**             | Tải lên file ấn phẩm dạng PDF (giới hạn dung lượng, lưu vào R2/S3)       |
+| ✏️ **Chỉnh sửa thông tin**         | Cập nhật tiêu đề, mô tả, hoặc thay thế file                              |
+| 🗑️ **Xóa số báo**                 | Gỡ bỏ hoặc ẩn số báo khỏi hiển thị                                       |
+| 🔍 **Xem chi tiết / Preview**      | Xem trước ảnh bìa, đọc thử PDF                                           |
+| 📦 **Liên kết bài báo**            | Gán bài viết vào số báo cụ thể                                           |
+| 📅 **Quản lý thời gian phát hành** | Ghi nhận ngày tạo, ngày phát hành chính thức                             |
+| 📶 **Trạng thái**                  | Nháp (draft) / Xuất bản (published)                                      |
+
+---
+
+## 📄 **2. Quản lý Bài báo (Article Management)**
+
+### **Mục đích:**
+
+Tổ chức, lưu trữ và xuất bản các bài nghiên cứu, tin tức, chuyên đề.
+
+### **Chức năng chính:**
+
+| Chức năng                    | Mô tả chi tiết                                                         |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| ➕ **Thêm bài mới**           | Tạo bài viết, nhập tiêu đề, tóm tắt, chọn tác giả, từ khóa, upload PDF |
+| 📑 **Metadata**              | Quản lý DOI, số trang, ngày đăng, chuyên mục                           |
+| 🖋️ **Liên kết tác giả**     | Gán 1 hoặc nhiều tác giả cho bài                                       |
+| 🏷️ **Gán từ khóa**          | Chọn từ danh sách keyword có sẵn                                       |
+| 📄 **Upload PDF bài viết**   | Lưu trữ và hiển thị bài báo toàn văn                                   |
+| 🧾 **Preview / Xuất bản**    | Xem trước nội dung bài hoặc công khai                                  |
+| 🗑️ **Xóa hoặc ẩn bài viết** | Gỡ bài khỏi hiển thị công khai                                         |
+| 🧩 **Gắn với số báo**        | Chỉ định bài viết thuộc số báo nào                                     |
+
+---
+
+## 👤 **3. Quản lý Tác giả (Author Management)**
+
+### **Mục đích:**
+
+Lưu trữ thông tin chi tiết về các tác giả có bài đăng trong tạp chí.
+
+### **Chức năng chính:**
+
+| Chức năng                   | Mô tả chi tiết                                              |
+| --------------------------- | ----------------------------------------------------------- |
+| ➕ **Thêm tác giả**          | Nhập họ tên, học vị, đơn vị công tác, email, ORCID (nếu có) |
+| 🧾 **Hồ sơ tác giả**        | Lưu ảnh đại diện, tiểu sử ngắn, lĩnh vực nghiên cứu         |
+| 🧩 **Liên kết bài viết**    | Hiển thị danh sách bài viết do tác giả thực hiện            |
+| 🖋️ **Chỉnh sửa thông tin** | Cập nhật thông tin học vị, cơ quan                          |
+| 🔍 **Tìm kiếm / Lọc**       | Theo tên, đơn vị, lĩnh vực                                  |
+| 🗑️ **Xóa / Ẩn**            | Gỡ hoặc ẩn tác giả không hoạt động                          |
+
+---
+
+## 🏷️ **4. Quản lý Từ khóa / Chủ đề (Keyword Management)**
+
+### **Mục đích:**
+
+Chuẩn hoá và quản lý danh sách từ khóa để phân loại bài viết và hỗ trợ tìm kiếm.
+
+### **Chức năng chính:**
+
+| Chức năng                | Mô tả chi tiết                      |
+| ------------------------ | ----------------------------------- |
+| ➕ **Thêm từ khóa**       | Nhập tên, slug, mô tả ngắn          |
+| 🔗 **Liên kết bài viết** | Xem danh sách bài có gắn từ khóa    |
+| ✏️ **Chỉnh sửa / gộp**   | Sửa hoặc hợp nhất từ khóa trùng lặp |
+| 🗑️ **Xóa / Ẩn**         | Ẩn từ khóa không còn dùng           |
+| 📊 **Thống kê**          | Đếm số bài viết theo từ khóa        |
+
+---
+
+## 🎬 **5. Quản lý Tư liệu (Media Management)**
+
+### **Mục đích:**
+
+Quản lý file đa phương tiện (ảnh, video, biểu đồ, infographic) được sử dụng trên trang chủ hoặc trong bài viết.
+
+### **Chức năng chính:**
+
+| Chức năng                        | Mô tả chi tiết                             |
+| -------------------------------- | ------------------------------------------ |
+| 📥 **Upload file mới**           | Ảnh (JPG/PNG/WebP) hoặc video (MP4/WebM)   |
+| 🧾 **Nhập metadata**             | Tên, mô tả, loại, nguồn gốc, ngày tạo      |
+| 🏷️ **Phân loại / Gắn danh mục** | Ví dụ: Banner, Infographic, Video khoa học |
+| 🔍 **Tìm kiếm / Lọc**            | Theo loại file, danh mục, người tải lên    |
+| 🖼️ **Preview trực tiếp**        | Hiển thị ảnh hoặc xem video inline         |
+| 🗑️ **Xóa / Thay thế**           | Gỡ file hoặc cập nhật phiên bản mới        |
+
+---
+
+## 🗃️ **6. Chức năng dùng chung**
+
+| Tính năng                        | Mô tả                                                                 |
+| -------------------------------- | --------------------------------------------------------------------- |
+| 🔎 **Tìm kiếm nhanh**            | Theo tên, từ khóa, người tạo, hoặc trạng thái                         |
+| 🔄 **Phân trang & Lọc nâng cao** | Theo loại catalog, thời gian, danh mục                                |
+| ⚙️ **Phân quyền truy cập**       | Admin (toàn quyền), Editor (soạn & xuất bản), Contributor (soạn nháp) |
+| 🕒 **Lịch sử hoạt động**         | Log tạo, sửa, xóa, xuất bản                                           |
+| 📤 **Xuất dữ liệu**              | CSV, Excel hoặc JSON cho sao lưu                                      |
+| 📥 **Nhập dữ liệu**              | Import bài viết hoặc tác giả hàng loạt                                |
+
+---
+
+## 🧱 **7. Cấu trúc hiển thị trong Dashboard**
+
+```
+📚 Catalog
+├── Issues
+│   ├── Danh sách số báo
+│   ├── Tạo mới
+│   └── Chỉnh sửa
+├── Articles
+│   ├── Danh sách bài
+│   ├── Tạo mới
+│   └── Chỉnh sửa
+├── Authors
+├── Keywords
+└── Media
+```
+
+Mỗi module gồm:
+
+* **Bảng dữ liệu (table)** — có cột tên, trạng thái, ngày, người tạo
+* **Bộ lọc / tìm kiếm**
+* **Nút hành động (edit, delete, publish)**
+* **Dialog Form** khi tạo mới / chỉnh sửa
+
+---
+
+## 📈 **8. Báo cáo & Thống kê**
+
+| Chỉ số                       | Mô tả                             |
+| ---------------------------- | --------------------------------- |
+| 📰 Tổng số bài viết          | Theo từng tháng / năm             |
+| 📚 Số lượng số báo           | Đã xuất bản, đang nháp            |
+| 👤 Số tác giả đang hoạt động | Tổng số tác giả có bài đăng       |
+| 🏷️ Top từ khóa phổ biến     | Từ khóa được gắn nhiều nhất       |
+| 🎬 Thống kê media            | Số lượng ảnh / video được sử dụng |
+
+---
+
+## 🔒 **9. Quyền hạn người dùng**
+
+| Vai trò        | Quyền                             |
+| -------------- | --------------------------------- |
+| 🛡️ Admin      | Toàn quyền CRUD, xuất bản, xóa    |
+| ✍️ Editor      | Tạo, sửa, xuất bản bài, không xóa |
+| 🧾 Contributor | Tạo nháp, không xuất bản          |
+| 👀 Viewer      | Xem, không chỉnh sửa              |
+
+---
+
+## 📦 **10. Kết quả đầu ra (Outputs)**
+
+* Danh mục đầy đủ các ấn phẩm, bài viết, tác giả, media
+* Hệ thống lưu trữ và quản lý file có cấu trúc
+* Bộ lọc và tìm kiếm nâng cao trong Dashboard
+* API RESTful chuẩn CRUD để các module khác (Website, Archive, Search) sử dụng
+
+---
+
+## ✅ **Tóm tắt lợi ích của Catalog Management**
+
+| Lợi ích                  | Mô tả                                              |
+| ------------------------ | -------------------------------------------------- |
+| 📚 Quản lý tập trung     | Toàn bộ nội dung (số báo, bài, media) có tổ chức   |
+| 🔍 Dễ tra cứu & xuất bản | Nhanh chóng tìm, sửa, xuất bản nội dung            |
+| 🧱 Chuẩn hóa dữ liệu     | Metadata thống nhất giúp dễ tìm và hiển thị        |
+| 🧩 Dễ mở rộng            | Có thể tích hợp AI, tìm kiếm ngữ nghĩa sau này     |
+| 🕹️ Tiện quản trị        | Giao diện trực quan, thao tác nhanh trên Dashboard |

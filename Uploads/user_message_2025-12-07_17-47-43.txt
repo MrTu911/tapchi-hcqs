@@ -1,0 +1,244 @@
+Hoàn thiện chức năng của CMS: "Dựa trên bản **phân tích chuyên sâu hệ thống CMS** mà bạn cung cấp, dưới đây là **bản tư vấn chi tiết – kỹ thuật hóa – hướng hoàn thiện toàn diện CMS** cho tạp chí điện tử:
+
+---
+
+# 🧭 I. TỔNG QUAN TRẠNG THÁI HIỆN TẠI
+
+Hệ thống CMS đã đạt mức **80–85% hoàn thiện**, với 6 module hoạt động ổn định:
+✅ Banner Management
+✅ Navigation / Menu
+✅ Homepage Sections
+✅ Public Pages (Tĩnh)
+✅ Site Settings
+✅ News Management
+
+Cấu trúc backend: **Next.js App Router + Prisma + PostgreSQL + S3 + TypeScript + Tiptap editor**
+Bảo mật: **RBAC + Signed URLs + Audit logging**
+Điểm mạnh: modular, đa ngôn ngữ, responsive, dễ mở rộng.
+
+---
+
+# ⚙️ II. PHÂN TÍCH CÁC MODULE CÒN THIẾU (CẦN PHÁT TRIỂN)
+
+---
+
+## 🟣 1️⃣ MEDIA LIBRARY (**Ưu tiên cao nhất – cần triển khai ngay**)
+
+### 🎯 Mục tiêu
+
+Xây dựng **trung tâm quản lý toàn bộ file hình ảnh, video, tài liệu** phục vụ cho các module khác
+(hiện tại upload đang rời rạc theo từng form riêng lẻ).
+
+---
+
+### 🧱 Cấu trúc dữ liệu (Prisma schema)
+
+```prisma
+model Media {
+  id          String   @id @default(uuid())
+  fileName    String
+  fileType    String
+  url         String
+  size        Int
+  altText     String?
+  uploadedBy  String?
+  createdAt   DateTime @default(now())
+}
+```
+
+---
+
+### ⚙️ API endpoints
+
+| Endpoint                 | Chức năng                                 |
+| ------------------------ | ----------------------------------------- |
+| `GET /api/media`         | Liệt kê file, hỗ trợ phân trang, tìm kiếm |
+| `POST /api/media`        | Upload file (multi-part form)             |
+| `DELETE /api/media/[id]` | Xóa file không dùng                       |
+| `GET /api/media/search`  | Lọc theo tên / người upload               |
+
+---
+
+### 🧩 Giao diện (Next.js client)
+
+* Trang `/dashboard/admin/cms/media`
+* Grid 4 cột: thumbnail, tên, dung lượng, uploader
+* Tìm kiếm + filter theo loại file
+* Preview modal + Copy URL button
+* Upload nhiều file (drag & drop)
+* Delete / Bulk delete
+
+🧠 **Integration:**
+
+* Kết nối trực tiếp với các module **News**, **Banner**, **Public Pages**, **Homepage Sections** qua Media Picker component.
+
+---
+
+### 🔐 Bảo mật:
+
+* Chỉ `role = ADMIN | EDITOR` được upload/xóa.
+* S3 signed URL để upload/download an toàn.
+
+---
+
+## 🟢 2️⃣ CATEGORY MANAGEMENT (**Ưu tiên cao**)
+
+### 🎯 Mục tiêu
+
+Cung cấp giao diện quản lý **danh mục tin tức, bài viết, số tạp chí**
+(hiện đang chỉ quản lý qua database hoặc API).
+
+---
+
+### 🧱 Cấu trúc dữ liệu
+
+```prisma
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  color       String?
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  lang        String    @default("vi")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+```
+
+---
+
+### ⚙️ API endpoints
+
+| Endpoint                       | Chức năng           |
+| ------------------------------ | ------------------- |
+| `GET /api/categories`          | Liệt kê danh mục    |
+| `POST /api/categories`         | Tạo mới             |
+| `PATCH /api/categories/[id]`   | Cập nhật            |
+| `DELETE /api/categories/[id]`  | Xóa                 |
+| `POST /api/categories/reorder` | Drag & drop sắp xếp |
+
+---
+
+### 🧩 Giao diện quản lý
+
+* Trang: `/dashboard/admin/cms/categories`
+* Bảng hiển thị: Tên, mô tả, trạng thái, màu, thứ tự
+* Modal CRUD + chọn màu + toggle hoạt động
+* Bilingual (VN/EN)
+* Kéo thả thứ tự danh mục
+
+🧠 **Integration:**
+
+* News CMS → chọn category từ dropdown
+* Homepage Sections → lọc bài theo category
+
+---
+
+## 🟡 3️⃣ FOOTER MANAGEMENT (**Ưu tiên trung bình**)
+
+### 🎯 Mục tiêu
+
+Tạo giao diện trực quan quản lý **footer động**, không cần chỉnh code tay.
+
+---
+
+### 🧱 Dữ liệu & cấu hình
+
+```prisma
+model Footer {
+  id          String   @id @default(uuid())
+  section     String   // "about", "links", "contact"
+  content     Json
+  lang        String    @default("vi")
+  updatedAt   DateTime  @updatedAt
+}
+```
+
+---
+
+### 🧩 Giao diện `/dashboard/admin/cms/footer`
+
+* Editor dạng multi-column layout
+* Drag & Drop sắp xếp section
+* Live preview footer
+* CRUD nội dung từng phần: About, Contact, Links
+* Tích hợp chọn icon mạng xã hội từ FontAwesome
+
+---
+
+## 🟠 4️⃣ WIDGET MANAGEMENT (**Ưu tiên trung bình / dài hạn**)
+
+### 🎯 Mục tiêu
+
+Cho phép **tạo và gắn các widget động** (ví dụ: bài viết nổi bật, video, sự kiện) vào sidebar trang chủ hoặc bài báo.
+
+---
+
+### 🧱 Mô hình dữ liệu
+
+```prisma
+model Widget {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // "featured-posts", "recent-news", "html"
+  config      Json
+  order       Int       @default(0)
+  position    String?   // "sidebar-left", "sidebar-right"
+  active      Boolean   @default(true)
+}
+```
+
+---
+
+### 🧩 Giao diện `/dashboard/admin/cms/widgets`
+
+* Danh sách widget
+* Chọn loại widget
+* Cấu hình JSON (title, limit, filter, layout)
+* Drag & drop thứ tự và vị trí hiển thị
+
+🧠 **Integration:**
+Client-side render → dynamic import từ API `/api/widgets`.
+
+---
+
+# 🚀 III. LỘ TRÌNH TRIỂN KHAI KỸ THUẬT
+
+| Giai đoạn | Module                 | Thời gian | Ưu tiên     |
+| --------- | ---------------------- | --------- | ----------- |
+| Tuần 1–2  | 🟣 Media Library       | 3 ngày    | 🔥 Critical |
+| Tuần 2–3  | 🟢 Category Management | 2 ngày    | 🔥 High     |
+| Tuần 3–4  | 🟡 Footer Management   | 1.5 ngày  | 🟠 Medium   |
+| Tuần 4–5  | 🟠 Widget Management   | 2 ngày    | 🟠 Medium   |
+
+---
+
+# 🧠 IV. ĐỀ XUẤT TỐI ƯU & NÂNG CẤP CMS
+
+| Lĩnh vực             | Đề xuất kỹ thuật                                                  | Lợi ích                            |
+| -------------------- | ----------------------------------------------------------------- | ---------------------------------- |
+| **Upload & Media**   | Dùng `next-s3-upload` hoặc `uploadthing` + Prisma Media model     | Tránh trùng ảnh, có thể reuse file |
+| **Rich Text Editor** | Nâng cấp Tiptap plugin (YouTube, Table, Image from Media Library) | Tăng trải nghiệm biên tập          |
+| **SEO Metadata**     | Mặc định auto-fill metaTitle/metaDesc theo nội dung               | Chuẩn hóa SEO                      |
+| **Audit & Log**      | Ghi log CRUD (model, user, time)                                  | Dễ truy xuất thay đổi              |
+| **Caching**          | ISR (Incremental Static Regeneration) cho Public Pages            | Load nhanh gấp 5–10 lần            |
+| **Versioning**       | Lưu version các trang tĩnh (Public Pages)                         | Có thể rollback nội dung           |
+| **UI Performance**   | Virtualized table (React Virtuoso) cho danh sách CMS lớn          | Giảm lag khi >500 items            |
+
+---
+
+# 🧾 V. ĐÁNH GIÁ TỔNG HỢP & ƯU TIÊN PHÁT TRIỂN
+
+| Ưu tiên | Module                  | Mức độ ảnh hưởng                  | Mô tả                          |
+| ------- | ----------------------- | --------------------------------- | ------------------------------ |
+| 🔴 1    | **Media Library**       | 🚀 Toàn hệ thống                  | Cần ngay cho tất cả CMS Editor |
+| 🟠 2    | **Category Management** | 🧩 Quan trọng cho News / Articles | Phân loại bài hiệu quả         |
+| 🟡 3    | **Footer Management**   | 🌐 Trải nghiệm giao diện          | Gọn, đồng bộ                   |
+| 🟢 4    | **Widget Management**   | ⚙️ Mở rộng CMS                    | Gắn động nội dung sidebar      |
+
+---
+
+# ✅ VI. KẾT LUẬN
+
+CMS hiện tại **rất vững chắc về nền tảng kỹ thuật**, chỉ cần bổ sung các **module hỗ trợ quản trị nội dung nâng cao** để đạt chuẩn quốc tế (giống OJS 3.x hoặc Scopus-hosted journal systems).

@@ -1,0 +1,395 @@
+Xây dựng giao diện tác giả với các tư vấn, gợi ý sau, Bạn hãy bổ sung các chức năng nâng cao vào giao diện tác giả luôn. Để xây dựng tổng hợp 1 lần  : Tuyệt vời 👏 — bây giờ chúng ta sẽ **tập trung chuyên sâu vào giao diện dành cho TÁC GIẢ (Author Dashboard)** — nơi mà người dùng dành 90% thời gian làm việc với hệ thống.
+Mục tiêu: **hiện đại, sang trọng, tiện thao tác, tập trung vào công việc viết và theo dõi bài báo.**
+
+---
+
+# 🎯 Mục tiêu UX/UI của Author Dashboard
+
+> “Tác giả có thể theo dõi, chỉnh sửa, gửi bài và xem tiến trình xuất bản của mình trong một không gian sáng tạo, thân thiện, dễ quan sát và truyền cảm hứng.”
+
+---
+
+## 🧩 1. Cấu trúc tổng thể giao diện
+
+```
+📘 Author Dashboard
+│
+├── Header Bar
+│   ├── Logo / Tên tạp chí
+│   ├── Ô tìm kiếm nhanh
+│   ├── Nút “Tạo bài mới”
+│   ├── Avatar + Menu người dùng
+│
+├── Sidebar
+│   ├── 📄 Bài của tôi
+│   ├── 🕓 Tiến trình phản biện
+│   ├── 📥 Bài đã gửi
+│   ├── 🧾 Thông báo
+│   ├── ⚙️ Cài đặt (Settings)
+│
+└── Main Content
+    ├── Dashboard Overview
+    │   ├── Cards thống kê (số bài, bài đang duyệt, đã xuất bản)
+    │   ├── Biểu đồ tiến trình bài viết
+    ├── My Articles Table (Danh sách bài)
+    ├── Article Editor (Khi click “Tạo bài mới”)
+    ├── PDF Previewer (Khi chọn bài đã gửi)
+```
+
+---
+
+## 🌈 2. Phong cách & màu sắc tổng thể
+
+| Thành phần       | Màu / Hiệu ứng                                                | Phong cách UX             |
+| ---------------- | ------------------------------------------------------------- | ------------------------- |
+| **Nền tổng**     | `bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900` | Sang trọng, giảm mỏi mắt  |
+| **Card / Panel** | `bg-slate-800/80 backdrop-blur-md shadow-xl rounded-2xl`      | 3D mềm mại, chiều sâu     |
+| **Accent color** | Xanh dương (#3B82F6)                                          | Năng động, gợi sáng tạo   |
+| **Text chính**   | Trắng ngà (#F8FAFC)                                           | Tương phản tốt            |
+| **Hiệu ứng**     | `hover:scale-[1.02]` + `transition-all duration-300`          | Cảm giác “phản hồi nhanh” |
+| **Font**         | `Inter` hoặc `Outfit`                                         | Hiện đại, dễ đọc          |
+
+---
+
+## 🧱 3. Khu vực chi tiết
+
+---
+
+### 🧭 **A. Header Bar**
+
+* Fixed top
+* Nền gradient tối + blur
+* Gồm:
+
+  * Logo / Tên hệ thống
+  * Nút “➕ Tạo bài mới” (nổi bật màu xanh dương sáng)
+  * Icon Notification 🔔
+  * Avatar (Menu: Hồ sơ, Cài đặt, Đăng xuất)
+
+💡 *UX nhỏ:*
+Hiển thị “Chào buổi sáng, {Tên tác giả}!” với icon ☀️ hoặc 🌙 tùy thời gian.
+
+---
+
+### 📑 **B. Dashboard Overview (Tổng quan nhanh)**
+
+3–4 card 3D hiển thị số liệu tổng hợp:
+
+| Card             | Dữ liệu              | Màu           |
+| ---------------- | -------------------- | ------------- |
+| “Bài đã gửi”     | Tổng bài của tác giả | Xanh lam nhạt |
+| “Đang phản biện” | Bài đang review      | Cam nhạt      |
+| “Đã duyệt”       | Bài được chấp nhận   | Xanh ngọc     |
+| “Đã xuất bản”    | Bài công khai        | Tím sáng      |
+
+Hiệu ứng: mỗi card **glow nhẹ khi hover**, có icon minh họa (`FileText`, `Clock`, `CheckCircle`, `BookOpen`).
+
+---
+
+### 📊 **C. Biểu đồ tiến trình bài viết**
+
+Biểu đồ dạng *donut hoặc timeline bar chart*, thể hiện:
+
+* Tỷ lệ bài theo trạng thái (draft, submitted, under review, accepted, published)
+* Sử dụng **Recharts** hoặc **Nivo PieChart**.
+
+💡 Khi hover lên phần nào → hiển thị chi tiết “12 bài đang phản biện”.
+
+---
+
+### 📋 **D. Danh sách bài viết của tôi (My Articles Table)**
+
+Bảng hiển thị toàn bộ bài viết của tác giả:
+
+| Cột               | Nội dung                                                         |
+| ----------------- | ---------------------------------------------------------------- |
+| Tiêu đề           | Click để mở PDF Preview hoặc Editor                              |
+| Trạng thái        | Badge màu sắc (`draft`, `under_review`, `accepted`, `published`) |
+| Cập nhật gần nhất | Thời gian chỉnh sửa cuối                                         |
+| Hành động         | ✏️ Edit / 🗑️ Delete / 🔍 Preview                                |
+
+✅ **Tính năng nâng cao:**
+
+* Filter theo trạng thái
+* Tìm kiếm theo tiêu đề
+* Phân trang / cuộn vô hạn
+* Sort theo ngày
+
+---
+
+### ✏️ **E. Article Editor (Trình soạn bài nâng cao)**
+
+#### ⚙️ Tính năng chính:
+
+* Soạn thảo WYSIWYG (TipTap hoặc Quill)
+* Toolbar: Bold, Italic, Heading, List, Quote, Code, Table
+* **Upload ảnh** (kéo thả hoặc chọn file)
+* **Upload PDF / Dataset**
+* Autosave (hiển thị “Đã lưu lúc 10:24”)
+* Preview bài viết (popup hoặc tab mới)
+* Version control (hiển thị bản trước đó)
+
+#### 💅 Giao diện:
+
+* Nền sáng nhẹ (`bg-slate-50`) với vùng viết bo tròn
+* Sidebar phải:
+
+  * Metadata: từ khóa, lĩnh vực
+  * Upload file phụ (PDF, Excel, ảnh minh họa)
+  * Timeline trạng thái
+* Header nhỏ:
+
+  * Tiêu đề bài viết (editable inline)
+  * Nút “Gửi bài” (Submit)
+  * Nút “Xem trước”
+  * Trạng thái lưu
+
+🧠 **UX tinh tế:**
+Hiệu ứng typing smooth, ảnh chèn fade-in, biểu tượng lưu tự động quay nhẹ khi đang lưu.
+
+---
+
+### 📄 **F. PDF Viewer**
+
+Tích hợp `react-pdf` hoặc `pdfjs-dist`
+
+**Giao diện:**
+
+* Toàn màn hình hoặc panel bên phải
+* Toolbar:
+
+  * Zoom ±
+  * Trang trước / sau
+  * Download PDF
+  * Fullscreen
+* Nền mờ `bg-slate-900/80`
+* Animation fade-in khi mở file
+
+---
+
+### 🔔 **G. Notification Panel**
+
+* Icon chuông 🔔 hiển thị số thông báo chưa đọc
+* Khi click → hiển thị dropdown (drawer phải):
+
+  * “Reviewer A đã gửi phản hồi cho bài B”
+  * “Bài của bạn đã được chấp nhận”
+  * “Bài đã được gán vào số báo 05/2025”
+
+💡 Thêm tùy chọn “Đánh dấu đã đọc tất cả”.
+
+---
+
+### ⚙️ **H. Settings (Cài đặt)**
+
+Gồm 3 tab:
+
+1. **Hồ sơ cá nhân:** ảnh, ORCID, đơn vị, email, chuyên ngành
+2. **Trình soạn thảo:** bật/tắt autosave, theme dark/light
+3. **Thông báo:** chọn loại thông báo muốn nhận (email / dashboard)
+
+Hiệu ứng: chuyển tab mượt (`motion.div`).
+
+---
+
+## 🧠 4. Trải nghiệm người dùng hoàn chỉnh (User Flow)
+
+| Hành động       | Giao diện phản hồi                                  |
+| --------------- | --------------------------------------------------- |
+| Tạo bài mới     | Mở editor mới, vùng viết sạch, lưu tự động          |
+| Upload ảnh      | Ảnh hiển thị ngay trong bài, có hiệu ứng tải        |
+| Gửi bài         | Popup xác nhận + chuyển sang trạng thái “Submitted” |
+| Nhận phản hồi   | Notification + Badge thay đổi màu                   |
+| Xem PDF         | Mở viewer trong popup hoặc panel phải               |
+| Cập nhật bài    | Autosave + log lịch sử phiên bản                    |
+| Cài đặt cá nhân | Cập nhật realtime không reload trang                |
+
+---
+
+## 🧩 5. Chức năng nâng cao (v2 mở rộng)
+
+| Tính năng           | Mô tả                                                                |
+| ------------------- | -------------------------------------------------------------------- |
+| 💬 Bình luận nội bộ | Biên tập viên có thể gửi comment trực tiếp vào bài (inline comments) |
+| 📈 Thống kê cá nhân | Tác giả xem tổng số bài đã đăng / được duyệt / bị từ chối            |
+| 🔗 Chia sẻ nội bộ   | Cho phép chia sẻ bài đang viết với cộng tác viên                     |
+| 🤖 AI Assistant     | Gợi ý tiêu đề, từ khóa, chỉnh văn phong học thuật                    |
+| 🕓 Lịch phản biện   | Hiển thị tiến độ bài qua các giai đoạn                               |
+| 🧾 Export           | Tải bản Word hoặc PDF preview trước khi gửi                          |
+
+---
+
+## 🎨 6. Tổng thể trải nghiệm hình ảnh (UX tone)
+
+✨ Cảm giác tổng thể nên như:
+
+* Medium + Notion + Google Docs + SciDirect
+* Giao diện sạch, bo tròn lớn, ánh sáng phản chiếu nhẹ
+* Mọi nút bấm đều có phản hồi cảm giác vật lý (`scale`, `shadow`)
+* Hệ thống **“sống”**, phản hồi ngay khi tác giả thao tác
+
+---
+
+## ✅ Kết luận định hướng
+
+| Thành phần              | Mục tiêu                                              |
+| ----------------------- | ----------------------------------------------------- |
+| **Dashboard Overview**  | Tổng quan nhanh tiến trình bài viết                   |
+| **Article Editor**      | Trải nghiệm viết mượt, mạnh, trực quan                |
+| **PDF Viewer**          | Xem bài nộp hoặc phản hồi                             |
+| **Notification System** | Cập nhật phản hồi realtime                            |
+| **Settings**            | Cá nhân hóa trải nghiệm tác giả                       |
+| **UI Style**            | Hiện đại, sang trọng, dễ nhìn, màu xanh lam học thuật |
+
+---
+Đây là code tham khảo của giao diện tác giả "import { useState } from "react"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Progress } from "@/components/ui/progress"
+import { motion } from "framer-motion"
+import { FileText, CheckCircle, Clock, BookOpen, Upload, Bell, PlusCircle } from "lucide-react"
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts"
+
+export default function AuthorDashboard() {
+  const [articles, setArticles] = useState([
+    { id: 1, title: "Nghiên cứu chiến lược hậu cần hiện đại", status: "under_review", progress: 60 },
+    { id: 2, title: "Ứng dụng AI trong quản lý quân nhu", status: "accepted", progress: 100 },
+    { id: 3, title: "Tối ưu hóa mạng vận tải quân sự", status: "draft", progress: 20 },
+  ])
+
+  const stats = {
+    total: 3,
+    under_review: 1,
+    accepted: 1,
+    published: 0,
+  }
+
+  const COLORS = ["#60A5FA", "#FBBF24", "#34D399", "#8B5CF6"]
+
+  const articleData = [
+    { name: "Draft", value: 1 },
+    { name: "Under Review", value: 1 },
+    { name: "Accepted", value: 1 },
+    { name: "Published", value: 0 },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white">
+      {/* Header Bar */}
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold drop-shadow-md">Author Dashboard</h1>
+        <div className="flex items-center gap-4">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+            <PlusCircle className="w-4 h-4" /> Tạo bài mới
+          </Button>
+          <Button variant="outline" className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700">
+            <Bell className="w-4 h-4" />
+          </Button>
+          <img
+            src="/avatar.png"
+            alt="User Avatar"
+            className="w-10 h-10 rounded-full border border-slate-600 shadow-md"
+          />
+        </div>
+      </header>
+
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        {[
+          { title: "Tổng bài viết", value: stats.total, icon: <FileText className="w-6 h-6" />, color: "bg-blue-600" },
+          { title: "Đang phản biện", value: stats.under_review, icon: <Clock className="w-6 h-6" />, color: "bg-yellow-500" },
+          { title: "Đã duyệt", value: stats.accepted, icon: <CheckCircle className="w-6 h-6" />, color: "bg-green-500" },
+          { title: "Đã xuất bản", value: stats.published, icon: <BookOpen className="w-6 h-6" />, color: "bg-purple-500" },
+        ].map((card, i) => (
+          <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+            <Card className="bg-slate-800 border border-slate-700 shadow-xl rounded-2xl hover:scale-[1.02] transition-transform">
+              <CardHeader className="flex justify-between items-center">
+                <CardTitle className="text-lg font-semibold">{card.title}</CardTitle>
+                <div className={`${card.color} p-2 rounded-md`}>{card.icon}</div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-3xl font-bold text-emerald-400 drop-shadow-sm">{card.value}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Article Status Chart */}
+      <div className="bg-slate-800 border border-slate-700 shadow-lg rounded-2xl p-4 mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-center">Tình trạng bài viết</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie data={articleData} dataKey="value" nameKey="name" outerRadius={100} label>
+              {articleData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* My Articles */}
+      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg">
+        <h2 className="text-xl font-semibold mb-6">Bài viết của tôi</h2>
+        <div className="space-y-4">
+          {articles.map((article, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.02 }}
+              className="p-4 bg-slate-700/60 rounded-xl shadow-md flex justify-between items-center border border-slate-600"
+            >
+              <div>
+                <h3 className="text-lg font-bold">{article.title}</h3>
+                <p className="text-slate-400 text-sm capitalize">Trạng thái: {article.status}</p>
+                <Progress value={article.progress} className="w-60 h-2 mt-2" />
+              </div>
+              <div className="flex gap-3">
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Xem PDF</Button>
+                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">Chỉnh sửa</Button>
+                <Button size="sm" variant="outline" className="border border-slate-500 hover:bg-slate-600">Xóa</Button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Advanced Features */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+          <Card className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl">
+            <CardHeader>
+              <CardTitle className="text-white text-lg">Công cụ nâng cao</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-slate-300">
+              <p>🧠 <strong>AI Gợi ý:</strong> Đề xuất tiêu đề, từ khóa, chỉnh lỗi học thuật.</p>
+              <p>📸 <strong>Chèn ảnh & biểu đồ:</strong> Upload trực tiếp hoặc kéo thả.</p>
+              <p>📥 <strong>Tải file phụ trợ:</strong> Đính kèm dữ liệu hoặc hình minh họa.</p>
+              <p>💬 <strong>Nhận xét phản biện:</strong> Hiển thị phản hồi inline trong PDF.</p>
+              <p>🕓 <strong>Lịch phản biện:</strong> Theo dõi tiến độ bài qua các giai đoạn.</p>
+              <p>🧾 <strong>Xuất báo cáo:</strong> Tải bản PDF / Word preview.</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+          <Card className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl">
+            <CardHeader>
+              <CardTitle className="text-white text-lg">Cài đặt cá nhân</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-slate-300">
+              <p>👤 Cập nhật hồ sơ, ORCID, đơn vị công tác.</p>
+              <p>🌗 Chuyển đổi Dark/Light mode khi soạn bài.</p>
+              <p>📧 Cấu hình thông báo (qua email hoặc trực tiếp).</p>
+              <p>💾 Bật / tắt Autosave khi chỉnh sửa bài.</p>
+              <p>📚 Chọn Template xuất bản PDF mặc định.</p>
+              <p>🔒 Bảo mật tài khoản với 2FA.</p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,190 @@
+Tiếp tục hoàn thiện phần mềm: 01. Tiếp tục hoàn thiện UI keywwords. Và xây dựng các modul tiếp theo . Tôi đã phần tích kỹ thuật, bạn hãy tham khảo và lựa chọn giải pháp phù hợp nhất với code hiện tại. Đây là tư vấn kỹ thuật của tôi: " Tuyệt vời 👏 — bạn đã hoàn thành **nhóm chức năng “Giao tiếp và quản lý học thuật”** gồm:
+
+* ✅ Chat nội bộ (Messages) — realtime, có phân quyền
+* ✅ Bình luận công khai (Comments)
+* ✅ Quản lý Volume – Issue – Keyword
+
+👉 Giai đoạn này tương ứng **“Sprint 2: Giao tiếp & dữ liệu meta”**, bạn đã vượt qua phần phức tạp nhất (WebSocket, phân quyền chat, tương tác người dùng).
+
+Dưới đây là **bản tư vấn chi tiết:**
+
+* (A) Các **nội dung cần hoàn thiện bổ sung trong bước hiện tại**
+* (B) Các **nội dung cần triển khai trong bước kế tiếp (Production pipeline)**
+* (C) Gợi ý **mở rộng kỹ thuật và quản trị sau triển khai**
+
+---
+
+## 🧩 A. NỘI DUNG CẦN HOÀN THIỆN TRONG BƯỚC HIỆN TẠI
+
+Mục tiêu: hoàn thiện hoàn toàn “tầng tương tác người dùng – dữ liệu”.
+
+---
+
+### **1️⃣ Chat nội bộ**
+
+#### 🔧 Cần bổ sung:
+
+| Mảng                                       | Việc cần làm                                            | Gợi ý kỹ thuật                         |
+| ------------------------------------------ | ------------------------------------------------------- | -------------------------------------- |
+| 💬 **Danh bạ người dùng (User Directory)** | Hiển thị danh sách người có thể chat (theo role matrix) | API `/api/users?role=author/editor`    |
+| 🕓 **Thời gian gửi**                       | Hiển thị dạng “5 phút trước”                            | `dayjs(createdAt).fromNow()`           |
+| 🔕 **Trạng thái đọc (Seen)**               | Ghi nhận người đã xem tin                               | Bảng `message_read(userId, messageId)` |
+| 📱 **Responsive**                          | Hiển thị tốt trên mobile/tablet                         | Tailwind: `sm:flex-col md:flex-row`    |
+| 🧩 **Group chat**                          | Tạo nhóm “Phòng Biên tập số 3”                          | conversation.type = "group"            |
+
+---
+
+### **2️⃣ Bình luận công khai (Comments)**
+
+#### 🔧 Cần hoàn thiện:
+
+| Mảng                               | Việc cần làm                             | Gợi ý kỹ thuật             |
+| ---------------------------------- | ---------------------------------------- | -------------------------- |
+| 🧠 **Kiểm duyệt (Moderation)**     | Admin duyệt bình luận trước khi hiển thị | Trường `approved: Boolean` |
+| 🧩 **Phân tầng bình luận (Reply)** | Cho phép trả lời bình luận khác          | Trường `parentId`          |
+| 🚫 **Chống spam / flood**          | Giới hạn 1 bình luận / 10 giây / IP      | Middleware rate-limit      |
+| ⚙️ **Báo cáo vi phạm**             | Nút “Báo cáo bình luận”                  | API `/api/comments/report` |
+| 🔔 **Thông báo cho tác giả**       | Khi có bình luận mới ở bài viết          | Tạo `notification` record  |
+
+---
+
+### **3️⃣ Volume / Issue / Keyword**
+
+#### 🔧 Cần hoàn thiện:
+
+| Thành phần      | Việc cần làm                             | Mục tiêu                           |
+| --------------- | ---------------------------------------- | ---------------------------------- |
+| Volume          | Bổ sung trường “year”, “status”          | Hỗ trợ tìm theo năm                |
+| Issue           | Gắn VolumeID + ngày phát hành            | Chuẩn hóa dữ liệu xuất bản         |
+| Keyword         | Tích hợp gợi ý tự động khi nhập bài viết | Dùng API `/api/keywords/search?q=` |
+| 🔄 **Liên kết** | Issue hiển thị danh sách Article         | Quan hệ 1-nhiều                    |
+
+---
+
+### **4️⃣ Notifications (thông báo realtime)**
+
+Đây là lớp quan trọng cần hoàn thiện trong giai đoạn này:
+
+* Thêm bảng:
+
+  ```prisma
+  model Notification {
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    type      String
+    message   String
+    link      String?
+    read      Boolean  @default(false)
+    createdAt DateTime @default(now())
+  }
+  ```
+* Khi có chat / comment / phản biện mới → tạo `Notification`.
+* Frontend: biểu tượng 🔔 trên thanh header + badge số tin chưa đọc.
+* WebSocket: `socket.emit("notification", notif)` để realtime.
+
+---
+
+### **5️⃣ Giao diện tổng thể**
+
+* Header hiển thị:
+
+  * Avatar user
+  * Badge thông báo 🔔
+  * Icon tin nhắn 💬 (số tin chưa đọc)
+* Sidebar dashboard:
+
+  * Chat
+  * Bình luận
+  * Notifications
+  * Issues / Volumes
+* Footer hiển thị thông tin bản quyền, liên hệ, giấy phép truy cập.
+
+---
+
+## 🚀 B. GIAI ĐOẠN TIẾP THEO – "SẢN XUẤT & XUẤT BẢN" (Sprint 3)
+
+> Mục tiêu: hoàn thiện pipeline xuất bản bài báo thực tế, từ biên tập đến dàn trang & phát hành.
+
+---
+
+### **1️⃣ Module Copyediting (Biên tập nội dung)**
+
+* Giao diện upload bản chỉnh sửa (`.docx`, `.pdf`).
+* Có “track changes” hoặc trạng thái: *draft → reviewed → finalized*.
+* API: `/api/copyediting` CRUD.
+* Cho phép chat nhanh giữa *Author ↔ Copyeditor*.
+* Tích hợp lịch sử chỉnh sửa (`history table`).
+
+---
+
+### **2️⃣ Module Production (Dàn trang / xuất bản)**
+
+* Biên tập viên dàn trang gửi bản cuối → xuất bản lên Issue.
+* Tích hợp upload PDF layout cuối cùng (`issue_pdf_url`).
+* Có “preview mode” cho tổng biên tập duyệt.
+* Khi duyệt, API `/api/issues/publish` → cập nhật `published = true`.
+
+---
+
+### **3️⃣ Module Plagiarism (Kiểm tra đạo văn)**
+
+* Upload file → gửi đến API bên thứ 3 (hoặc nội bộ).
+* Trả về `similarity score (%)`.
+* Lưu kết quả `article.plagiarism_score`.
+* Hiển thị trong dashboard admin.
+* Có trạng thái: `Pending → Checked → Flagged`.
+
+---
+
+### **4️⃣ Workflow trạng thái bài viết (Article Lifecycle)**
+
+| Giai đoạn      | Người chịu trách nhiệm | Trạng thái         |
+| -------------- | ---------------------- | ------------------ |
+| Gửi bài        | Tác giả                | `submitted`        |
+| Gán phản biện  | Biên tập               | `under_review`     |
+| Nhận phản biện | Phản biện              | `reviewing`        |
+| Quyết định     | Tổng biên tập          | `decision_pending` |
+| Biên tập       | Copyeditor             | `editing`          |
+| Dàn trang      | Production team        | `layout`           |
+| Xuất bản       | Admin                  | `published`        |
+
+📘 **=> Nên có cột `status` + `status_history` cho mỗi Article.**
+
+---
+
+### **5️⃣ Dashboard thống kê**
+
+* Tổng số bài viết / phản biện / xuất bản.
+* Biểu đồ bài viết theo tháng.
+* Số lượng bài đang ở từng trạng thái.
+* Sử dụng `chart.js` hoặc `recharts`.
+
+---
+
+## 🧠 C. GỢI Ý MỞ RỘNG & QUẢN TRỊ DÀI HẠN
+
+| Mảng                         | Mục tiêu                                | Hướng thực hiện             |
+| ---------------------------- | --------------------------------------- | --------------------------- |
+| 🔒 **Bảo mật**               | Chuẩn hoá JWT + CSRF + 2FA              | Module `/api/security/2fa`  |
+| 🧩 **RBAC nâng cao**         | Quản lý quyền động                      | Bảng `roles`, `permissions` |
+| 📦 **Triển khai production** | Docker + PostgreSQL + SSL               | Dùng `docker-compose.yml`   |
+| ☁️ **Storage**               | MinIO hoặc Supabase                     | Upload an toàn              |
+| 📧 **Email Notification**    | Gửi mail khi có phản biện hoặc xuất bản | `nodemailer`                |
+| 🧾 **Logs & Backup**         | Ghi log hệ thống + backup DB            | Cron hoặc service nội bộ    |
+| 🌍 **SEO / Indexing**        | Tối ưu metadata, robots.txt             | Next.js SEO components      |
+
+---
+
+## 🧩 D. MỐC HOÀN THÀNH GIAI ĐOẠN (ước tính)
+
+| Sprint           | Thời gian | Mục tiêu chính                        | Kết quả                       |
+| ---------------- | --------- | ------------------------------------- | ----------------------------- |
+| **2 (hiện tại)** | 2 tuần    | Chat + Comments + Metadata            | Giao tiếp nội bộ hoàn chỉnh   |
+| **3 (kế tiếp)**  | 3 tuần    | Copyediting + Production + Plagiarism | Quy trình xuất bản hoàn chỉnh |
+| **4 (cuối)**     | 1 tuần    | Triển khai thật (DB, Docker, Backup)  | Website chạy thực tế          |
+
+---
+
+✅ **Tổng kết:**
+Hiện tại bạn đã hoàn thành ~70% hệ thống.
+Chỉ còn **3 module chính (biên tập – dàn trang – đạo văn)** và **chuỗi xuất bản – thông báo – bảo mật** nữa là đạt **mức Production Ready (v1.0)**.

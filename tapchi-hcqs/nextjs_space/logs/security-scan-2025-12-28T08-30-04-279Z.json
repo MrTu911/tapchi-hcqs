@@ -1,0 +1,3458 @@
+{
+  "timestamp": "2025-12-28T08:30:04.279Z",
+  "summary": {
+    "total": 176,
+    "full": 0,
+    "partial": 7,
+    "basic": 20,
+    "none": 149
+  },
+  "modules": {
+    "Auth": {
+      "total": 16,
+      "full": 0,
+      "partial": 0,
+      "basic": 13,
+      "none": 3,
+      "avgScore": 37,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Submissions": {
+      "total": 8,
+      "full": 0,
+      "partial": 4,
+      "basic": 4,
+      "none": 0,
+      "avgScore": 54,
+      "coverage": 0,
+      "status": "🟡 FAIR"
+    },
+    "Reviews": {
+      "total": 3,
+      "full": 0,
+      "partial": 3,
+      "basic": 0,
+      "none": 0,
+      "avgScore": 75,
+      "coverage": 0,
+      "status": "🟢 GOOD"
+    },
+    "Admin": {
+      "total": 14,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 14,
+      "avgScore": 12,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Editor": {
+      "total": 1,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 1,
+      "avgScore": 10,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Articles": {
+      "total": 16,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 16,
+      "avgScore": 12,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Issues": {
+      "total": 6,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 6,
+      "avgScore": 10,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Users": {
+      "total": 9,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 9,
+      "avgScore": 15,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Categories": {
+      "total": 4,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 4,
+      "avgScore": 14,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Keywords": {
+      "total": 2,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 2,
+      "avgScore": 25,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Files": {
+      "total": 4,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 4,
+      "avgScore": 10,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Chat": {
+      "total": 4,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 4,
+      "avgScore": 18,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Comments": {
+      "total": 2,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 2,
+      "avgScore": 18,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Statistics": {
+      "total": 11,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 11,
+      "avgScore": 10,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Search": {
+      "total": 4,
+      "full": 0,
+      "partial": 0,
+      "basic": 0,
+      "none": 4,
+      "avgScore": 10,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    },
+    "Other": {
+      "total": 72,
+      "full": 0,
+      "partial": 0,
+      "basic": 3,
+      "none": 69,
+      "avgScore": 14,
+      "coverage": 0,
+      "status": "🔴 NEEDS WORK"
+    }
+  },
+  "priorities": {
+    "🔴 CRITICAL": [
+      "admin/categories/[id]/route.ts",
+      "admin/comments/route.ts",
+      "admin/dashboard-stats/route.ts",
+      "admin/deadlines/[id]/route.ts",
+      "admin/deadlines/route.ts",
+      "admin/featured-articles/[id]/route.ts",
+      "admin/featured-articles/route.ts",
+      "admin/monitor/route.ts",
+      "admin/role-escalation/[id]/route.ts",
+      "admin/role-escalation/route.ts",
+      "admin/users/approve/route.ts",
+      "admin/users/pending/route.ts",
+      "admin/users/stats/route.ts",
+      "admin/users/toggle-active/route.ts",
+      "auth/[...nextauth]/route.ts",
+      "auth/login/route.ts",
+      "auth/register/route.ts"
+    ],
+    "🟠 HIGH": [
+      "statistics/editor/route.ts",
+      "statistics/users/route.ts",
+      "users/[id]/reset-password/route.ts",
+      "users/[id]/route.ts",
+      "users/export/route.ts",
+      "users/password/route.ts",
+      "users/profile/route.ts",
+      "users/route.ts",
+      "users/search/route.ts",
+      "users/sessions/route.ts"
+    ],
+    "🟡 MEDIUM": [
+      "analytics/route.ts",
+      "articles/[id]/approve/route.ts",
+      "articles/[id]/assign-issue/route.ts",
+      "articles/[id]/citation/route.ts",
+      "articles/[id]/pdf/route.ts",
+      "articles/[id]/route.ts",
+      "articles/[id]/versions/route.ts",
+      "articles/route.ts",
+      "audit-logs/route.ts",
+      "audit-logs/stats/route.ts",
+      "auth/2fa/route.ts",
+      "auth/2fa/send-otp/route.ts",
+      "auth/2fa/verify-otp/route.ts",
+      "auth/csrf/route.ts",
+      "auth/forgot-password/route.ts",
+      "auth/logout/route.ts",
+      "auth/me/route.ts",
+      "auth/orcid/callback/route.ts",
+      "auth/orcid/route.ts",
+      "auth/refresh/route.ts",
+      "auth/reset-password/route.ts",
+      "auth/signin/route.ts",
+      "auth/verify-email/route.ts",
+      "author/articles/[id]/autosave/route.ts",
+      "author/articles/[id]/route.ts",
+      "author/articles/route.ts",
+      "author/statistics/route.ts",
+      "banners/[id]/analytics/route.ts",
+      "banners/[id]/image-url/route.ts",
+      "banners/[id]/route.ts",
+      "banners/bulk-update-order/route.ts",
+      "banners/reorder/route.ts",
+      "banners/route.ts",
+      "cache/clear/route.ts",
+      "cache/revalidate/route.ts",
+      "categories/[id]/route.ts",
+      "categories/alias/route.ts",
+      "categories/by-slug/[slug]/articles/route.ts",
+      "categories/by-slug/[slug]/route.ts",
+      "categories/route.ts",
+      "chat/conversations/[id]/route.ts",
+      "chat/conversations/route.ts",
+      "chat/messages/route.ts",
+      "comments/[id]/route.ts",
+      "comments/route.ts",
+      "copyediting/[id]/route.ts",
+      "copyediting/history/[articleId]/route.ts",
+      "copyediting/route.ts",
+      "cron/check-overdue/route.ts",
+      "cron/reminders/route.ts",
+      "cron/run-jobs/route.ts",
+      "csrf/route.ts",
+      "dashboard/summary/route.ts",
+      "deadlines/route.ts",
+      "export/excel/route.ts",
+      "export/pdf/route.ts",
+      "featured-articles/[id]/route.ts",
+      "featured-articles/route.ts",
+      "files/[id]/route.ts",
+      "files/download/route.ts",
+      "files/route.ts",
+      "files/upload/route.ts",
+      "health/route.ts",
+      "homepage-sections/[id]/route.ts",
+      "homepage-sections/route.ts",
+      "images/proxy/route.ts",
+      "issues/[id]/download/route.ts",
+      "issues/[id]/route.ts",
+      "issues/add-articles/route.ts",
+      "issues/latest/route.ts",
+      "issues/publish/route.ts",
+      "issues/route.ts",
+      "issues/upload/route.ts",
+      "keywords/[id]/route.ts",
+      "keywords/route.ts",
+      "media/[id]/route.ts",
+      "media/route.ts",
+      "messages/route.ts",
+      "metadata/route.ts",
+      "metrics/article/[articleId]/route.ts",
+      "navigation/[id]/route.ts",
+      "navigation/bulk-update/route.ts",
+      "navigation/route.ts",
+      "news/[id]/route.ts",
+      "news/route.ts",
+      "news/slug-backup/route.ts",
+      "news/upload-image/route.ts",
+      "notifications/route.ts",
+      "page-blocks/key-backup/route.ts",
+      "page-blocks/reorder/route.ts",
+      "page-blocks/route.ts",
+      "permissions/role/route.ts",
+      "permissions/route.ts",
+      "permissions/seed/route.ts",
+      "plagiarism/route.ts",
+      "production/[id]/route.ts",
+      "production/publish/route.ts",
+      "production/route.ts",
+      "public/articles/[id]/route.ts",
+      "public/articles/route.ts",
+      "public-pages/[id]/route.ts",
+      "public-pages/route.ts",
+      "push/subscribe/route.ts",
+      "reviewers/[id]/expertise/route.ts",
+      "reviewers/match/route.ts",
+      "reviewers/profile/route.ts",
+      "reviewers/suggest/route.ts",
+      "search/advanced/route.ts",
+      "search/filter/route.ts",
+      "search/route.ts",
+      "search/semantic/route.ts",
+      "security/alerts/[id]/route.ts",
+      "security/alerts/route.ts",
+      "security/api-tokens/[id]/route.ts",
+      "security/api-tokens/route.ts",
+      "security/retention/route.ts",
+      "sessions/route.ts",
+      "signup/route.ts",
+      "site-settings/[key]/route.ts",
+      "site-settings/route.ts",
+      "statistics/dashboard/route.ts",
+      "statistics/editor-performance/route.ts",
+      "statistics/overview/route.ts",
+      "statistics/review-monthly/route.ts",
+      "statistics/reviewers/route.ts",
+      "statistics/reviewers-advanced/route.ts",
+      "statistics/system/route.ts",
+      "statistics/trends/route.ts",
+      "statistics/user-roles/route.ts",
+      "statistics/workflow/route.ts",
+      "submissions/[id]/assign-reviewers/route.ts",
+      "submissions/[id]/decision/route.ts",
+      "submissions/[id]/status/route.ts",
+      "submissions/revise/route.ts",
+      "ui-config/route.ts",
+      "videos/[id]/route.ts",
+      "videos/route.ts",
+      "volumes/[id]/route.ts",
+      "volumes/route.ts",
+      "workflow/auto-assign/route.ts",
+      "workflow/route.ts",
+      "workflow/timeline/route.ts"
+    ],
+    "🟢 LOW": [
+      "reviews/[id]/complete/route.ts",
+      "reviews/[id]/route.ts",
+      "reviews/route.ts",
+      "statistics/submissions/route.ts",
+      "submissions/[id]/comments/route.ts",
+      "submissions/[id]/route.ts",
+      "submissions/route.ts"
+    ]
+  },
+  "routes": [
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/categories/[id]/route.ts",
+      "relativePath": "admin/categories/[id]/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/comments/route.ts",
+      "relativePath": "admin/comments/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/dashboard-stats/route.ts",
+      "relativePath": "admin/dashboard-stats/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/[id]/route.ts",
+      "relativePath": "admin/deadlines/[id]/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/route.ts",
+      "relativePath": "admin/deadlines/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/[id]/route.ts",
+      "relativePath": "admin/featured-articles/[id]/route.ts",
+      "module": "Admin",
+      "methods": [
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/route.ts",
+      "relativePath": "admin/featured-articles/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/monitor/route.ts",
+      "relativePath": "admin/monitor/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/[id]/route.ts",
+      "relativePath": "admin/role-escalation/[id]/route.ts",
+      "module": "Admin",
+      "methods": [
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/route.ts",
+      "relativePath": "admin/role-escalation/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/approve/route.ts",
+      "relativePath": "admin/users/approve/route.ts",
+      "module": "Admin",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/pending/route.ts",
+      "relativePath": "admin/users/pending/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/stats/route.ts",
+      "relativePath": "admin/users/stats/route.ts",
+      "module": "Admin",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/toggle-active/route.ts",
+      "relativePath": "admin/users/toggle-active/route.ts",
+      "module": "Admin",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/analytics/route.ts",
+      "relativePath": "analytics/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/approve/route.ts",
+      "relativePath": "articles/[id]/approve/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/assign-issue/route.ts",
+      "relativePath": "articles/[id]/assign-issue/route.ts",
+      "module": "Articles",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/citation/route.ts",
+      "relativePath": "articles/[id]/citation/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/pdf/route.ts",
+      "relativePath": "articles/[id]/pdf/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/route.ts",
+      "relativePath": "articles/[id]/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/versions/route.ts",
+      "relativePath": "articles/[id]/versions/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/route.ts",
+      "relativePath": "articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/route.ts",
+      "relativePath": "audit-logs/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/stats/route.ts",
+      "relativePath": "audit-logs/stats/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/route.ts",
+      "relativePath": "auth/2fa/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/send-otp/route.ts",
+      "relativePath": "auth/2fa/send-otp/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/verify-otp/route.ts",
+      "relativePath": "auth/2fa/verify-otp/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/[...nextauth]/route.ts",
+      "relativePath": "auth/[...nextauth]/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": false
+      },
+      "score": 0,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/csrf/route.ts",
+      "relativePath": "auth/csrf/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/forgot-password/route.ts",
+      "relativePath": "auth/forgot-password/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/login/route.ts",
+      "relativePath": "auth/login/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/logout/route.ts",
+      "relativePath": "auth/logout/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/me/route.ts",
+      "relativePath": "auth/me/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/callback/route.ts",
+      "relativePath": "auth/orcid/callback/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/route.ts",
+      "relativePath": "auth/orcid/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/refresh/route.ts",
+      "relativePath": "auth/refresh/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/register/route.ts",
+      "relativePath": "auth/register/route.ts",
+      "module": "Auth",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/reset-password/route.ts",
+      "relativePath": "auth/reset-password/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/signin/route.ts",
+      "relativePath": "auth/signin/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 55,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/verify-email/route.ts",
+      "relativePath": "auth/verify-email/route.ts",
+      "module": "Auth",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/autosave/route.ts",
+      "relativePath": "author/articles/[id]/autosave/route.ts",
+      "module": "Articles",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/route.ts",
+      "relativePath": "author/articles/[id]/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/route.ts",
+      "relativePath": "author/articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/statistics/route.ts",
+      "relativePath": "author/statistics/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/analytics/route.ts",
+      "relativePath": "banners/[id]/analytics/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/image-url/route.ts",
+      "relativePath": "banners/[id]/image-url/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/route.ts",
+      "relativePath": "banners/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 45,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/bulk-update-order/route.ts",
+      "relativePath": "banners/bulk-update-order/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/reorder/route.ts",
+      "relativePath": "banners/reorder/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 30,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/route.ts",
+      "relativePath": "banners/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 45,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/clear/route.ts",
+      "relativePath": "cache/clear/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/revalidate/route.ts",
+      "relativePath": "cache/revalidate/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/[id]/route.ts",
+      "relativePath": "categories/[id]/route.ts",
+      "module": "Categories",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/alias/route.ts",
+      "relativePath": "categories/alias/route.ts",
+      "module": "Categories",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/articles/route.ts",
+      "relativePath": "categories/by-slug/[slug]/articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/route.ts",
+      "relativePath": "categories/by-slug/[slug]/route.ts",
+      "module": "Categories",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/route.ts",
+      "relativePath": "categories/route.ts",
+      "module": "Categories",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/[id]/route.ts",
+      "relativePath": "chat/conversations/[id]/route.ts",
+      "module": "Chat",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/route.ts",
+      "relativePath": "chat/conversations/route.ts",
+      "module": "Chat",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/messages/route.ts",
+      "relativePath": "chat/messages/route.ts",
+      "module": "Chat",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/[id]/route.ts",
+      "relativePath": "comments/[id]/route.ts",
+      "module": "Comments",
+      "methods": [
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/route.ts",
+      "relativePath": "comments/route.ts",
+      "module": "Comments",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/[id]/route.ts",
+      "relativePath": "copyediting/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/history/[articleId]/route.ts",
+      "relativePath": "copyediting/history/[articleId]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/route.ts",
+      "relativePath": "copyediting/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/check-overdue/route.ts",
+      "relativePath": "cron/check-overdue/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/reminders/route.ts",
+      "relativePath": "cron/reminders/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/run-jobs/route.ts",
+      "relativePath": "cron/run-jobs/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/csrf/route.ts",
+      "relativePath": "csrf/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": false
+      },
+      "score": 0,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/dashboard/summary/route.ts",
+      "relativePath": "dashboard/summary/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/deadlines/route.ts",
+      "relativePath": "deadlines/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/excel/route.ts",
+      "relativePath": "export/excel/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/pdf/route.ts",
+      "relativePath": "export/pdf/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/[id]/route.ts",
+      "relativePath": "featured-articles/[id]/route.ts",
+      "module": "Articles",
+      "methods": [
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/route.ts",
+      "relativePath": "featured-articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/[id]/route.ts",
+      "relativePath": "files/[id]/route.ts",
+      "module": "Files",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/download/route.ts",
+      "relativePath": "files/download/route.ts",
+      "module": "Files",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/route.ts",
+      "relativePath": "files/route.ts",
+      "module": "Files",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/upload/route.ts",
+      "relativePath": "files/upload/route.ts",
+      "module": "Files",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/health/route.ts",
+      "relativePath": "health/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/[id]/route.ts",
+      "relativePath": "homepage-sections/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/route.ts",
+      "relativePath": "homepage-sections/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/images/proxy/route.ts",
+      "relativePath": "images/proxy/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/download/route.ts",
+      "relativePath": "issues/[id]/download/route.ts",
+      "module": "Issues",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/route.ts",
+      "relativePath": "issues/[id]/route.ts",
+      "module": "Issues",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/add-articles/route.ts",
+      "relativePath": "issues/add-articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/latest/route.ts",
+      "relativePath": "issues/latest/route.ts",
+      "module": "Issues",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/publish/route.ts",
+      "relativePath": "issues/publish/route.ts",
+      "module": "Issues",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/route.ts",
+      "relativePath": "issues/route.ts",
+      "module": "Issues",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/upload/route.ts",
+      "relativePath": "issues/upload/route.ts",
+      "module": "Issues",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/[id]/route.ts",
+      "relativePath": "keywords/[id]/route.ts",
+      "module": "Keywords",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/route.ts",
+      "relativePath": "keywords/route.ts",
+      "module": "Keywords",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/[id]/route.ts",
+      "relativePath": "media/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/route.ts",
+      "relativePath": "media/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/messages/route.ts",
+      "relativePath": "messages/route.ts",
+      "module": "Chat",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metadata/route.ts",
+      "relativePath": "metadata/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metrics/article/[articleId]/route.ts",
+      "relativePath": "metrics/article/[articleId]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/[id]/route.ts",
+      "relativePath": "navigation/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/bulk-update/route.ts",
+      "relativePath": "navigation/bulk-update/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/route.ts",
+      "relativePath": "navigation/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/[id]/route.ts",
+      "relativePath": "news/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/route.ts",
+      "relativePath": "news/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/slug-backup/route.ts",
+      "relativePath": "news/slug-backup/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/upload-image/route.ts",
+      "relativePath": "news/upload-image/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/notifications/route.ts",
+      "relativePath": "notifications/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/key-backup/route.ts",
+      "relativePath": "page-blocks/key-backup/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/reorder/route.ts",
+      "relativePath": "page-blocks/reorder/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/route.ts",
+      "relativePath": "page-blocks/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/role/route.ts",
+      "relativePath": "permissions/role/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/route.ts",
+      "relativePath": "permissions/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/seed/route.ts",
+      "relativePath": "permissions/seed/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/plagiarism/route.ts",
+      "relativePath": "plagiarism/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/[id]/route.ts",
+      "relativePath": "production/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/publish/route.ts",
+      "relativePath": "production/publish/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/route.ts",
+      "relativePath": "production/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/[id]/route.ts",
+      "relativePath": "public/articles/[id]/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/route.ts",
+      "relativePath": "public/articles/route.ts",
+      "module": "Articles",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/[id]/route.ts",
+      "relativePath": "public-pages/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/route.ts",
+      "relativePath": "public-pages/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/push/subscribe/route.ts",
+      "relativePath": "push/subscribe/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/[id]/expertise/route.ts",
+      "relativePath": "reviewers/[id]/expertise/route.ts",
+      "module": "Other",
+      "methods": [
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/match/route.ts",
+      "relativePath": "reviewers/match/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/profile/route.ts",
+      "relativePath": "reviewers/profile/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/suggest/route.ts",
+      "relativePath": "reviewers/suggest/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/complete/route.ts",
+      "relativePath": "reviews/[id]/complete/route.ts",
+      "module": "Reviews",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 75,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/route.ts",
+      "relativePath": "reviews/[id]/route.ts",
+      "module": "Reviews",
+      "methods": [
+        "GET",
+        "PUT",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 75,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/route.ts",
+      "relativePath": "reviews/route.ts",
+      "module": "Reviews",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 75,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/advanced/route.ts",
+      "relativePath": "search/advanced/route.ts",
+      "module": "Search",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/filter/route.ts",
+      "relativePath": "search/filter/route.ts",
+      "module": "Search",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/route.ts",
+      "relativePath": "search/route.ts",
+      "module": "Search",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/semantic/route.ts",
+      "relativePath": "search/semantic/route.ts",
+      "module": "Search",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/[id]/route.ts",
+      "relativePath": "security/alerts/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/route.ts",
+      "relativePath": "security/alerts/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/[id]/route.ts",
+      "relativePath": "security/api-tokens/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/route.ts",
+      "relativePath": "security/api-tokens/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/retention/route.ts",
+      "relativePath": "security/retention/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/sessions/route.ts",
+      "relativePath": "sessions/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/signup/route.ts",
+      "relativePath": "signup/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": false
+      },
+      "score": 0,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/[key]/route.ts",
+      "relativePath": "site-settings/[key]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "DELETE",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/route.ts",
+      "relativePath": "site-settings/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/dashboard/route.ts",
+      "relativePath": "statistics/dashboard/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor/route.ts",
+      "relativePath": "statistics/editor/route.ts",
+      "module": "Editor",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor-performance/route.ts",
+      "relativePath": "statistics/editor-performance/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/overview/route.ts",
+      "relativePath": "statistics/overview/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/review-monthly/route.ts",
+      "relativePath": "statistics/review-monthly/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers/route.ts",
+      "relativePath": "statistics/reviewers/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers-advanced/route.ts",
+      "relativePath": "statistics/reviewers-advanced/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/submissions/route.ts",
+      "relativePath": "statistics/submissions/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 60,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/system/route.ts",
+      "relativePath": "statistics/system/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/trends/route.ts",
+      "relativePath": "statistics/trends/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/user-roles/route.ts",
+      "relativePath": "statistics/user-roles/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/users/route.ts",
+      "relativePath": "statistics/users/route.ts",
+      "module": "Users",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/workflow/route.ts",
+      "relativePath": "statistics/workflow/route.ts",
+      "module": "Statistics",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/assign-reviewers/route.ts",
+      "relativePath": "submissions/[id]/assign-reviewers/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/comments/route.ts",
+      "relativePath": "submissions/[id]/comments/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 60,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/decision/route.ts",
+      "relativePath": "submissions/[id]/decision/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/route.ts",
+      "relativePath": "submissions/[id]/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 75,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/status/route.ts",
+      "relativePath": "submissions/[id]/status/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/revise/route.ts",
+      "relativePath": "submissions/revise/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 40,
+      "status": "BASIC"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/route.ts",
+      "relativePath": "submissions/route.ts",
+      "module": "Submissions",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": true,
+        "hasLogger": false,
+        "hasApiGuards": true,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 75,
+      "status": "PARTIAL"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/ui-config/route.ts",
+      "relativePath": "ui-config/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/reset-password/route.ts",
+      "relativePath": "users/[id]/reset-password/route.ts",
+      "module": "Users",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/route.ts",
+      "relativePath": "users/[id]/route.ts",
+      "module": "Users",
+      "methods": [
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/export/route.ts",
+      "relativePath": "users/export/route.ts",
+      "module": "Users",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/password/route.ts",
+      "relativePath": "users/password/route.ts",
+      "module": "Users",
+      "methods": [
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/profile/route.ts",
+      "relativePath": "users/profile/route.ts",
+      "module": "Users",
+      "methods": [
+        "PUT"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/route.ts",
+      "relativePath": "users/route.ts",
+      "module": "Users",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/search/route.ts",
+      "relativePath": "users/search/route.ts",
+      "module": "Users",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/sessions/route.ts",
+      "relativePath": "users/sessions/route.ts",
+      "module": "Users",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/[id]/route.ts",
+      "relativePath": "videos/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/route.ts",
+      "relativePath": "videos/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/[id]/route.ts",
+      "relativePath": "volumes/[id]/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/route.ts",
+      "relativePath": "volumes/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": true,
+        "hasTryCatch": true
+      },
+      "score": 25,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/auto-assign/route.ts",
+      "relativePath": "workflow/auto-assign/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/route.ts",
+      "relativePath": "workflow/route.ts",
+      "module": "Other",
+      "methods": [
+        "POST"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/timeline/route.ts",
+      "relativePath": "workflow/timeline/route.ts",
+      "module": "Other",
+      "methods": [
+        "GET"
+      ],
+      "security": {
+        "hasHandleError": false,
+        "hasLogger": false,
+        "hasApiGuards": false,
+        "hasValidator": false,
+        "hasTryCatch": true
+      },
+      "score": 10,
+      "status": "NONE"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+Tôi đã purchase - hãy fix lỗi tiếp. Hãy tục sửa lỗi: Đây là phân tích lỗi của tôi "Rất tốt, Master Tu — đây là báo cáo phân tích **chuyên sâu chi tiết lỗi hệ thống** từ log bạn cung cấp.
+Tôi đã xác định **nguồn gốc chính xác**, **nguyên nhân sâu xa**, và **cách sửa triệt để** cho cả hai nhóm lỗi chính:
+🧩 *Prisma query trùng lặp / quá tải*, và
+🌐 *Failed to fetch dữ liệu (API, SSR fetch trong môi trường standalone)*
+
+---
+
+## ⚙️ 1️⃣ **Nhóm 1 — Lỗi Prisma query chạy lặp (spam truy vấn DB)**
+
+### 🔍 Dấu hiệu:
+
+Log xuất hiện liên tục lặp lại:
+
+```
+prisma:query SELECT "public"."User" ...
+LEFT JOIN (SELECT "public"."Submission"...) ...
+```
+
+— cùng **một câu query** chạy **hàng chục lần liên tiếp**.
+Điều này **không bình thường**; nó chứng tỏ có **vòng lặp render hoặc refetch SSR**.
+
+---
+
+### 🧠 **Nguyên nhân sâu xa**
+
+Trong Next.js 14 (App Router):
+
+* Mỗi lần server render một route có `fetch` hoặc `db query` **bên trong component**, Next sẽ **tự động re-execute** khi:
+
+  * Component bị re-render do dependency thay đổi.
+  * `fetch` không được cache (`{ cache: 'no-store' }` mặc định trong môi trường SSR).
+  * Không đặt `export const revalidate = ...` nên hệ thống xem dữ liệu là “dynamic” và fetch lại.
+
+➡️ Kết quả: Prisma query được gọi lại liên tục — gây log spam như bạn thấy.
+
+---
+
+### 🧩 **Cách kiểm tra**
+
+Mở file:
+
+```
+app/(admin)/reviewers/page.tsx 
+hoặc
+app/(dashboard)/users/page.tsx
+```
+
+Trong đó chắc chắn có đoạn như:
+
+```ts
+const users = await prisma.user.findMany({...});
+```
+
+Nếu gọi trực tiếp trong component mà không có cache → bị render lại.
+
+---
+
+### ✅ **Cách khắc phục triệt để**
+
+1. **Dùng `cache()` của React hoặc `React cache()` từ Next.js**
+
+```ts
+import { cache } from 'react';
+import { prisma } from '@/lib/prisma';
+
+const getUsers = cache(async () => {
+  return prisma.user.findMany({
+    where: { role: 'REVIEWER', isActive: true },
+    include: { submissions: true },
+  });
+});
+```
+
+→ sau đó trong component:
+
+```ts
+const users = await getUsers();
+```
+
+2. **Hoặc thêm revalidation:**
+
+```ts
+export const revalidate = 300; // cache 5 phút
+```
+
+3. **Nếu là API route**, thêm header cache:
+
+```ts
+export async function GET() {
+  const data = await prisma.user.findMany();
+  return Response.json(data, { headers: { 'Cache-Control': 's-maxage=300' } });
+}
+```
+
+✅ Kết quả: Prisma sẽ chỉ query một lần, Next sẽ cache trong bộ nhớ edge hoặc revalidate lại theo chu kỳ → không còn spam log.
+
+---
+
+## 🌐 2️⃣ **Nhóm 2 — Lỗi “Failed to fetch …” hàng loạt**
+
+### 🔍 Dấu hiệu:
+
+```
+Error fetching news: Error: Failed to fetch news
+Error fetching categories: Error: Failed to fetch categories
+Error fetching issues: Error: Failed to fetch issues
+```
+
+và các hàm `$`, `E`, `I`, `P`, `z`, `U` trong `page.js`.
+
+---
+
+### 🧠 **Nguyên nhân sâu xa**
+
+Khi bạn chạy **Next.js 14 ở chế độ standalone**, Next build ra một server node nội bộ tại:
+
+```
+/run/root/app/.build/standalone/
+```
+
+Trong chế độ này:
+
+* `fetch('/api/...')` **không còn hiểu là gọi vào chính server**.
+* Vì không có `window` hay base URL, nó coi `/api/...` là “địa chỉ trống”, dẫn đến lỗi *“Failed to fetch”*.
+
+Điều này **chính là nguyên nhân gốc rễ** của toàn bộ chuỗi lỗi bạn thấy.
+
+---
+
+### ✅ **Cách khắc phục chuẩn chỉnh**
+
+#### ① **Khai báo biến môi trường absolute base URL**
+
+Trong `.env`:
+
+```env
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+#### ② **Dùng base URL trong tất cả fetch SSR**
+
+Thay vì:
+
+```ts
+const res = await fetch('/api/news');
+```
+
+hãy dùng:
+
+```ts
+const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/news`, {
+  next: { revalidate: 300 },
+});
+```
+
+#### ③ **Hoặc tạo helper**
+
+Tạo file `/lib/fetcher.ts`:
+
+```ts
+export async function apiFetch(path: string, options?: RequestInit) {
+  const base = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(`${base}${path}`, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch ${path}`);
+  return res.json();
+}
+```
+
+Sau đó trong `page.tsx`:
+
+```ts
+const [news, issues] = await Promise.all([
+  apiFetch('/api/news'),
+  apiFetch('/api/issues'),
+]);
+```
+
+---
+
+### ⚙️ **③ Thêm kiểm soát lỗi Promise.all**
+
+Bạn đang dùng:
+
+```ts
+await Promise.all([
+  fetchNews(),
+  fetchIssues(),
+  fetchArticles(),
+]);
+```
+
+Nếu 1 trong 3 lỗi → toàn bộ fail.
+Hãy đổi sang:
+
+```ts
+const results = await Promise.allSettled([
+  fetchNews(),
+  fetchIssues(),
+  fetchArticles(),
+]);
+
+const [news, issues, articles] = results.map(r =>
+  r.status === 'fulfilled' ? r.value : []
+);
+```
+
+→ Giao diện vẫn render phần dữ liệu hợp lệ, không crash.
+
+---
+
+### 🔒 **④ Cấu hình Next.js environment**
+
+Trong `next.config.js`:
+
+```js
+const nextConfig = {
+  output: 'standalone',
+  env: {
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+  },
+  eslint: { ignoreDuringBuilds: true },
+};
+```
+
+---
+
+## 🔧 **3️⃣ Tổng hợp lỗi và hướng sửa**
+
+| Nhóm                          | Lỗi chính                                  | Hướng khắc phục                                  | Mức độ        |
+| ----------------------------- | ------------------------------------------ | ------------------------------------------------ | ------------- |
+| **Prisma spam query**         | Lặp truy vấn nhiều lần do render lại SSR   | Dùng `cache()` hoặc `revalidate`                 | 🔥 Cao        |
+| **API fetch lỗi**             | Fetch `/api/...` thất bại trong standalone | Dùng absolute URL `NEXT_PUBLIC_BASE_URL`         | 🔥 Cao        |
+| **Promise.all toàn cục fail** | Một API lỗi → toàn bộ vỡ trang             | Dùng `Promise.allSettled()`                      | ⚠️ Trung bình |
+| **Không có Cache-Control**    | Tất cả request bị dynamic                  | Thêm `{ next: { revalidate }}` hoặc header cache | ⚠️ Trung bình |
+| **ESLint ignored**            | Không phát hiện sớm lỗi logic              | Bật lại lint trong CI/CD                         | ⚙️ Thấp       |
+
+---
+
+## 🧭 **Tóm tắt chiến lược sửa nhanh (triệt để):**
+
+1. **Tạo `.env` chuẩn:**
+
+   ```env
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000
+   NEXT_OUTPUT_MODE=standalone
+   ```
+2. **Thay tất cả `fetch('/api/...')` → `fetch(${BASE_URL}/api/...)`**
+3. **Bao Promise bằng `Promise.allSettled()`**
+4. **Dùng `cache()` hoặc `export const revalidate = 300` cho SSR**
+5. **Bật lại ESLint trong build pipeline**

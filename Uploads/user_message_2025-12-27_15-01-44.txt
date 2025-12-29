@@ -1,0 +1,247 @@
+Đây là phân tích đánh giá giao diện trang chủ của tôi. Bạn hãy tham khảo để hoàn thiện. Sau khi phân tích đánh giá xong. Bạn hãy tham khảo code của tôi thiết kế giao diện mới nhé. "🎨 1️⃣ ĐÁNH GIÁ GIAO DIỆN HIỆN TẠI
+✅ Ưu điểm
+
+Giao diện sạch, sáng, có màu quân đội (#295232) → đúng nhận diện thương hiệu.
+
+Dùng Tailwind + responsive grid → tương thích mobile, tablet, PC.
+
+Có hiệu ứng hover, gradient nhẹ, font hiện đại (“Montserrat”, “Inter”).
+
+Các phần như “Tin nổi bật”, “Tin mới”, “Các số mới” rõ ràng và tách biệt.
+
+⚠️ Hạn chế
+
+Banner:
+
+Ảnh lớn nhưng không có slider động tự chuyển.
+
+Chiếm quá nhiều chiều cao (450px–600px), chưa tối ưu cho mobile.
+
+Bố cục Desktop:
+
+Quá nhiều khoảng trắng bên lề (padding 8–12%), khiến phần nội dung bị co.
+
+“Tin nổi bật” và “Tin mới” hiển thị kiểu danh sách giống nhau → chưa tạo được điểm nhấn thị giác.
+
+Sidebar “Các số mới”:
+
+Chỉ có 1 issue hiển thị → nên hiển thị 3 số gần nhất với thumbnail nhỏ.
+
+Typography:
+
+Tiêu đề bài viết và đoạn text hơi nhỏ trên màn hình lớn.
+
+Font chưa đồng nhất giữa phần Việt và English subtitle.
+
+Tính động:
+
+Thiếu carousel tin tức, animation nhẹ khi cuộn (scroll fade-in).
+
+Khả năng tự điều chỉnh màn hình (responsive):
+
+Các section co giãn tốt, nhưng banner + grid 2 cột chưa thật cân đối ở màn hình 1024px hoặc 1366px.";;;;; Đây là code tham khảo "💡 2️⃣ GỢI Ý GIAO DIỆN MỚI – “MODERN RESPONSIVE MILITARY JOURNAL”
+🧱 Tổng thể layout
+
+Responsive fluid layout với grid động:
+
+<div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1440px]">
+  <section className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 mt-8">
+    <main>{/* Bài nổi bật, tin mới */}</main>
+    <aside>{/* Các số mới, bài xem nhiều, chủ đề */}</aside>
+  </section>
+</div>
+
+🖼️ Hero Banner (Modern Responsive Slider)
+
+Thay banner tĩnh bằng auto carousel + text overlay mượt:
+
+<Carousel autoPlay interval={5000} infiniteLoop showThumbs={false}>
+  {featuredArticles.map(article => (
+    <div key={article.id} className="relative h-[400px] sm:h-[500px] lg:h-[550px]">
+      <img src={article.imageUrl} className="object-cover w-full h-full" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+      <div className="absolute bottom-10 left-10 right-10 text-white">
+        <h2 className="text-3xl lg:text-4xl font-bold mb-3">{article.title}</h2>
+        <p className="text-lg opacity-90">{article.summary}</p>
+        <Link href={`/news/${article.slug}`} className="btn-primary mt-4">Xem chi tiết</Link>
+      </div>
+    </div>
+  ))}
+</Carousel>
+
+
+🟢 Tự điều chỉnh kích thước theo màn hình, co giãn linh hoạt.
+🟢 Có hiệu ứng chuyển động và blur overlay nhẹ → tạo ấn tượng chuyên nghiệp.
+
+📰 Section “Tin nổi bật”
+
+Tạo bố cục 1 bài lớn + 3 bài nhỏ bên phải (giống layout báo chí):
+
+<section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div className="lg:col-span-2 relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+    <img src={mainArticle.image} className="object-cover w-full h-full" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+    <div className="absolute bottom-6 left-6 text-white">
+      <h2 className="text-3xl font-bold mb-2">{mainArticle.title}</h2>
+      <Link href={`/news/${mainArticle.slug}`} className="text-emerald-300 font-semibold hover:underline">
+        Đọc thêm →
+      </Link>
+    </div>
+  </div>
+  <div className="flex flex-col gap-4">
+    {subArticles.map(a => (
+      <a key={a.id} href={`/news/${a.slug}`} className="flex gap-3 items-center">
+        <img src={a.image} className="w-20 h-20 rounded-lg object-cover" />
+        <p className="font-medium text-gray-800 dark:text-gray-100 line-clamp-2 hover:text-emerald-600">{a.title}</p>
+      </a>
+    ))}
+  </div>
+</section>
+
+📚 Sidebar: “Các số mới” + “Chuyên mục” + “Xem nhiều nhất”
+
+Tạo 3 block nhỏ, mỗi block có border + tiêu đề màu chủ đạo:
+
+<aside className="space-y-6">
+  <Card title="Các số mới">
+    {issues.map(i => (
+      <a key={i.id} href={`/issues/${i.id}`} className="flex items-center gap-3 hover:bg-emerald-50 p-2 rounded-lg">
+        <img src={i.cover} className="w-12 h-16 rounded border" />
+        <div>
+          <p className="text-sm font-bold">{i.name}</p>
+          <span className="text-xs text-gray-500">{i.date}</span>
+        </div>
+      </a>
+    ))}
+  </Card>
+  <Card title="Chuyên mục">
+    <ul className="space-y-1">
+      {categories.map(c => <li><a href={`/category/${c.slug}`} className="hover:text-emerald-600">{c.name}</a></li>)}
+    </ul>
+  </Card>
+  <Card title="Xem nhiều nhất">
+    {popular.map(p => (
+      <a key={p.id} href={`/articles/${p.id}`} className="block hover:text-emerald-600 text-sm">{p.title}</a>
+    ))}
+  </Card>
+</aside>
+
+🧠 Footer mới gợi ý
+<footer className="bg-[#295232] text-white py-10 mt-12">
+  <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+    <div>
+      <h4 className="font-bold mb-2">Tạp chí Nghiên cứu KH Hậu cần Quân sự</h4>
+      <p className="text-sm opacity-80">Cơ quan của Học viện Hậu cần, Bộ Quốc phòng Việt Nam</p>
+    </div>
+    <div>
+      <h4 className="font-bold mb-2">Liên hệ</h4>
+      <p>📍 Số 45, Phường Ngọc Thụy, Long Biên, Hà Nội</p>
+      <p>📧 tapchihcqs@hvc.edu.vn</p>
+    </div>
+    <div>
+      <h4 className="font-bold mb-2">Theo dõi</h4>
+      <div className="flex gap-3">
+        <a className="hover:text-emerald-300">Facebook</a>
+        <a className="hover:text-emerald-300">Zalo</a>
+      </div>
+    </div>
+  </div>
+  <div className="text-center text-sm mt-8 border-t border-white/20 pt-4 opacity-70">
+    © 2025 Học viện Hậu cần - All rights reserved.
+  </div>
+</footer>
+
+💡 3️⃣ TỐI ƯU GIAO DIỆN (UI/UX RECOMMENDATIONS)
+Mục tiêu	Giải pháp
+Tự động co giãn toàn màn hình	Dùng max-w-[100vw] và aspect-ratio cho ảnh
+Tăng khả năng đọc	Font-size 1rem – 1.125rem, line-height 1.75
+Màu sắc quân đội tinh tế	Xanh lục đậm (#2E4A36) + vàng đồng (#D4AF37) + trắng ngà
+Tăng tương tác	Thêm hiệu ứng hover nhẹ và animation “fade-in-on-scroll”
+Dark mode hoàn chỉnh	Sử dụng dark:from-gray-900 to-gray-800 đồng nhất toàn site
+Mobile-first	Ẩn bớt phần phụ, giữ layout 1 cột cho ≤768px". Code trang chủ bạn có thể tham khảo. "export default function HomePro() {
+  return (
+    <div className="bg-[#f9f9f5] dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+      {/* 🔝 Marquee News Bar */}
+      <div className="bg-[#2C5530] text-yellow-300 py-2 overflow-hidden relative">
+        <marquee behavior="scroll" direction="left" scrollamount="6" className="text-sm font-semibold">
+          🔴 Tin mới: Hội thảo Khoa học Quốc phòng 2025 - Đẩy mạnh nghiên cứu ứng dụng AI trong huấn luyện hậu cần.
+        </marquee>
+      </div>
+
+      {/* 🎞 Hero Multimedia Slider */}
+      <section className="relative h-[520px] overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <video src="/videos/hero.mp4" autoPlay muted loop className="object-cover w-full h-full" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        <div className="absolute bottom-10 left-10 text-white max-w-xl">
+          <h1 className="text-4xl font-bold mb-3 animate-fadeIn">Chiến lược Hậu cần trong thời đại số</h1>
+          <p className="text-lg opacity-90 mb-4 animate-slideUp">Đổi mới công tác bảo đảm hậu cần hướng tới Quân đội hiện đại năm 2030.</p>
+          <button className="px-6 py-2 bg-yellow-500 text-black font-semibold rounded-md hover:bg-yellow-400 transition-all">
+            Xem thêm
+          </button>
+        </div>
+      </section>
+
+      {/* 📰 Featured Section */}
+      <section className="container mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 relative rounded-xl overflow-hidden shadow-lg">
+          <img src="/images/featured.jpg" className="object-cover w-full h-[420px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70"></div>
+          <div className="absolute bottom-6 left-6 text-white">
+            <h2 className="text-2xl font-bold">Ứng dụng dữ liệu lớn trong huấn luyện</h2>
+          </div>
+        </div>
+        <div className="space-y-4">
+          {[1,2,3].map(n => (
+            <div key={n} className="flex gap-3 hover:bg-emerald-50 p-2 rounded-lg cursor-pointer transition-all">
+              <img src={`/images/news${n}.jpg`} className="w-20 h-20 rounded-md object-cover" />
+              <p className="text-sm font-medium line-clamp-2">Tin ngắn số {n}: Công tác bảo đảm hậu cần vùng biên giới.</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 🎥 Video Zone */}
+      <section className="bg-gray-100 dark:bg-gray-800 py-10">
+        <div className="container mx-auto px-6">
+          <h2 className="text-2xl font-bold mb-6 text-center border-b-2 border-yellow-400 inline-block">🎥 Video Nổi bật</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1,2,3].map(v => (
+              <div key={v} className="relative group overflow-hidden rounded-xl shadow-lg">
+                <img src={`/videos/thumb${v}.jpg`} className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button className="p-4 bg-yellow-400 rounded-full text-black font-bold">▶</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 📚 Footer */}
+      <footer className="bg-[#2C5530] text-white py-10 mt-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h4 className="font-bold mb-2 text-yellow-400">Tạp chí Nghiên cứu KH Hậu cần Quân sự</h4>
+            <p className="text-sm opacity-80">Cơ quan của Học viện Hậu cần - Bộ Quốc phòng</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-yellow-400">Liên hệ</h4>
+            <p>📍 Long Biên, Hà Nội</p>
+            <p>📧 tapchihcqs@hvc.edu.vn</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-yellow-400">Theo dõi</h4>
+            <div className="flex gap-3">
+              <a href=\"#\" className=\"hover:text-yellow-300\">Facebook</a>
+              <a href=\"#\" className=\"hover:text-yellow-300\">YouTube</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+"

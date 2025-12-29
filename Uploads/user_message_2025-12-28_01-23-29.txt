@@ -1,0 +1,251 @@
+Hãy tham khảo phân tích kỹ thuật của tôi. Hiện nay tôi muốn phát triển phần mềm để chạy trên mạng nội bộ (intranet). Hãy tư vấn cho tôi để không xảy ra lỗi các chức năng của phần mềm. "Rất đúng hướng — bạn đang hỏi **một câu cốt lõi của kỹ thuật phần mềm chuyên nghiệp:**
+
+> “Làm sao tránh lỗi 500, lỗi ngầm, và lỗi logic tương tự trên toàn hệ thống (không chỉ phần nộp bài)?”
+
+Tôi sẽ hướng dẫn bạn một **phương pháp tổng thể, chuyên sâu** để:
+
+* Phát hiện sớm lỗi logic hoặc dữ liệu rỗng,
+* Ngăn chặn 500 Internal Server Error,
+* Bảo đảm phần mềm chạy ổn định trong môi trường **nội bộ quân đội**, nơi không có giám sát tự động ngoài.
+
+---
+
+## 🧭 I. TƯ TƯỞNG CHUNG: *“Fail Early – Recover Gracefully”*
+
+Trong mọi module backend + frontend của bạn (chat, submission, copyedit, production...),
+hãy áp dụng 3 nguyên tắc chính:
+
+| Nguyên tắc               | Ý nghĩa                                  | Mục tiêu                                    |
+| ------------------------ | ---------------------------------------- | ------------------------------------------- |
+| **Fail Early**           | Kiểm tra đầu vào ngay khi nhận request   | Không để lỗi logic đi sâu tới DB            |
+| **Recover Gracefully**   | Nếu lỗi, trả phản hồi rõ ràng, không 500 | Giúp người dùng và dev dễ xử lý             |
+| **Monitor Continuously** | Ghi log có cấu trúc + cảnh báo           | Phát hiện sự cố tự động, không cần Internet |
+
+---
+
+## ⚙️ II. PHƯƠNG PHÁP CHỐNG LỖI TOÀN HỆ THỐNG (Chi tiết thực hành)
+
+### 1️⃣ **Validation đầu vào (Input Validation Layer)**
+
+Trước mọi thao tác `create` / `update` / `upload`, luôn xác thực dữ liệu.
+
+**Dùng thư viện Zod (đã có trong project):**
+
+```ts
+import { z } from "zod";
+
+const submissionSchema = z.object({
+  title: z.string().min(5, "Tiêu đề quá ngắn"),
+  abstract: z.string().min(30, "Tóm tắt cần ít nhất 30 ký tự"),
+  fileId: z.string().optional(),
+});
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const data = submissionSchema.parse(body); // ✅ Kiểm tra dữ liệu
+    ...
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return new Response(JSON.stringify({ error: err.issues }), { status: 400 });
+    }
+    return new Response("Lỗi không xác định", { status: 500 });
+  }
+}
+```
+
+✅ **Lợi ích:**
+
+* Không bao giờ xảy ra lỗi “undefined property” hoặc “missing argument”.
+* Người dùng nhận phản hồi cụ thể (“Thiếu tóm tắt” thay vì “500 Error”).
+
+---
+
+### 2️⃣ **Kiểm tra xác thực và phân quyền (Auth & Role Guard)**
+
+Trước khi gọi bất kỳ Prisma API nào, **xác minh người dùng + vai trò**.
+
+Ví dụ `canSubmit()`:
+
+```ts
+if (!session?.user) {
+  return new Response("Chưa đăng nhập", { status: 401 });
+}
+
+if (session.user.role !== "AUTHOR") {
+  return new Response("Không có quyền nộp bài", { status: 403 });
+}
+```
+
+✅ Không cho phép request ẩn danh → tránh lỗi DB hoặc 500 không rõ nguyên nhân.
+
+---
+
+### 3️⃣ **Middleware kiểm tra token và kết nối**
+
+Tạo middleware toàn cục `/middleware.ts`:
+
+```ts
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("auth_token");
+  if (!token) {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+  return NextResponse.next();
+}
+```
+
+✅ Ngăn chặn các API bị gọi khi chưa đăng nhập.
+
+---
+
+### 4️⃣ **Tầng xử lý lỗi thống nhất (Global Error Handler)**
+
+Tạo tiện ích trong `lib/error-handler.ts`:
+
+```ts
+export function handleError(err: unknown, context: string) {
+  console.error(`[${context}]`, err);
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    return new Response("Lỗi cơ sở dữ liệu", { status: 500 });
+  }
+  if (err instanceof z.ZodError) {
+    return new Response(JSON.stringify({ error: err.issues }), { status: 400 });
+  }
+  return new Response("Lỗi hệ thống", { status: 500 });
+}
+```
+
+→ Mỗi API route chỉ cần:
+
+```ts
+catch (err) {
+  return handleError(err, "API_SUBMISSION_CREATE");
+}
+```
+
+✅ Giảm 80% lỗi 500, log luôn có ngữ cảnh.
+
+---
+
+### 5️⃣ **Cơ chế Health Check + Self-Healing nội bộ**
+
+Đặc biệt quan trọng trong môi trường nội bộ (mạng quân đội).
+
+Tạo `/api/health`:
+
+```ts
+export async function GET() {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return Response.json({ ok: true, ts: new Date().toISOString() });
+  } catch {
+    return new Response("Database Unavailable", { status: 503 });
+  }
+}
+```
+
+Sau đó dùng cron (Ubuntu):
+
+```bash
+*/5 * * * * curl -sf http://localhost:3000/api/health || systemctl restart tapchi
+```
+
+✅ Nếu DB ngắt kết nối → hệ thống tự khởi động lại.
+✅ Không cần Internet, không cần Cloudflare.
+
+---
+
+### 6️⃣ **Ghi log có cấu trúc (Structured Logging)**
+
+Thay vì `console.log()`, hãy dùng dạng JSON có timestamp:
+
+```ts
+import pino from "pino";
+export const logger = pino({ transport: { target: "pino-pretty" } });
+
+logger.info({ module: "submission", action: "create", user: session.user.id });
+logger.error({ module: "submission", error: err.message });
+```
+
+✅ Khi cần kiểm tra lỗi, chỉ grep theo module hoặc user.
+✅ Log lưu tại `/var/log/tapchi/app.log` — không cần dịch vụ ngoài.
+
+---
+
+### 7️⃣ **Kiểm thử định kỳ (Internal Diagnostic Scripts)**
+
+Tạo thư mục `/scripts/diagnostics`:
+
+```
+diagnostic-chat.ts
+diagnostic-submission.ts
+diagnostic-db.ts
+```
+
+Ví dụ:
+
+```bash
+npx tsx scripts/diagnostic-db.ts
+```
+
+→ Tự động test kết nối DB, API, session, và ghi báo cáo JSON.
+
+✅ Giúp cán bộ CNTT kiểm tra định kỳ mà không cần truy cập mã nguồn.
+
+---
+
+## 🧱 III. Cấu trúc ứng dụng “bền vững” (Clean Internal Architecture)
+
+```
+/app/api/...
+  ├─ [module]/route.ts     (API entry)
+  ├─ [module]/service.ts   (Business logic)
+  ├─ [module]/validation.ts (Zod schema)
+  ├─ [module]/guard.ts     (Role check)
+  └─ [module]/tests/...
+
+/lib/
+  ├─ prisma.ts
+  ├─ error-handler.ts
+  ├─ auth.ts
+  └─ logger.ts
+```
+
+✅ Giúp mỗi module **độc lập, kiểm soát lỗi riêng biệt**, dễ bảo trì.
+
+---
+
+## 🧰 IV. Cơ chế dự phòng và khôi phục
+
+| Mục                | Cách thực hiện                           | Tác dụng       |
+| ------------------ | ---------------------------------------- | -------------- |
+| DB connection lost | Dùng Prisma singleton + cron health      | Tránh 503      |
+| Server crash       | Dùng `pm2 restart --watch`               | Tự hồi phục    |
+| Upload server ngắt | Lưu tạm trong `/tmp/uploads/` và retry   | Không mất file |
+| Lỗi mạng cục bộ    | Có retry logic ở frontend (`fetchRetry`) | Không crash UI |
+
+---
+
+## 🧠 V. Tổng kết: *Checklist chống lỗi toàn hệ thống*
+
+| Nhóm            | Giải pháp               | Trạng thái |
+| --------------- | ----------------------- | ---------- |
+| Dữ liệu đầu vào | ✅ Zod validation        |            |
+| Phân quyền      | ✅ Role guard            |            |
+| Middleware      | ✅ Token / session check |            |
+| Ghi log         | ✅ Structured logging    |            |
+| Xử lý lỗi chung | ✅ Error handler         |            |
+| Health check    | ✅ API + cron restart    |            |
+| Test định kỳ    | ✅ Diagnostic scripts    |            |
+
+---
+
+## ✅ KẾT LUẬN
+
+Với phương pháp này:
+
+* Mọi API **đều có tầng bảo vệ dữ liệu và quyền hạn**, không còn 500 do thiếu field.
+* Log hiển thị rõ **ngữ cảnh lỗi**, dễ truy tìm.
+* Ứng dụng **tự phục hồi khi DB / backend ngắt tạm**.
+* Phù hợp hoàn toàn với **mạng nội bộ quân đội** (tách biệt, không Internet, không cloud logging).

@@ -1,0 +1,617 @@
+Tôi chọn phương án A để triển khai. Tôi đã chuẩn bị sẵn Banner và Footer dạng ảnh . Bạn hãy đưa vào trong thiết kế giao diện. Hệ thống menu ngang tôi có ảnh mẫu bạn có thể phân tích nội dung và làm theo .     Bạn có thể tham khảo tư vấn phân tích của tôi "Tuyệt vời—mình bàn giao trọn bộ theo 3 gói anh/chị yêu cầu, dùng **PostgreSQL 16 + Prisma + Next.js (App Router)**, dễ chạy trên DeepAgent và “portable” khi migrate sang Viettel Cloud.
+
+---
+
+# 1) ERD chung (portable Postgres 16)
+
+## 1.1. Thực thể & quan hệ (tóm tắt)
+
+* **User** (1)──< **Submission** (n)
+* **Submission** (1)──< **SubmissionVersion** (n)
+* **Submission** (1)──< **Review** (n)
+* **Submission** (1)──< **EditorDecision** (n)
+* **Issue** (1)──< **Article** (n) ──(1) **Submission**
+* **Category** (1)──< **Submission** (n) *(chuyên mục khi nộp)*
+* **Asset** liên kết bởi `ownerId` và được tham chiếu từ `SubmissionVersion.filesetId` / `Article.pdfFile`
+* **ReportRegistry** ghi hash/tem ký của ARTICLE/ISSUE/TEST_REPORT
+* **AuditLog** ghi mọi thao tác
+
+## 1.2. Thuộc tính chính
+
+* **User**: id, fullName, email (unique), role (enum), org, isActive, passwordHash
+* **Category**: code (unique), name, slug, description
+* **Submission**: code (unique), title, abstracts (VN/EN), keywords[], status (enum), securityLevel (enum), categoryId, createdBy
+* **SubmissionVersion**: versionNo, filesetId (Asset bundle), changelog
+* **Review**: reviewerId, roundNo, score (0–100), recommendation (enum), formJson
+* **EditorDecision**: decision (enum), note, decidedBy, roundNo
+* **Issue**: volume, number, year, publishDate, status (enum)
+* **Article**: issueId, submissionId, pages, doiLocal, jatsXml, htmlBody, pdfFile (Asset path), checksum, publishedAt
+* **Asset**: path, mime, metaJson, checksum
+* **ReportRegistry**: objectType, objectId, hash, signer, signatureImage, signedAt
+* **AuditLog**: actorId, action, object, before, after, ip
+
+---
+
+# 2) Prisma schema (sẵn chạy với Postgres 16)
+
+> File: `prisma/schema.prisma`
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // postgres://user:pass@host:5432/dbname
+}
+
+enum Role {
+  READER
+  AUTHOR
+  REVIEWER
+  SECTION_EDITOR
+  MANAGING_EDITOR
+  EIC
+  LAYOUT_EDITOR
+  SYSADMIN
+  SECURITY_AUDITOR
+}
+
+enum SubmissionStatus {
+  NEW
+  DESK_REJECT
+  UNDER_REVIEW
+  REVISION
+  ACCEPTED
+  REJECTED
+  IN_PRODUCTION
+  PUBLISHED
+}
+
+enum SecurityLevel {
+  OPEN
+  INTERNAL
+  SENSITIVE
+}
+
+enum Decision {
+  ACCEPT
+  MINOR
+  MAJOR
+  REJECT
+}
+
+enum Recommendation {
+  ACCEPT
+  MINOR
+  MAJOR
+  REJECT
+}
+
+enum IssueStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id         String  @id @default(uuid())
+  fullName   String
+  email      String  @unique
+  org        String?
+  role       Role
+  isActive   Boolean @default(true)
+  passwordHash String
+  createdAt  DateTime @default(now())
+
+  submissions      Submission[] @relation("UserSubmissions")
+  reviews          Review[]
+  editorDecisions  EditorDecision[]
+  auditLogs        AuditLog[]   @relation("UserAudit")
+  reportSignatures ReportRegistry[] @relation("UserSigner")
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  code        String  @unique
+  name        String
+  slug        String  @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  submissions Submission[]
+}
+
+model Submission {
+  id            String  @id @default(uuid())
+  code          String  @unique
+  title         String
+  abstractVn    String?
+  abstractEn    String?
+  keywords      String[]
+  section       String? // alias if needed
+  status        SubmissionStatus
+  securityLevel SecurityLevel @default(OPEN)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  createdBy  String
+  author     User     @relation("UserSubmissions", fields: [createdBy], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  versions   SubmissionVersion[]
+  reviews    Review[]
+  decisions  EditorDecision[]
+  article    Article?
+}
+
+model SubmissionVersion {
+  id            String   @id @default(uuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id])
+  versionNo     Int
+  filesetId     String // points to an Asset bundle or prefix path
+  changelog     String?
+  createdAt     DateTime @default(now())
+
+  @@unique([submissionId, versionNo])
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id])
+
+  reviewerId  String
+  reviewer    User     @relation(fields: [reviewerId], references: [id])
+
+  roundNo       Int
+  score         Int?
+  recommendation Recommendation?
+  formJson      Json?
+  submittedAt   DateTime?
+
+  @@index([reviewerId])
+  @@index([submissionId])
+}
+
+model EditorDecision {
+  id            String   @id @default(uuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id])
+
+  roundNo   Int
+  decision  Decision
+  note      String?
+  decidedBy String
+  editor    User @relation(fields: [decidedBy], references: [id])
+  decidedAt DateTime @default(now())
+}
+
+model Issue {
+  id          String   @id @default(uuid())
+  volume      Int
+  number      Int
+  year        Int
+  publishDate DateTime?
+  status      IssueStatus @default(DRAFT)
+
+  articles Article[]
+
+  @@unique([volume, number, year])
+}
+
+model Article {
+  id            String   @id @default(uuid())
+  issueId       String?
+  issue         Issue?   @relation(fields: [issueId], references: [id])
+
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id])
+
+  pages       String?
+  doiLocal    String?
+  jatsXml     String?
+  htmlBody    String?
+  pdfFile     String? // asset path or url
+  checksum    String?
+  publishedAt DateTime?
+}
+
+model Asset {
+  id        String   @id @default(uuid())
+  ownerId   String?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  path      String
+  mime      String?
+  metaJson  Json?
+  checksum  String?
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+  @@index([path])
+}
+
+model ReportRegistry {
+  id             String   @id @default(uuid())
+  objectType     String   // 'ARTICLE' | 'ISSUE' | 'TEST_REPORT'
+  objectId       String
+  hash           String
+  signerId       String
+  signer         User     @relation("UserSigner", fields: [signerId], references: [id])
+  signatureImage String?  // path to image
+  signedAt       DateTime @default(now())
+  note           String?
+}
+
+model AuditLog {
+  id        BigInt  @id @default(autoincrement())
+  actorId   String?
+  actor     User?   @relation("UserAudit", fields: [actorId], references: [id])
+  action    String
+  object    String
+  before    Json?
+  after     Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+}
+```
+
+---
+
+# 3) Khung dự án Next.js (RBAC + submissions/reviews/issues) + seed 11 chuyên mục
+
+## 3.1. Cấu trúc thư mục đề xuất
+
+```
+tcdt-journal/
+├─ app/
+│  ├─ (public)/
+│  │  ├─ issues/[year]/[vol]/[no]/[slug]/page.tsx
+│  │  └─ search/page.tsx
+│  ├─ dashboard/
+│  │  ├─ author/page.tsx
+│  │  ├─ reviewer/page.tsx
+│  │  ├─ editor/page.tsx
+│  │  ├─ managing/page.tsx
+│  │  ├─ eic/page.tsx
+│  │  └─ admin/page.tsx
+│  ├─ api/
+│  │  ├─ auth/login/route.ts
+│  │  ├─ submissions/route.ts            (POST create, GET list)
+│  │  ├─ submissions/[id]/route.ts       (GET detail, PATCH)
+│  │  ├─ reviews/assign/route.ts
+│  │  ├─ reviews/[id]/route.ts
+│  │  ├─ decisions/route.ts
+│  │  ├─ issues/route.ts
+│  │  ├─ issues/[id]/publish/route.ts
+│  │  └─ categories/seed/route.ts        (*tạm phục vụ seed)
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ lib/
+│  ├─ auth.ts       (JWT + session cookie)
+│  ├─ rbac.ts       (helpers checkRole)
+│  ├─ prisma.ts     (Prisma client)
+│  └─ responses.ts
+├─ prisma/
+│  ├─ schema.prisma
+│  └─ seed.ts
+├─ middleware.ts    (bảo vệ /dashboard/* theo role)
+├─ package.json
+└─ .env
+```
+
+## 3.2. RBAC helper (rút gọn)
+
+> `lib/rbac.ts`
+
+```ts
+export type Role =
+  | "READER" | "AUTHOR" | "REVIEWER" | "SECTION_EDITOR"
+  | "MANAGING_EDITOR" | "EIC" | "LAYOUT_EDITOR" | "SYSADMIN" | "SECURITY_AUDITOR";
+
+export const can = {
+  submit: (role: Role) => role === "AUTHOR",
+  assignReview: (role: Role) => role === "SECTION_EDITOR" || role === "MANAGING_EDITOR" || role === "EIC",
+  decide: (role: Role) => role === "SECTION_EDITOR" || role === "MANAGING_EDITOR" || role === "EIC",
+  publish: (role: Role) => role === "EIC",
+  admin: (role: Role) => role === "SYSADMIN" || role === "MANAGING_EDITOR" || role === "EIC",
+};
+```
+
+## 3.3. Prisma client
+
+> `lib/prisma.ts`
+
+```ts
+import { PrismaClient } from '@prisma/client';
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+export const prisma = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
+
+## 3.4. Đăng nhập (JWT + cookie)
+
+> `app/api/auth/login/route.ts` (demo giản lược)
+
+```ts
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+export async function POST(req: NextRequest) {
+  const { email, password } = await req.json();
+  const user = await prisma.user.findUnique({ where: { email }});
+  if (!user || !user.isActive) return NextResponse.json({ error: "Invalid" }, { status: 401 });
+  const ok = await bcrypt.compare(password, user.passwordHash);
+  if (!ok) return NextResponse.json({ error: "Invalid" }, { status: 401 });
+
+  const token = jwt.sign({ uid: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: "8h" });
+  const res = NextResponse.json({ ok: true, role: user.role });
+  res.cookies.set("tcdt_token", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" });
+  return res;
+}
+```
+
+## 3.5. Middleware bảo vệ dashboard
+
+> `middleware.ts`
+
+```ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
+
+export function middleware(req: NextRequest) {
+  if (!req.nextUrl.pathname.startsWith("/dashboard")) return NextResponse.next();
+  const token = req.cookies.get("tcdt_token")?.value;
+  if (!token) return NextResponse.redirect(new URL("/", req.url));
+  try {
+    jwt.verify(token, process.env.JWT_SECRET!);
+    return NextResponse.next();
+  } catch {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+}
+```
+
+## 3.6. API nộp bài (mẫu)
+
+> `app/api/submissions/route.ts` (POST + GET)
+
+```ts
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import jwt from "jsonwebtoken";
+
+function requireUser(req: NextRequest) {
+  const raw = req.cookies.get("tcdt_token")?.value;
+  if (!raw) throw new Error("unauth");
+  return jwt.verify(raw, process.env.JWT_SECRET!) as { uid: string; role: string };
+}
+
+export async function POST(req: NextRequest) {
+  const me = requireUser(req);
+  const body = await req.json();
+  const code = "SUB-" + Date.now();
+
+  const sub = await prisma.submission.create({
+    data: {
+      code,
+      title: body.title,
+      abstractVn: body.abstractVn,
+      abstractEn: body.abstractEn,
+      keywords: body.keywords ?? [],
+      status: "NEW",
+      securityLevel: "OPEN",
+      categoryId: body.categoryId ?? null,
+      createdBy: me.uid
+    }
+  });
+  return NextResponse.json(sub);
+}
+
+export async function GET() {
+  const items = await prisma.submission.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { category: true }
+  });
+  return NextResponse.json(items);
+}
+```
+
+## 3.7. Seed 11 chuyên mục
+
+> **Cách 1:** `prisma/seed.ts` (chạy: `npx prisma db push && ts-node prisma/seed.ts`)
+
+```ts
+import { prisma } from "../lib/prisma";
+
+const CATS = [
+  ["CDHD", "Chỉ đạo - Hướng dẫn"],
+  ["NVDC", "Những vấn đề chung"],
+  ["NCTD", "Nghiên cứu - Trao đổi"],
+  ["TTKN", "Thực tiễn - Kinh nghiệm"],
+  ["LSHK", "Lịch sử hậu cần, kỹ thuật quân sự"],
+  ["KHKT", "Khoa học kỹ thuật hậu cần"],
+  ["QTNQ", "Quán triệt các nghị quyết của Đảng"],
+  ["DBHB", "Làm thất bại chiến lược “Diễn biến hoà bình”"],
+  ["HTDT", "Học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh"],
+  ["LSTT", "Lịch sử - Truyền thống"],
+  ["TINTUC", "Tin tức"],
+];
+
+async function main() {
+  for (const [code, name] of CATS) {
+    const slug = name.toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    await prisma.category.upsert({
+      where: { code },
+      update: { name, slug },
+      create: { code, name, slug },
+    });
+  }
+  console.log("Seeded 11 categories");
+}
+
+main().then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)});
+```
+
+> **Cách 2 (nhanh trong môi trường API):** `app/api/categories/seed/route.ts` gọi 1 lần để seed.
+
+---
+
+# 4) SOP v1 (quy trình vận hành Số 0 – pilot)
+
+**Mục tiêu:** ra mắt **Số 0** (pilot) với 5–7 bài, đủ 11 chuyên mục (mỗi mục tối thiểu 1 bài ngắn/tin).
+
+## 4.1. Vai trò & SLA
+
+* **Desk-check (Thư ký/Section Editor):** ≤ 5 ngày kể từ khi nộp.
+* **Gán phản biện:** ≤ 3 ngày sau desk-check.
+* **Phản biện:** ≤ 14 ngày/bài/round.
+* **Tác giả sửa:** 7–21 ngày (tuỳ Minor/Major).
+* **Dàn trang + kiểm định:** ≤ 7 ngày sau chấp nhận.
+
+## 4.2. Các bước & biểu mẫu
+
+1. **Nộp bài**
+
+   * Biểu mẫu “TC-01 – Thông tin bản thảo” (metadata, chuyên mục, từ khóa).
+   * Kiểm tra kỹ thuật file: tên file, font, hình/bảng, trích dẫn.
+
+2. **Desk-check**
+
+   * Danh mục kiểm: phù hợp chuyên mục, không vi phạm bảo mật, đạo đức học thuật.
+   * Kết quả: *Desk-accept / Desk-reject / Request-fix-formatting*.
+
+3. **Phản biện mù đôi**
+
+   * Gán ≥2 phản biện; email mời (mẫu *TC-02*).
+   * Form phản biện: **TC-03** (điểm: Novelty/Method/Results/Clarity/Relevance + khuyến nghị ACCEPT/MINOR/MAJOR/REJECT + ghi chú cho tác giả/cho biên tập).
+
+4. **Quyết định vòng**
+
+   * Biên bản **TC-04** ghi kết quả round, yêu cầu sửa (nếu có).
+   * Gửi tác giả: chi tiết góp ý hợp nhất (ẩn danh reviewer).
+
+5. **Sửa chữa & nộp lại**
+
+   * Tác giả gửi **bản giải trình** (point-by-point response).
+
+6. **Biên tập kỹ thuật & dàn trang**
+
+   * Chuẩn hóa trích dẫn (CSL đã chọn), hình, bảng, thuật ngữ.
+   * Render **HTML→PDF (watermark)** ở MVP; (ký số thật sẽ thực hiện ở giai đoạn Viettel Cloud).
+
+7. **Kiểm định an ninh**
+
+   * Check **SecurityLevel**; nếu `SENSITIVE` áp dụng **2-person rule** (EIC + Security Auditor).
+
+8. **Xuất bản & lưu trữ**
+
+   * Tạo **Issue** (volume/number/year); gán bài; publish.
+   * Sinh **sitemap** & cập nhật search index nội bộ.
+
+---
+
+# 5) Danh sách ca kiểm thử (Số 0 – pilot)
+
+## 5.1. Xác thực & RBAC
+
+1. Đăng ký, xác minh email, đăng nhập.
+2. READER truy cập đọc công khai không cần đăng nhập.
+3. AUTHOR đăng nhập thấy trang Author Dashboard; không thấy màn hình admin.
+4. REVIEWER chỉ thấy bài được mời/gán.
+5. SECTION_EDITOR có thể gán reviewer; READER/ AUTHOR không gán được.
+6. EIC có nút publish issue; role khác không có.
+
+## 5.2. Nộp bài & phiên bản
+
+7. AUTHOR nộp bài với metadata đầy đủ → trạng thái `NEW`.
+8. Upsert chuyên mục khi nộp bài → liên kết `categoryId` đúng.
+9. Tạo **SubmissionVersion v1** tự động khi nộp.
+10. Tải lại bản sửa → tạo **v2**, check `@@unique(submissionId, versionNo)`.
+
+## 5.3. Desk-check
+
+11. SECTION_EDITOR chuyển `NEW` → `UNDER_REVIEW` hoặc `DESK_REJECT`.
+12. Desk-reject phải ghi lý do; tác giả thấy thông báo.
+
+## 5.4. Gán phản biện & phản hồi
+
+13. Gán ≥2 reviewer thành công; không cho gán trùng người.
+14. Reviewer nộp phiếu **TC-03**: điểm (0–100) + khuyến nghị.
+15. Khóa sửa phiếu sau khi ấn “Submit”; log vào **AuditLog**.
+
+## 5.5. Quyết định vòng
+
+16. Biên tập hợp nhất nhận xét → **MINOR**: tạo yêu cầu sửa, gửi tác giả.
+17. Tác giả upload bản sửa + giải trình; **SubmissionVersion v2** xuất hiện.
+18. Quyết định **ACCEPT** → chuyển `IN_PRODUCTION`.
+
+## 5.6. Dàn trang & xuất PDF (MVP)
+
+19. LAYOUT_EDITOR render HTML→PDF; gắn watermark “Bản chính thức – Số 0 (Pilot)”.
+20. Lưu PDF path vào **Article.pdfFile**; sinh `checksum` (server).
+21. Kiểm tra tải PDF ở public page bài.
+
+## 5.7. Issue/Volume/Year
+
+22. Tạo **Issue** (volume, number, year) → unique constraint đúng.
+23. Gán ≥3 bài vào Issue; tạo mục lục (TOC).
+24. Publish Issue: status → `PUBLISHED`; bài có `publishedAt`.
+
+## 5.8. Tìm kiếm & lọc
+
+25. Tìm theo tiêu đề;
+26. Lọc theo chuyên mục;
+27. Lọc theo năm;
+28. Tìm theo tác giả/đơn vị (metadata).
+
+## 5.9. Thống kê
+
+29. Ghi **lượt xem** khi mở trang bài; tăng 1.
+30. Ghi **lượt tải** khi tải PDF; tăng 1.
+31. Dashboard hiển thị số bài theo trạng thái (NEW/UNDER_REVIEW/REVISION/…).
+
+## 5.10. Bảo mật căn bản
+
+32. Reviewer không truy cập được submission không được gán.
+33. READER không truy cập API `/issues/*/publish` (403).
+34. Kiểm thử SQL injection cơ bản (Prisma an toàn).
+35. AuditLog ghi: login, create submission, assign review, submit review, decision, publish.
+
+## 5.11. Tin tức & chuyên mục
+
+36. Tạo bản tin (Tin tức) hiển thị ở trang chủ; lọc theo “Tin tức”.
+37. Mỗi trong 11 chuyên mục có trang liệt kê riêng.
+
+---
+
+## 6) Biến môi trường (mẫu)
+
+> `.env`
+
+```
+DATABASE_URL="postgresql://user:pass@localhost:5432/tcdt_journal"
+JWT_SECRET="change_this_to_a_long_random_secret"
+NODE_ENV="development"
+```
+
+---
+
+## 7) Lời khuyên triển khai nhanh (ngày hôm nay)
+
+1. `npm create next-app@latest` → App Router.
+2. Cài: `npm i @prisma/client prisma bcrypt jsonwebtoken zod`
+3. `npx prisma init` → dán `schema.prisma` ở trên → `npx prisma db push`.
+4. Tạo `lib/prisma.ts`, `lib/rbac.ts`, routes mẫu như trên.
+5. Thêm `prisma/seed.ts` → `ts-node prisma/seed.ts` (hoặc API seed).
+6. Đăng nhập thử, nộp 1 bài, gán reviewer, đi hết luồng cho **Số 0**.

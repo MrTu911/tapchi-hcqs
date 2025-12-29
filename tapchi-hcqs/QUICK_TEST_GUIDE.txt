@@ -1,0 +1,56 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    TÀI KHOẢN TEST - TẠP CHÍ HCQS                             ║
+║                        Ngày: 03/11/2025                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DANH SÁCH TÀI KHOẢN (Tất cả mật khẩu có format: [Role]123!@#)              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+1. ADMIN          admin@test.com          Admin123!@#
+2. EIC            eic@test.com            Eic123!@#
+3. MANAGING       managing@test.com       Managing123!@#
+4. EDITOR         editor@test.com         Editor123!@#
+5. LAYOUT         layout@test.com         Layout123!@#
+6. REVIEWER 1     reviewer@test.com       Reviewer123!@#  [2 reviews]
+7. REVIEWER 2     reviewer2@test.com      Reviewer123!@#  [2 reviews]
+8. AUTHOR 1       author@test.com         Author123!@#
+9. AUTHOR 2       author2@test.com        Author123!@#
+10. SECURITY      security@test.com       Security123!@#
+11. READER        reader@test.com         Reader123!@#
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ TEST NHANH CHỨC NĂNG REVIEW                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+BƯỚC 1: Đăng nhập
+  URL: /auth/login
+  Email: reviewer@test.com
+  Password: Reviewer123!@#
+
+BƯỚC 2: Xem reviews được gán
+  URL: /dashboard/reviewer/assignments
+  → Sẽ thấy 2 bài cần phản biện trong tab "Chờ phản biện"
+
+BƯỚC 3: Bắt đầu phản biện
+  Click nút "Bắt đầu phản biện" trên bất kỳ bài nào
+  → Form phản biện với các trường: Score, Comments, Recommendation
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ THỐNG KÊ HỆ THỐNG                                                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+✅ Tài khoản:     11 (tất cả các role)
+✅ Bài nộp:       25 bài (20 published + 5 mới)
+✅ Reviews:       10 assignments (đang chờ phản biện)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ VẤN ĐỀ ĐÃ KHẮC PHỤC                                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+❌ TRƯỚC: Không có review nào → Reviewer không thể xem gì
+✅ SAU:  Có 10 reviews → Reviewer có bài để phản biện
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ ✅ HỆ THỐNG ĐÃ SẴN SÀNG - CÓ THỂ BẮT ĐẦU TEST                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

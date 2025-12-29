@@ -1,0 +1,292 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { prisma } from '@/lib/prisma';
+import { logAudit } from '@/lib/audit-logger';
+import { AuditEventType } from '@prisma/client';
+import { authOptions } from '@/lib/auth';
+
+/**
+ * @route POST /api/reviewers/auto-assign
+ * @description Automatically assign reviewers to a submission based on match scores
+ * @access Private (MANAGING_EDITOR, EIC, SYSADMIN only)
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.uid) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const allowedRoles = ['MANAGING_EDITOR', 'EIC', 'SYSADMIN'];
+    if (!allowedRoles.includes(session.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden. Only editors can auto-assign reviewers.' },
+        { status: 403 }
+      );
+    }
+
+    const body = await req.json();
+    const { submissionId, count = 3, minScore = 0.5 } = body;
+
+    if (!submissionId) {
+      return NextResponse.json(
+        { error: 'submissionId is required' },
+        { status: 400 }
+      );
+    }
+
+    // Check if submission exists
+    const submission = await prisma.submission.findUnique({
+      where: { id: submissionId },
+      include: {
+        category: true,
+        keywords: true
+      }
+    });
+
+    if (!submission) {
+      return NextResponse.json(
+        { error: 'Submission not found' },
+        { status: 404 }
+      );
+    }
+
+    // Get existing reviewers for this submission
+    const existingReviews = await prisma.review.findMany({
+      where: { submissionId },
+      select: { reviewerId: true }
+    });
+    const existingReviewerIds = existingReviews.map(r => r.reviewerId);
+
+    // Find candidate reviewers based on category and expertise
+    // First, try to find reviewers with matching expertise
+    const candidates = await prisma.user.findMany({
+      where: {
+        role: 'REVIEWER',
+        id: { notIn: [submission.createdBy, ...existingReviewerIds] }, // Exclude author and already assigned
+        OR: [
+          // Match by research interests containing submission keywords
+          {
+            researchInterests: {
+              hasSome: submission.keywords
+            }
+          },
+          // Or match by category if available
+          ...(submission.categoryId ? [{
+            // This assumes reviewers might have category preferences
+            // You may need to adjust based on your schema
+          }] : [])
+        ]
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        researchInterests: true,
+        org: true
+      },
+      take: count * 3 // Get more candidates for scoring
+    });
+
+    if (candidates.length === 0) {
+      return NextResponse.json(
+        { 
+          error: 'No suitable reviewers found',
+          message: 'Could not find reviewers matching the submission criteria'
+        },
+        { status: 404 }
+      );
+    }
+
+    // Calculate match scores for each candidate
+    const scoredCandidates = candidates.map(reviewer => {
+      let score = 0;
+      
+      // Score based on keyword overlap
+      const matchingKeywords = reviewer.researchInterests?.filter(
+        interest => submission.keywords.includes(interest)
+      ) || [];
+      
+      score += matchingKeywords.length * 0.3; // 0.3 points per matching keyword
+      
+      // Add base score for being in the reviewer pool
+      score += 0.2;
+      
+      // Normalize score to 0-1 range
+      score = Math.min(score, 1.0);
+      
+      return {
+        ...reviewer,
+        matchScore: score,
+        matchingKeywords
+      };
+    });
+
+    // Filter by minimum score and sort by score
+    const qualifiedCandidates = scoredCandidates
+      .filter(c => c.matchScore >= minScore)
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, count);
+
+    if (qualifiedCandidates.length === 0) {
+      return NextResponse.json(
+        { 
+          error: 'No qualified reviewers found',
+          message: `No reviewers met the minimum score threshold of ${minScore}`,
+          suggestion: 'Try lowering the minScore parameter'
+        },
+        { status: 404 }
+      );
+    }
+
+    // Store match scores in the database for reference
+    await Promise.all(
+      qualifiedCandidates.map(candidate =>
+        prisma.reviewerMatchScore.create({
+          data: {
+            submissionId,
+            reviewerId: candidate.id,
+            score: candidate.matchScore,
+            matchingKeywords: candidate.matchingKeywords,
+            calculatedAt: new Date()
+          }
+        }).catch(() => {
+          // Ignore duplicate key errors (if already exists)
+        })
+      )
+    );
+
+    // Log the auto-assignment recommendation
+    await logAudit({
+      eventType: AuditEventType.ROLE_ASSIGNED,
+      userId: session.uid,
+      details: {
+        action: 'AUTO_ASSIGN_REVIEWERS_RECOMMENDED',
+        submissionId,
+        submissionCode: submission.code,
+        recommendedReviewers: qualifiedCandidates.map(c => ({
+          id: c.id,
+          name: c.fullName,
+          score: c.matchScore
+        }))
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: `Found ${qualifiedCandidates.length} suitable reviewer(s)`,
+      data: {
+        submission: {
+          id: submission.id,
+          code: submission.code,
+          title: submission.title
+        },
+        recommendedReviewers: qualifiedCandidates.map(c => ({
+          id: c.id,
+          email: c.email,
+          fullName: c.fullName,
+          org: c.org,
+          matchScore: c.matchScore,
+          matchingKeywords: c.matchingKeywords,
+          researchInterests: c.researchInterests
+        }))
+      }
+    });
+
+  } catch (error) {
+    console.error('Error in auto-assign reviewers:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * @route GET /api/reviewers/auto-assign
+ * @description Get auto-assignment configuration and statistics
+ * @access Private (MANAGING_EDITOR, EIC, SYSADMIN only)
+ */
+export async function GET(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.uid) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const allowedRoles = ['MANAGING_EDITOR', 'EIC', 'SYSADMIN'];
+    if (!allowedRoles.includes(session.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+
+    // Get total reviewers
+    const totalReviewers = await prisma.user.count({
+      where: { role: 'REVIEWER' }
+    });
+
+    // Get pending submissions without reviewers
+    const submissionsNeedingReviewers = await prisma.submission.count({
+      where: {
+        status: 'SUBMITTED',
+        reviews: {
+          none: {}
+        }
+      }
+    });
+
+    // Get recent match scores
+    const recentMatches = await prisma.reviewerMatchScore.findMany({
+      take: 10,
+      orderBy: { calculatedAt: 'desc' },
+      include: {
+        reviewer: {
+          select: {
+            fullName: true,
+            email: true
+          }
+        },
+        submission: {
+          select: {
+            code: true,
+            title: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        statistics: {
+          totalReviewers,
+          submissionsNeedingReviewers
+        },
+        recentMatches: recentMatches.map(match => ({
+          submissionCode: match.submission.code,
+          submissionTitle: match.submission.title,
+          reviewerName: match.reviewer.fullName,
+          score: match.score,
+          calculatedAt: match.calculatedAt
+        }))
+      }
+    });
+
+  } catch (error) {
+    console.error('Error getting auto-assign stats:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

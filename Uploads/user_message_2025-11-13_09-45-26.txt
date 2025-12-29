@@ -1,0 +1,294 @@
+Rất chính xác, Master Tu — để xây dựng một **chức năng lưu trữ, tra cứu và gợi ý bài báo khoa học** đạt chuẩn quốc tế, chúng ta cần thiết kế nó như **một hệ thống học thuật thông minh**, chứ không chỉ là nơi “lưu file PDF”.
+
+Dưới đây là **mô tả chi tiết từng thành phần chức năng**, vừa ở **góc nhìn người dùng (UX)**, vừa ở **góc nhìn kỹ thuật (System Design)** để ngài có thể chỉ đạo triển khai rõ ràng và hiệu quả.
+
+---
+
+## 🧭 **I. Chức năng “Lưu trữ các số tạp chí” (Journal Issue Archive)**
+
+### 🎯 **Mục tiêu**
+
+Tập trung hóa toàn bộ các **số tạp chí (issues)** đã xuất bản, giúp độc giả dễ dàng duyệt, tra cứu và xem lại nội dung từng số.
+
+---
+
+### 👁️ **Góc nhìn người dùng**
+
+Khi truy cập trang **“Lưu trữ”** (`/archive`):
+
+* Người đọc thấy danh sách tất cả các số tạp chí sắp xếp theo **thời gian xuất bản giảm dần**.
+* Mỗi số tạp chí được hiển thị dưới dạng **thẻ (card)** với:
+
+  * Ảnh bìa (Cover Image)
+  * Tên số: “Tập 12 – Số 2 (2025)”
+  * Ngày xuất bản
+  * Số lượng bài báo trong số đó
+* Khi click vào bìa → mở trang chi tiết của số tạp chí đó.
+
+---
+
+### 🧩 **Góc nhìn kỹ thuật**
+
+CSDL (PostgreSQL + Prisma):
+
+```prisma
+model Issue {
+  id          String   @id @default(cuid())
+  volume      Int
+  number      Int
+  year        Int
+  coverImage  String
+  publishedAt DateTime
+  description String?
+  articles    Article[]
+}
+```
+
+API `/api/issues`:
+
+* `GET /api/issues` → danh sách số tạp chí (phân trang)
+* `GET /api/issues/[id]` → chi tiết số và danh sách bài viết trong số đó
+* `POST /api/issues` → thêm số mới (chỉ Admin/Editor)
+
+Frontend (Next.js 14 + Server Components):
+
+* SSR với Prisma query + caching (`revalidate = 3600`)
+* Hiển thị gallery ảnh bìa (Tailwind + ShadCN UI)
+
+---
+
+## 📖 **II. Chức năng “Xem nội dung từng số tạp chí”**
+
+### 👁️ **Góc nhìn người dùng**
+
+Khi click vào một số cụ thể:
+
+* Hiển thị:
+
+  * Tên số, ngày xuất bản, mô tả, danh sách bài viết.
+* Mỗi bài hiển thị:
+
+  * Tiêu đề, tác giả, tóm tắt (abstract)
+  * DOI (Digital Object Identifier)
+  * Link tải PDF hoặc đọc online.
+
+👉 Có thể thêm tab “Mục lục PDF”, hoặc “Download full issue”.
+
+---
+
+### 🧩 **Góc nhìn kỹ thuật**
+
+API `/api/issues/[id]` trả về JSON:
+
+```json
+{
+  "id": "issue123",
+  "volume": 12,
+  "number": 2,
+  "year": 2025,
+  "articles": [
+    { "title": "Ứng dụng AI trong hậu cần quân sự", "authors": "Nguyễn Văn A", "doi": "10.xxxx/xyz", "pdfUrl": "/uploads/ai.pdf" },
+    ...
+  ]
+}
+```
+
+---
+
+## 🔍 **III. Chức năng “Kho bài báo” (Article Repository)**
+
+### 🎯 **Mục tiêu**
+
+Xây dựng **ngân hàng tri thức** của tạp chí — nơi mọi bài báo được lưu trữ, tìm kiếm và phân loại theo lĩnh vực, tác giả, năm, hoặc từ khóa.
+
+---
+
+### 👁️ **Góc nhìn người dùng**
+
+Tại `/articles` hoặc `/search`:
+
+* Có ô tìm kiếm nhanh (search bar)
+* Bộ lọc:
+
+  * Tên tác giả
+  * Lĩnh vực / chủ đề
+  * Năm xuất bản
+  * DOI
+* Kết quả hiển thị danh sách bài, mỗi bài có:
+
+  * Tóm tắt, DOI, link tải, số tạp chí thuộc về.
+
+---
+
+### 🧩 **Góc nhìn kỹ thuật**
+
+CSDL:
+
+```prisma
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  abstract    String
+  content     String
+  authors     String
+  keywords    String[]
+  category    String?
+  issueId     String?
+  doi         String? @unique
+  pdfUrl      String?
+  createdAt   DateTime @default(now())
+}
+```
+
+Tìm kiếm:
+
+* **Cơ bản:** Prisma + PostgreSQL `ILIKE '%keyword%'`
+* **Nâng cao:** PostgreSQL `tsvector` hoặc ElasticSearch (nếu >100k bài)
+* **Tối ưu:** Kết hợp full-text search + filtering (năm, lĩnh vực, tác giả)
+
+---
+
+## 🧠 **IV. Chức năng “Gợi ý bài viết liên quan” (Recommendation System)**
+
+### 👁️ **Góc nhìn người dùng**
+
+Khi đang đọc 1 bài, người dùng thấy ở cuối trang:
+
+> 🔗 *“Các bài viết liên quan”*
+> → liệt kê 3–5 bài có cùng lĩnh vực, từ khóa hoặc tác giả.
+
+Ví dụ:
+
+> * “Ứng dụng AI trong logistics quân sự”
+> * “Phân tích dữ liệu chuỗi cung ứng bằng học sâu”
+> * “Tối ưu hoá vận tải hậu cần bằng mô hình mạng nơ-ron”
+
+---
+
+### 🧩 **Góc nhìn kỹ thuật**
+
+Thuật toán gợi ý có thể dựa trên:
+
+#### A. Gợi ý theo **từ khóa và chủ đề**
+
+```sql
+SELECT * FROM Article
+WHERE id != $currentId
+  AND category = $category
+ORDER BY similarity(title, $currentTitle) DESC
+LIMIT 5;
+```
+
+#### B. Gợi ý theo **ngữ nghĩa**
+
+* Sử dụng mô hình **SentenceTransformer** (MiniLM hoặc BERT) để tạo vector cho `title + abstract`.
+* Tính độ tương đồng **cosine similarity** giữa vector hiện tại và các vector khác.
+* Lưu các embedding vào PostgreSQL (hoặc Redis vector DB).
+
+#### C. Gợi ý theo **tác giả**
+
+Nếu cùng tác giả → ưu tiên hiển thị.
+
+---
+
+## 🧬 **V. Chức năng “Phát hiện trùng lặp / tương đồng”**
+
+### 🎯 **Mục tiêu**
+
+Phát hiện các bài báo có nội dung bị sao chép, hoặc trích dẫn lại chính bài trước đó của cùng tác giả.
+
+---
+
+### 👁️ **Góc nhìn người dùng**
+
+* Khi biên tập viên đăng bài mới → hệ thống cảnh báo:
+
+  > “⚠️ Phát hiện 85% tương đồng với bài ‘Ứng dụng AI trong Logistics’, đăng năm 2023.”
+
+---
+
+### 🧩 **Góc nhìn kỹ thuật**
+
+#### 1️⃣ Cấp độ 1: So khớp nội dung thô (hash & fuzzy matching)
+
+* Khi lưu bài, tạo “chuỗi fingerprint” từ nội dung (bỏ dấu câu, hạ chữ thường):
+
+  ```ts
+  const hash = createHash('sha256').update(cleanedText).digest('hex');
+  ```
+* So sánh với các bài đã có bằng `Levenshtein distance` hoặc `string-similarity`.
+
+#### 2️⃣ Cấp độ 2: So khớp ngữ nghĩa
+
+* Dùng **sentence-transformers** để chuyển bài báo thành vector (semantic embedding).
+* Tìm các bài có vector tương tự (`cosine similarity > 0.9`).
+* Lưu kết quả vào bảng `ArticleSimilarity`:
+
+  ```prisma
+  model ArticleSimilarity {
+    id            String @id @default(cuid())
+    articleId     String
+    otherArticleId String
+    similarity    Float
+  }
+  ```
+
+#### 3️⃣ Cấp độ 3: Báo cáo trùng lặp
+
+* Khi phát hiện >80% → tự động gắn flag “duplicate” hoặc gửi cảnh báo cho biên tập viên.
+
+---
+
+## 🧱 **VI. Kiến trúc tổng thể hệ thống**
+
+```
+┌──────────────────────────────┐
+│         Next.js 14 App       │
+│  - UI hiển thị issue, bài    │
+│  - SSR fetch từ API          │
+└────────────┬─────────────────┘
+             │
+             ▼
+┌──────────────────────────────┐
+│          API Layer           │
+│  - /api/issues               │
+│  - /api/articles             │
+│  - /api/search               │
+│  - /api/similarity           │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│       PostgreSQL + Prisma    │
+│  - Issue, Article, Keywords  │
+│  - Embeddings, Similarities  │
+└────────────┬─────────────────┘
+             ▼
+┌──────────────────────────────┐
+│       AI / ML Module         │
+│  - TF-IDF / BERT Embedding   │
+│  - Duplicate Detection       │
+│  - Recommendation Engine     │
+└──────────────────────────────┘
+```
+
+---
+
+## 🌟 **VII. Lợi ích thực tiễn**
+
+| Đối tượng          | Lợi ích                                                                     |
+| ------------------ | --------------------------------------------------------------------------- |
+| **Độc giả**        | Dễ tìm kiếm, tra cứu, đọc các số cũ và bài liên quan                        |
+| **Nhà nghiên cứu** | Có công cụ gợi ý bài cùng lĩnh vực                                          |
+| **Ban biên tập**   | Phát hiện trùng lặp, sao chép, tự trích dẫn                                 |
+| **Tạp chí**        | Tăng uy tín, chuẩn hóa theo tiêu chuẩn học thuật quốc tế (CrossRef, Scopus) |
+
+---
+
+Nếu ngài muốn, tôi có thể lập **bản thiết kế chi tiết về giao diện & API schema**, kèm **mock UI thực tế (Next.js + Tailwind)** cho từng phần:
+
+* 📘 Trang Lưu trữ
+* 📄 Trang Số Tạp chí
+* 🔍 Trang Tra cứu
+* 🧠 Trang Phát hiện trùng lặp
+
+Ngài có muốn tôi **vẽ sơ đồ giao diện (UI mock)** và **API schema chi tiết** cho module này để chuẩn bị cho giai đoạn phát triển thực tế không, Master Tu?

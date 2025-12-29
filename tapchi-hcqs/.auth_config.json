@@ -1,0 +1,7 @@
+{
+  "login_credentials": {
+    "email": "john@doe.com",
+    "password": "johndoe123"
+  },
+  "signup_endpoint": "/api/auth/register"
+}

@@ -1,0 +1,99 @@
+Hoàn chỉnh tiếp phần mềm. Chú ý nguyên tắc chỉ thêm mới, nâng cấp, mở rộng chức năng . Không xóa các chức năng đang hoạt động tốt. Làm theo tư vấn sau : "💻 *Nhận lệnh… kích hoạt module “Functional Audit Matrix”* 🧠
+Phân tích toàn bộ mã nguồn **tapchi-hcqs_v3** của Thầy cho thấy hệ thống đã có nền tảng rất tốt — **khung kỹ thuật hoàn chỉnh, bảo mật khá vững, quy trình nghiệp vụ đã hình thành**, nhưng vẫn cần **tối ưu hóa & bổ sung các module hỗ trợ cấp phép – vận hành – mở rộng**.
+
+Dưới đây là **bản tư vấn + checklist chi tiết các chức năng cần hoàn thiện & phát triển**, được chia theo nhóm nghiệp vụ, kỹ thuật, và pháp lý.
+Em đã thiết kế theo format có thể dùng ngay làm **bảng kiểm triển khai (QA checklist hoặc quản lý dự án)**.
+
+---
+
+# ✅ **CHECKLIST CHỨC NĂNG HOÀN THIỆN HỆ THỐNG TẠP CHÍ ĐIỆN TỬ KHQS**
+
+---
+
+## 🧩 **I. NHÓM CỐT LÕI – NỘI DUNG & QUẢN LÝ TẠP CHÍ**
+
+| Mã     | Chức năng                                      | Mức hiện tại                               | Việc cần hoàn thiện                                                          | Ưu tiên                            |          |
+| ------ | ---------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------- | ---------------------------------- | -------- |
+| **A1** | **Quản lý Số tạp chí (Issue Management)**      | Có script `check_issues.js`                | Tạo module CRUD “Số mới”, chọn bài thuộc số, hiển thị bìa – ngày phát hành   | 🔥 Cao                             |          |
+| **A2** | **Quản lý Bài viết (Article Management)**      | Có form nộp & thẻ bài (`article-card.tsx`) | Thêm API `/api/articles`, bộ lọc theo trạng thái, tác giả, chủ đề, issue     | 🔥 Cao                             |          |
+| **A3** | **Quy trình Phản biện (Peer Review Workflow)** | Có form phản biện thủ công                 | Chuẩn hóa trạng thái (SUBMITTED→REVIEW→ACCEPTED→PUBLISHED), tự động cập nhật | 🔥 Cao                             |          |
+| **A4** | **Phản biện ẩn danh (Double/Single Blind)**    | Chưa                                       | Thêm tùy chọn cấu hình, ẩn/hiện tên reviewer theo issue                      | 🔥 Cao                             |          |
+| **A5** | **Quản lý Reviewer**                           | Có form assign reviewer                    | Tạo danh sách reviewer, giới hạn số lượng bài đang xử lý                     | ⚙️ Trung                           |          |
+| **A6** | **Kho lưu trữ số (Archive)**                   | Một phần code có sẵn                       | Xây trang `/archive`, lọc theo năm/số, xuất PDF/HTML/JATS                    | ⚙️ Trung                           |          |
+| **A7** | **Bài viết nổi bật / Featured**                | Chưa hoàn thiện                            | Thêm cờ `isFeatured` trong Prisma, API hiển thị “Nổi bật” ở trang chủ        | ⚙️ Trung                           |          |
+| **A8** | **Trang Thể lệ / Gửi bài / Liên hệ**           | Cơ bản                                     | Chuẩn hóa theo TT41 (hiển thị tôn chỉ, thể lệ, cơ quan chủ quản)             | ⚙️ Trung                           |          |
+| **A9** | **Đa ngôn ngữ (VI/EN)**                        | Có toggle                                  | Tách file `/locales/vi                                                       | en/*.json`, áp dụng `next-i18next` | ⚙️ Trung |
+
+---
+
+## 👥 **II. NHÓM NGƯỜI DÙNG – XÁC THỰC & PHÂN QUYỀN**
+
+| Mã     | Chức năng                         | Mức hiện tại                  | Việc cần hoàn thiện                                                | Ưu tiên  |
+| ------ | --------------------------------- | ----------------------------- | ------------------------------------------------------------------ | -------- |
+| **B1** | **Đăng nhập & JWT**               | Có `auth.ts`, `middleware.ts` | Bổ sung refresh token, cờ cookie `Secure`, `SameSite`              | 🔥 Cao   |
+| **B2** | **Đăng ký / Quản lý tài khoản**   | Có model `User`               | Tạo UI quản lý người dùng (`UserManagementPage`)                   | 🔥 Cao   |
+| **B3** | **Phân quyền (RBAC)**             | Đã có `role` trong token      | Thêm kiểm tra role trong dashboard + middleware                    | ⚙️ Trung |
+| **B4** | **Khóa / Kích hoạt người dùng**   | Chưa                          | Bổ sung trường `isActive` + giao diện toggle                       | ⚙️ Trung |
+| **B5** | **Audit Log (Nhật ký hoạt động)** | Chưa                          | Bổ sung bảng `AuditLog`, log hành động đăng nhập, phản biện, duyệt | 🔥 Cao   |
+
+---
+
+## 🧠 **III. NHÓM QUẢN TRỊ & CẤU HÌNH GIAO DIỆN**
+
+| Mã     | Chức năng                                    | Mức hiện tại       | Việc cần hoàn thiện                                            | Ưu tiên  |
+| ------ | -------------------------------------------- | ------------------ | -------------------------------------------------------------- | -------- |
+| **C1** | **Tùy chỉnh giao diện (UIConfig)**           | Chưa               | Bổ sung bảng `UIConfig`, form quản trị banner/logo/màu nền     | 🔥 Cao   |
+| **C2** | **Trang chủ tùy biến (HomeConfig)**          | Một phần           | Cho phép admin bật/tắt khối “Số mới”, “Bài nổi bật”, “Tra cứu” | ⚙️ Trung |
+| **C3** | **Quản lý banner/footer PNG**                | Có file tĩnh       | Cho phép upload thay thế trực tiếp trong dashboard             | ⚙️ Trung |
+| **C4** | **Đổi ngôn ngữ mặc định website**            | Có toggle thủ công | Liên kết với `UIConfig.defaultLocale`                          | ⚙️ Trung |
+| **C5** | **Trang giới thiệu hiển thị giấy phép TT41** | Có tĩnh            | Bổ sung thông tin số GP-BTTTT, ngày cấp, cơ quan cấp           | 🔥 Cao   |
+
+---
+
+## 🔐 **IV. NHÓM BẢO MẬT & QUẢN TRỊ HỆ THỐNG**
+
+| Mã     | Chức năng                          | Mức hiện tại       | Việc cần hoàn thiện                                         | Ưu tiên  |
+| ------ | ---------------------------------- | ------------------ | ----------------------------------------------------------- | -------- |
+| **D1** | **CSP / XSS / Header bảo mật**     | Chưa bật           | Dùng `next-safe-middleware` hoặc `helmet`                   | 🔥 Cao   |
+| **D2** | **Rate Limit / Chống brute-force** | Chưa               | Dùng `express-rate-limit` (Edge Middleware)                 | ⚙️ Trung |
+| **D3** | **WAF / Firewall layer**           | Chưa               | Tích hợp Cloudflare hoặc Nginx ModSecurity                  | ⚙️ Trung |
+| **D4** | **Sao lưu & khôi phục dữ liệu**    | Chưa               | Thiết kế script `pg_dump`, backup 3-2-1, diễn tập khôi phục | 🔥 Cao   |
+| **D5** | **Mã hóa dữ liệu người dùng**      | Hash bcrypt có sẵn | Thêm AES-256 cho thông tin nhạy cảm (email, phone)          | ⚙️ Trung |
+| **D6** | **Giám sát hệ thống**              | Chưa               | Prometheus + Loki + Grafana hoặc Cloud Logs                 | ⚙️ Trung |
+
+---
+
+## 🌐 **V. NHÓM GIAO DIỆN & TRẢI NGHIỆM NGƯỜI DÙNG**
+
+| Mã     | Chức năng                              | Mức hiện tại  | Việc cần hoàn thiện                                         | Ưu tiên  |
+| ------ | -------------------------------------- | ------------- | ----------------------------------------------------------- | -------- |
+| **E1** | **Responsive (Desktop ↔ Mobile)**      | Có cơ bản     | Tối ưu hiển thị banner/footer PNG, lưới bài viết            | ⚙️ Trung |
+| **E2** | **SEO học thuật (schema.org)**         | Chưa          | Thêm JSON-LD `ScholarlyArticle`, `Journal`                  | ⚙️ Trung |
+| **E3** | **Tra cứu bài viết nâng cao**          | Có search bar | Bổ sung bộ lọc: năm, chủ đề, tác giả, đơn vị                | 🔥 Cao   |
+| **E4** | **Trang “Số mới nhất” (Latest Issue)** | Chưa có UI    | Thêm component `LatestIssue.tsx` + API `/api/issues/latest` | 🔥 Cao   |
+| **E5** | **In ấn & Xuất bản (PDF/HTML)**        | Chưa          | Xuất file JATS→PDF/HTML (WeasyPrint hoặc PrinceXML)         | ⚙️ Trung |
+| **E6** | **Accessibility (WCAG 2.1)**           | Cơ bản        | Kiểm tra độ tương phản, alt image, keyboard nav             | ⚙️ Thấp  |
+
+---
+
+## 📦 **VI. NHÓM CÔNG CỤ & TỰ ĐỘNG HÓA**
+
+| Mã     | Chức năng                      | Mức hiện tại        | Việc cần hoàn thiện                                                 | Ưu tiên  |
+| ------ | ------------------------------ | ------------------- | ------------------------------------------------------------------- | -------- |
+| **F1** | **CLI quản trị (Admin Tools)** | Có nhiều file nhỏ   | Hợp nhất `fix_slugs`, `check_issues`, `reset-admin` thành CLI chung | ⚙️ Trung |
+| **F2** | **Kiểm thử tự động (Testing)** | Có `test-verify.js` | Tạo test unit cho auth, API, workflow (Jest/Vitest)                 | 🔥 Cao   |
+| **F3** | **Pipeline CI/CD**             | Chưa có config      | Tạo workflow GitHub Actions (lint, build, test)                     | ⚙️ Trung |
+| **F4** | **Phát hành số tự động**       | Chưa                | Script build “issue manifest” (.json + hash + sign)                 | ⚙️ Trung |
+| **F5** | **Tích hợp DOI / OAI-PMH**     | Chưa                | Khi đạt chuẩn, kết nối CrossRef / PKP OAI-PMH                       | ⚙️ Thấp  |
+
+---
+
+## 🧾 **VII. NHÓM HỒ SƠ PHÁP LÝ – TUÂN THỦ TT41**
+
+| Mã     | Chức năng                                | Mức hiện tại      | Việc cần hoàn thiện                                               | Ưu tiên  |
+| ------ | ---------------------------------------- | ----------------- | ----------------------------------------------------------------- | -------- |
+| **G1** | **Trang hiển thị giấy phép**             | Có phần mô phỏng  | Hiển thị chính xác số/GP, ngày cấp, cơ quan cấp                   | 🔥 Cao   |
+| **G2** | **Hồ sơ kỹ thuật TT41**                  | Chưa sinh tự động | Sinh `.docx` mô tả kỹ thuật, tờ khai, phương án an toàn thông tin | 🔥 Cao   |
+| **G3** | **Nhật ký kiểm duyệt (post-moderation)** | Chưa              | Ghi lại các thao tác sửa, duyệt, phản hồi bài                     | ⚙️ Trung |
+| **G4** | **Chính sách bảo mật & dữ liệu**         | Chưa              | Soạn trang “Chính sách bảo mật” theo quy định                     | ⚙️ Trung |
+"

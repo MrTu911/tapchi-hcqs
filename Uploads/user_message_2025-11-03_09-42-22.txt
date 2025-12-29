@@ -1,0 +1,281 @@
+Xây dựng chức năng : Rất hay 👏 — ba hạng mục bạn nêu là **nhóm tính năng “Frontend CMS Layer”** (Content Management System Layer), đóng vai trò **cầu nối giữa hệ thống biên tập học thuật và phần giao diện công cộng (public site)**.
+
+Dưới đây là **bản tư vấn chi tiết cấp kiến trúc + triển khai thực tế** cho từng module, giúp bạn xây dựng hệ thống hoàn chỉnh, linh hoạt, dễ mở rộng và tương thích hoàn toàn với Prisma + Next.js + JWT middleware hiện tại.
+
+---
+
+# 🧱 TỔNG QUAN: CMS LAYER
+
+Mục tiêu chính của các tính năng này:
+
+1. **Tin tức / thông báo:** truyền thông nội bộ hoặc công khai (news, call for paper, event)
+2. **Banner động:** quảng bá, highlight sự kiện / số tạp chí / bài nổi bật
+3. **CMS cho trang chủ:** cho phép admin cập nhật nội dung tĩnh / động mà không cần code
+
+---
+
+## 🗞️ 1️⃣ HỆ THỐNG QUẢN LÝ TIN TỨC / THÔNG BÁO
+
+### 🎯 Mục tiêu:
+
+Quản lý, hiển thị và phân loại các **bài viết dạng tin tức hoặc thông báo** (news, events, updates, call for papers, policy, v.v.)
+Có thể là **public** (trang chủ) hoặc **internal** (dashboard user).
+
+---
+
+### 🧩 Đề xuất mô hình dữ liệu (schema)
+
+```prisma
+model News {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  title        String
+  summary      String?
+  content      String   // Lưu dạng HTML hoặc Markdown
+  coverImage   String?
+  category     String?  // e.g., "Announcement", "Event", "Call for Paper"
+  isPublished  Boolean  @default(false)
+  publishedAt  DateTime?
+  authorId     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  author User? @relation(fields: [authorId], references: [id])
+}
+```
+
+---
+
+### 🛠️ API Endpoints
+
+| Endpoint           | Method   | Chức năng                                             |
+| ------------------ | -------- | ----------------------------------------------------- |
+| `/api/news`        | `GET`    | Lấy danh sách tin (phân trang, lọc category, keyword) |
+| `/api/news`        | `POST`   | Tạo bài mới (admin)                                   |
+| `/api/news/[slug]` | `GET`    | Lấy chi tiết tin công khai                            |
+| `/api/news/[id]`   | `PUT`    | Cập nhật nội dung (admin)                             |
+| `/api/news/[id]`   | `DELETE` | Xóa bài (admin)                                       |
+
+---
+
+### 🧑‍💻 UI đề xuất
+
+**Dashboard:**
+
+* `/dashboard/admin/news`
+
+  * Danh sách tin tức (table + filter + search)
+  * Nút “Tạo mới”, “Chỉnh sửa”, “Đăng / Gỡ”
+* `/dashboard/admin/news/[id]`
+
+  * Editor WYSIWYG (TipTap hoặc React Quill)
+  * Upload ảnh bìa (tích hợp `/api/upload`)
+  * Preview dạng article card
+
+**Public site:**
+
+* `/news` – Trang danh sách tin (hiển thị 8–12 tin/pagination)
+* `/news/[slug]` – Trang chi tiết tin tức
+* “Tin nổi bật” section trên homepage (query `isPublished=true` + `orderBy: publishedAt desc`)
+
+---
+
+### 💡 Tính năng mở rộng
+
+✅ Lên lịch đăng (scheduled publish)
+✅ Bộ lọc theo category / keyword
+✅ TinyMCE hoặc TipTap editor cho rich content
+✅ SEO meta tags (title, description, image)
+✅ Pin bài viết (isFeatured flag)
+✅ Gắn tag (model `Tag` riêng, N:N relationship)
+
+---
+
+## 🎞️ 2️⃣ QUẢN LÝ BANNER SLIDER ĐỘNG
+
+### 🎯 Mục tiêu:
+
+Hiển thị banner (carousel / hero slides) ở trang chủ — có thể thay đổi nội dung, hình ảnh, thứ tự và trạng thái hiển thị mà không cần deploy code.
+
+---
+
+### 🧩 Đề xuất mô hình dữ liệu
+
+```prisma
+model Banner {
+  id          String   @id @default(uuid())
+  title       String?
+  subtitle    String?
+  imageUrl    String
+  linkUrl     String?
+  position    Int       @default(0)  // thứ tự hiển thị
+  isActive    Boolean   @default(true)
+  startDate   DateTime? // thời gian hiển thị
+  endDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+```
+
+---
+
+### 🛠️ API Endpoints
+
+| Endpoint            | Method   | Chức năng                                  |
+| ------------------- | -------- | ------------------------------------------ |
+| `/api/banners`      | `GET`    | Lấy danh sách banner active (cho homepage) |
+| `/api/banners`      | `POST`   | Tạo banner mới (admin)                     |
+| `/api/banners/[id]` | `PUT`    | Cập nhật nội dung / ảnh / link             |
+| `/api/banners/[id]` | `DELETE` | Xóa banner                                 |
+
+---
+
+### 🧑‍💻 UI đề xuất
+
+**Dashboard:**
+
+* `/dashboard/admin/banners`
+
+  * Danh sách banner (sortable list)
+  * Nút bật/tắt (isActive)
+  * Upload ảnh (tích hợp `/api/upload`)
+  * Preview live
+  * Cho phép drag/drop reorder → cập nhật `position`
+
+**Public site:**
+
+* Component `HomeBannerSlider.tsx`
+
+  * Lấy từ `/api/banners`
+  * Dùng `swiper/react` hoặc `keen-slider`
+  * Hỗ trợ autoplay, link click, responsive
+
+---
+
+### 💡 Tính năng mở rộng
+
+✅ Tự động ẩn banner hết hạn (theo `endDate`)
+✅ Hiển thị riêng cho từng role / section (ví dụ “Call for Paper” chỉ Author thấy)
+✅ Hỗ trợ video / background gradient
+✅ Cache phía client với ISR (Incremental Static Regeneration)
+
+---
+
+## 🏠 3️⃣ CMS CHO NỘI DUNG TRANG CHỦ
+
+### 🎯 Mục tiêu:
+
+Cho phép admin chỉnh sửa **các section nội dung tĩnh** trên trang chủ mà không cần lập trình (giới thiệu, thống kê, liên hệ, trích dẫn...).
+
+---
+
+### 🧩 Đề xuất mô hình dữ liệu
+
+```prisma
+model PageBlock {
+  id        String   @id @default(uuid())
+  key       String   @unique // ví dụ: "hero_text", "about_section", "footer_contact"
+  title     String?
+  content   String?  // HTML hoặc JSON (nếu section phức tạp)
+  imageUrl  String?
+  order     Int       @default(0)
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+}
+```
+
+---
+
+### 🛠️ API Endpoints
+
+| Endpoint                 | Method | Chức năng                           |
+| ------------------------ | ------ | ----------------------------------- |
+| `/api/page-blocks`       | `GET`  | Lấy toàn bộ cấu hình trang chủ      |
+| `/api/page-blocks`       | `POST` | Cập nhật / thêm section mới (admin) |
+| `/api/page-blocks/[key]` | `GET`  | Lấy section cụ thể                  |
+| `/api/page-blocks/[key]` | `PUT`  | Cập nhật section (admin)            |
+
+---
+
+### 🧑‍💻 UI đề xuất
+
+**Dashboard:**
+
+* `/dashboard/admin/homepage`
+
+  * Danh sách các block (Hero, About, Stats, Contact…)
+  * WYSIWYG editor + Upload ảnh + Live preview
+  * Nút “Lưu & Preview ngay”
+
+**Public site:**
+
+* `/app/page.tsx` (hoặc `/app/(public)/page.tsx`)
+
+  * Render các block động từ API
+  * Áp dụng cache SSR hoặc ISR (`revalidate = 60`)
+
+---
+
+### 💡 Tính năng mở rộng
+
+✅ Versioning (lưu lịch sử chỉnh sửa mỗi block)
+✅ Inline edit trực tiếp trên frontend (với quyền SYSADMIN)
+✅ Thêm các loại block có cấu trúc khác nhau (hero, quote, cards, stats)
+✅ Trang About, Contact cũng dùng cùng cơ chế này (`PageBlock` + `slug`)
+
+---
+
+## 🔐 PHÂN QUYỀN
+
+| Vai trò         | Quyền hạn                                              |
+| --------------- | ------------------------------------------------------ |
+| SYSADMIN        | Toàn quyền tạo/sửa/xóa tin tức, banner, homepage block |
+| EIC             | Đăng bài tin tức / thông báo học thuật                 |
+| MANAGING_EDITOR | Chỉnh banner, cập nhật nội dung trang chủ              |
+| AUTHOR/REVIEWER | Chỉ xem tin tức công khai                              |
+
+---
+
+## 🧠 GỢI Ý TRIỂN KHAI TỪNG PHASE
+
+| Phase     | Tính năng                     | Ưu tiên |
+| --------- | ----------------------------- | ------- |
+| **CMS 1** | News / Announcement System    | ⭐⭐⭐⭐    |
+| **CMS 2** | Dynamic Banner Management     | ⭐⭐⭐     |
+| **CMS 3** | Homepage CMS (Page Blocks)    | ⭐⭐⭐⭐    |
+| **CMS 4** | Inline Editor + Preview Live  | ⭐⭐      |
+| **CMS 5** | Versioning + Revision History | ⭐       |
+
+---
+
+## 💡 CÁC FILE CHÍNH CẦN TẠO
+
+| Loại                  | File                                                             | Chức năng          |
+| --------------------- | ---------------------------------------------------------------- | ------------------ |
+| **Prisma Models**     | `News`, `Banner`, `PageBlock`                                    | Dữ liệu cốt lõi    |
+| **API Routes**        | `/api/news`, `/api/banners`, `/api/page-blocks`                  | CRUD               |
+| **UI Components**     | `AdminNewsTable.tsx`, `BannerManager.tsx`, `PageBlockEditor.tsx` | Giao diện quản trị |
+| **Public Components** | `HomeBannerSlider.tsx`, `NewsList.tsx`, `NewsCard.tsx`           | Hiển thị công khai |
+| **Middleware / RBAC** | Cập nhật quyền truy cập admin                                    | `lib/rbac.ts`      |
+
+---
+
+## 🚀 TÍCH HỢP KHÁC
+
+| Mục tiêu              | Giải pháp                                 |
+| --------------------- | ----------------------------------------- |
+| **SEO**               | Dynamic `<Head>` meta tags từ DB          |
+| **Upload ảnh**        | Dùng `/api/upload` + Cloudinary hoặc S3   |
+| **Cache & Hiệu suất** | ISR (`revalidate` 30s–60s) hoặc SWR       |
+| **Analytics**         | Theo dõi lượt xem bài (`views` count)     |
+| **Localization**      | Trường `lang` trong News (vi/en song ngữ) |
+
+---
+
+## ✅ KẾT LUẬN
+
+Ba module này khi hoàn chỉnh sẽ giúp hệ thống **chuyển từ platform nội bộ (dashboard)** sang **portal công khai (public-facing)**, có khả năng xuất bản nội dung chuyên nghiệp như một **website học thuật hiện đại**:
+
+> 🔹 Hệ thống tin tức: cập nhật, call for paper, event
+> 🔹 Banner động: thu hút người đọc
+> 🔹 CMS trang chủ: tự chỉnh nội dung, không cần code

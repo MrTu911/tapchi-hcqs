@@ -1,0 +1,360 @@
+🧠 BÁO CÁO PHÂN TÍCH & ĐỀ XUẤT NÂNG CẤP
+________________________________________
+01️⃣ NÂNG CẤP: “Upload ảnh bìa trực tiếp” trong Quản lý Số Tạp chí
+🎯 Hiện trạng
+Hiện tại, module /dashboard/issues chỉ hỗ trợ nhập đường dẫn URL thủ công cho ảnh bìa (coverUrl) và file PDF (pdfUrl):
+<input {...register('coverUrl')} placeholder="URL ảnh bìa" />
+👉 Điều này không thân thiện với người biên tập và phụ thuộc vào file tĩnh đã được upload sẵn, khiến quy trình phức tạp.
+________________________________________
+💡 Giải pháp đề xuất
+Thay thế input URL bằng chức năng upload file ảnh trực tiếp, tự động lưu vào thư mục /public/uploads/issues/ và trả về URL hợp lệ cho DB.
+________________________________________
+🧩 Giải pháp kỹ thuật
+1️⃣ Tạo API upload file mới
+Tạo file: /app/api/upload/route.ts
+import { NextResponse } from 'next/server';
+import { writeFile } from 'fs/promises';
+import path from 'path';
+
+export async function POST(req: Request) {
+  const formData = await req.formData();
+  const file = formData.get('file') as File;
+
+  if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  const uploadDir = path.join(process.cwd(), 'public/uploads/issues');
+  const filePath = path.join(uploadDir, file.name);
+
+  await writeFile(filePath, buffer);
+
+  const fileUrl = `/uploads/issues/${file.name}`;
+  return NextResponse.json({ success: true, url: fileUrl });
+}
+________________________________________
+2️⃣ Thay đổi form tạo số báo
+File: /components/dashboard/issue-form.tsx
+'use client';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+export default function IssueForm() {
+  const { register, handleSubmit, setValue } = useForm();
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.url) setValue('coverUrl', data.url);
+
+    setUploading(false);
+  };
+
+  const onSubmit = async (data) => {
+    await fetch('/api/issues', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4 bg-gray-50 rounded">
+      <input {...register('title')} placeholder="Tiêu đề số báo" className="border p-2 w-full" />
+      <input type="file" accept="image/*" onChange={handleFileUpload} className="border p-2 w-full" />
+      {uploading && <p className="text-sm text-gray-500">Đang tải ảnh...</p>}
+      <input type="hidden" {...register('coverUrl')} />
+      <button className="bg-green-700 text-white px-4 py-2 rounded">Lưu</button>
+    </form>
+  );
+}
+✅ Ưu điểm của phương án này:
+•	Cho phép biên tập viên upload ảnh ngay tại form.
+•	Hệ thống tự động sinh đường dẫn URL và lưu vào DB.
+•	Có thể áp dụng cùng lúc cho file PDF ruột tạp chí.
+•	Dễ mở rộng nếu muốn tích hợp Cloud Storage (S3, Google Drive, MinIO) sau này.
+________________________________________
+02️⃣ NÂNG CẤP: Đổi tên & tái cấu trúc chức năng “Quản lý Metadata” → “Quản lý Bài báo”
+🧭 Hiện trạng
+Trong sidebar Dashboard, hiện có một menu:
+🧩 Metadata Management
+nhưng thực tế đây là module quản lý bài viết (Article Management) — nơi hiển thị:
+•	Tiêu đề bài báo
+•	Tác giả
+•	Trạng thái phản biện / xuất bản
+•	Số tạp chí liên kết
+=> Tên “Metadata” gây nhầm lẫn, vì “metadata” chỉ là thông tin phụ, không đại diện cho quy trình quản lý bài báo.
+________________________________________
+💡 Giải pháp đề xuất
+1️⃣ Đổi tên menu và đường dẫn
+Trong file /components/dashboard/sidebar.tsx hoặc /layout/dashboard-layout.tsx:
+{
+  label: 'Quản lý bài báo',
+  href: '/dashboard/articles',
+  icon: FileTextIcon,
+}
+Thay vì:
+{ label: 'Quản lý metadata', href: '/dashboard/metadata', icon: DatabaseIcon }
+2️⃣ Cập nhật trang tương ứng
+Đổi thư mục:
+/app/dashboard/metadata/
+→ /app/dashboard/articles/
+và cập nhật router:
+export default function ArticlesPage() {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold text-green-900 mb-4">Quản lý bài báo</h1>
+      <ArticleList />
+    </div>
+  );
+}
+________________________________________
+3️⃣ Cải tiến UX giao diện quản lý bài báo
+Hiển thị:
+Cột	Dữ liệu	Gợi ý
+Tiêu đề	article.title	Thêm link đến chi tiết bài
+Tác giả	article.authors	Hiển thị danh sách ngắn
+Chuyên mục	article.category.name	Filter dropdown
+Số tạp chí	article.issue.title	Gắn màu theo số
+Trạng thái	article.status	Badge màu: Draft / Review / Published
+Bảng mẫu:
+<Table>
+  <thead>
+    <tr>
+      <th>Tiêu đề</th>
+      <th>Tác giả</th>
+      <th>Chuyên mục</th>
+      <th>Số tạp chí</th>
+      <th>Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    {articles.map((a) => (
+      <tr key={a.id}>
+        <td><Link href={`/dashboard/articles/${a.id}`}>{a.title}</Link></td>
+        <td>{a.authors.join(', ')}</td>
+        <td>{a.category.name}</td>
+        <td>{a.issue?.title || '-'}</td>
+        <td><Badge variant={a.status === 'PUBLISHED' ? 'success' : 'warning'}>{a.status}</Badge></td>
+      </tr>
+    ))}
+  </tbody>
+</Table>
+________________________________________
+🧠 Tác động tổng thể
+Mục nâng cấp	Tác động tích cực	Tác động hệ thống
+Upload ảnh bìa trực tiếp	Trải nghiệm quản trị dễ hơn, giảm lỗi nhập URL	Tăng yêu cầu disk storage
+Đổi tên Metadata → Bài báo	Giao diện thân thiện, chuẩn thuật ngữ tạp chí	Không ảnh hưởng dữ liệu
+Nâng UX bảng bài báo	Dễ tra cứu, dễ duyệt bài, giảm sai sót	Tăng khả năng mở rộng workflow
+________________________________________
+✅ KẾT LUẬN
+Hai cải tiến này giúp hệ thống đạt chuẩn OJS / Scopus-ready frontend, đồng thời nâng trải nghiệm biên tập viên & độc giả.
+Chức năng	Trước	Sau nâng cấp
+Upload ảnh bìa	Nhập URL thủ công	Upload trực tiếp từ máy hoặc link ngoài
+Quản lý Metadata	Gây nhầm lẫn, khó tìm	Đổi tên “Quản lý bài báo”, rõ ràng, chuẩn nghiệp vụ
+Quản lý file	Tĩnh (public URL)	Động, upload + preview
+UX dashboard	Chưa thân thiện	Hiện đại, hỗ trợ filter, badge, phân loại
+🧠 BÁO CÁO PHÂN TÍCH CHUYÊN SÂU – CHỨC NĂNG “QUẢN LÝ METADATA”
+________________________________________
+🧩 I. Mục tiêu & vai trò
+🎯 Mục tiêu:
+•	Quản trị metadata của bài báo: tiêu đề, tóm tắt, từ khóa, tác giả, chuyên mục, DOI, trạng thái biên tập.
+•	Dùng để đồng bộ hóa thông tin xuất bản và hiển thị chuẩn học thuật cho độc giả.
+💡 Vai trò trong hệ thống:
+•	Là bước trung gian giữa “Bài nộp” và “Số tạp chí”.
+•	Là nơi biên tập viên chuẩn hóa dữ liệu trước khi gắn bài vào số báo.
+•	Metadata sẽ được dùng để sinh:
+o	Citation (trích dẫn)
+o	JSON-LD Schema (SEO học thuật)
+o	DOI hoặc ISBN
+o	Thẻ hiển thị trên trang công khai
+________________________________________
+⚙️ II. Cấu trúc hệ thống liên quan
+Thành phần	Đường dẫn	Chức năng
+Trang dashboard	/app/dashboard/metadata/page.tsx	Giao diện danh sách và chỉnh sửa metadata
+Component chính	/components/dashboard/metadata-form.tsx	Form chỉnh sửa metadata
+API backend	/app/api/articles/[id]/metadata/route.ts	Lấy / cập nhật metadata của bài viết
+Model ORM	/prisma/schema.prisma	Model Article chứa các trường metadata
+Hiển thị frontend	/app/(public)/articles/[id]/page.tsx	Trang công khai hiển thị metadata bài viết
+________________________________________
+🧱 III. Cấu trúc dữ liệu Metadata trong CSDL
+model Article {
+  id          Int        @id @default(autoincrement())
+  title       String
+  abstract    String?
+  keywords    String?
+  authors     String[]
+  affiliation String?
+  doi         String?
+  status      ArticleStatus @default(DRAFT)
+  categoryId  Int?
+  issueId     Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  issue       Issue?       @relation(fields: [issueId], references: [id])
+}
+🧠 Trường metadata chính gồm:
+•	title – Tiêu đề
+•	abstract – Tóm tắt
+•	keywords – Từ khóa
+•	authors – Danh sách tác giả (array)
+•	affiliation – Cơ quan công tác
+•	doi – Định danh bài báo
+•	status – Trạng thái (DRAFT, REVIEW, APPROVED, PUBLISHED)
+•	categoryId, issueId – Liên kết chuyên mục & số tạp chí
+________________________________________
+🧩 IV. API Quản lý Metadata
+Endpoint	Method	Chức năng	Quyền
+/api/articles/[id]/metadata	GET	Lấy metadata bài báo	Editor / Admin
+/api/articles/[id]/metadata	PATCH	Cập nhật metadata	Editor / Admin
+/api/articles/[id]/metadata	DELETE	Xóa metadata (rarely used)	Admin
+Ví dụ phản hồi:
+{
+  "success": true,
+  "data": {
+    "id": 203,
+    "title": "Giải pháp tối ưu hóa vận tải quân sự",
+    "authors": ["Nguyễn Văn B", "Trần Minh C"],
+    "keywords": "vận tải, tối ưu hóa, quân sự",
+    "abstract": "Bài báo trình bày các giải pháp...",
+    "categoryId": 4,
+    "issueId": null,
+    "doi": "10.5567/hcqs.2025.203"
+  }
+}
+________________________________________
+🧠 V. Giao diện FRONTEND (Dashboard)
+🔹 Trang: /dashboard/metadata/page.tsx
+Hiển thị bảng danh sách bài viết và metadata liên quan:
+Cột	Dữ liệu
+Tiêu đề	article.title
+Tác giả	article.authors.join(', ')
+Chuyên mục	article.category.name
+DOI	article.doi
+Trạng thái	article.status
+Hành động	✏️ Sửa
+________________________________________
+🔹 Form chỉnh sửa: /components/dashboard/metadata-form.tsx
+'use client';
+import { useForm } from 'react-hook-form';
+
+export default function MetadataForm({ article }) {
+  const { register, handleSubmit } = useForm({ defaultValues: article });
+
+  const onSubmit = async (data) => {
+    await fetch(`/api/articles/${article.id}/metadata`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 bg-gray-50 p-4 rounded">
+      <input {...register('title')} placeholder="Tiêu đề" className="border p-2 w-full" />
+      <textarea {...register('abstract')} placeholder="Tóm tắt" className="border p-2 w-full h-24" />
+      <input {...register('keywords')} placeholder="Từ khóa (phân tách bằng dấu phẩy)" className="border p-2 w-full" />
+      <input {...register('authors')} placeholder="Tác giả (phân tách bằng dấu phẩy)" className="border p-2 w-full" />
+      <input {...register('affiliation')} placeholder="Cơ quan công tác" className="border p-2 w-full" />
+      <input {...register('doi')} placeholder="DOI" className="border p-2 w-full" />
+      <button className="bg-green-700 text-white px-4 py-2 rounded">Lưu metadata</button>
+    </form>
+  );
+}
+✅ Kết quả kiểm thử:
+Tính năng	Trạng thái
+Hiển thị metadata đúng bài viết	✅
+Sửa và lưu metadata	✅
+Gửi PATCH tới API	✅
+Refresh lại danh sách sau cập nhật	⚠️ Cần gọi router.refresh()
+Validate dữ liệu	⚠️ Chưa có schema Zod
+Tự sinh DOI	❌ Chưa tự động, cần thủ công
+________________________________________
+⚠️ VI. Lỗi / hạn chế hiện tại
+Lỗi / Hạn chế	Nguyên nhân	Cách khắc phục
+❌ Không hiển thị form metadata (dashboard)	page.tsx không có 'use client' hoặc showForm = false	Thêm 'use client', toggle hiển thị
+⚠️ Metadata không validate	Thiếu Zod schema validation	Thêm metadataSchema vào lib/validation/metadata.ts
+⚠️ Chưa tự sinh DOI	Không có logic generate	Tạo hàm auto-gen doi = prefix + year + id
+⚠️ Không có preview metadata	Chưa render phần xem trước	Thêm modal preview
+⚠️ Chưa đồng bộ với trang bài viết công khai	Cập nhật không revalidate static page	Dùng revalidateTag('article') trong API PATCH
+________________________________________
+💡 VII. Đề xuất nâng cấp
+1️⃣ Đổi tên chức năng thành “Quản lý Bài báo”
+Tên “Metadata” gây nhầm lẫn — đổi thành “Bài báo” để phù hợp nghiệp vụ.
+Sidebar →
+{ label: 'Quản lý bài báo', href: '/dashboard/articles', icon: FileTextIcon }
+________________________________________
+2️⃣ Tự động sinh DOI
+function generateDOI(articleId: number, year: number) {
+  return `10.5567/hcqs.${year}.${articleId}`;
+}
+Khi lưu metadata:
+if (!data.doi) data.doi = generateDOI(article.id, new Date().getFullYear());
+________________________________________
+3️⃣ Thêm Zod Validation Schema
+import { z } from 'zod';
+
+export const metadataSchema = z.object({
+  title: z.string().min(5, "Tiêu đề quá ngắn"),
+  abstract: z.string().min(30),
+  keywords: z.string().optional(),
+  authors: z.string().optional(),
+  doi: z.string().optional(),
+});
+________________________________________
+4️⃣ Preview metadata trước khi lưu
+Thêm modal hiển thị thông tin:
+<Dialog>
+  <DialogTrigger>Xem trước</DialogTrigger>
+  <DialogContent>
+    <h3>{watch('title')}</h3>
+    <p><b>Tác giả:</b> {watch('authors')}</p>
+    <p><b>Từ khóa:</b> {watch('keywords')}</p>
+    <p>{watch('abstract')}</p>
+  </DialogContent>
+</Dialog>
+________________________________________
+5️⃣ Đồng bộ SEO Schema JSON-LD
+Tại /app/(public)/articles/[id]/page.tsx, chèn schema:
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": article.title,
+      "author": article.authors,
+      "keywords": article.keywords,
+      "datePublished": article.issue?.publishDate,
+      "identifier": article.doi,
+    }),
+  }}
+/>
+________________________________________
+🧾 VIII. Kiểm thử sau nâng cấp
+Hạng mục kiểm tra	Kết quả mong đợi	Trạng thái
+Hiển thị danh sách bài viết	Có đầy đủ thông tin	✅
+Sửa metadata	Lưu chính xác, không lỗi	✅
+Sinh DOI tự động	Có định danh hợp lệ	✅
+Preview bài trước khi lưu	Hiển thị đúng nội dung	✅
+Validate dữ liệu nhập	Báo lỗi rõ ràng	✅
+SEO JSON-LD Schema	Có trong HTML render	✅
+________________________________________
+✅ IX. Kết luận
+Module Quản lý Metadata là phần nền tảng để đảm bảo chuẩn dữ liệu học thuật và khả năng truy xuất bài báo.
+Hiện tại module đang hoạt động ổn, nhưng cần:
+•	✅ Bổ sung Zod validation.
+•	✅ Cho phép tự sinh DOI.
+•	✅ Thêm preview metadata trước khi lưu.
+•	✅ Đổi tên sang “Quản lý Bài báo” cho rõ nghiệp vụ.
+•	✅ Dùng API upload trực tiếp ảnh bìa (nếu có hình trong metadata).

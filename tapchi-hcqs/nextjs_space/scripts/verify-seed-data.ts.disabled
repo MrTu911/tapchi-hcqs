@@ -1,0 +1,141 @@
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function verify() {
+  console.log('🔍 KIỂM TRA DỮ LIỆU SAU SEED\n')
+  console.log('='.repeat(60))
+  
+  try {
+    // 1. Kiểm tra Categories
+    const categoryCount = await prisma.category.count()
+    console.log(`\n📚 Categories: ${categoryCount}`)
+    
+    // 2. Kiểm tra Users
+    const users = await prisma.user.groupBy({
+      by: ['role'],
+      _count: true
+    })
+    console.log(`\n👥 Users by role:`)
+    users.forEach(u => console.log(`   ${u.role}: ${u._count}`))
+    
+    // 3. Kiểm tra Volumes & Issues
+    const volumeCount = await prisma.volume.count()
+    const issueCount = await prisma.issue.count()
+    console.log(`\n📖 Volumes: ${volumeCount}`)
+    console.log(`📖 Issues: ${issueCount}`)
+    
+    // 4. Kiểm tra Articles
+    const articleCount = await prisma.article.count()
+    const articles = await prisma.article.findMany({
+      include: {
+        submission: {
+          include: {
+            author: true,
+            category: true
+          }
+        }
+      }
+    })
+    console.log(`\n📰 Articles: ${articleCount}`)
+    
+    // Check for potential issues
+    const articlesWithoutSubmission = articles.filter(a => !a.submission)
+    if (articlesWithoutSubmission.length > 0) {
+      console.log(`   ⚠️  ${articlesWithoutSubmission.length} articles không có submission`)
+    }
+    
+    const articlesWithoutAuthor = articles.filter(a => !a.submission?.author)
+    if (articlesWithoutAuthor.length > 0) {
+      console.log(`   ⚠️  ${articlesWithoutAuthor.length} articles không có author`)
+    }
+    
+    // 5. Kiểm tra Submissions
+    const submissions = await prisma.submission.groupBy({
+      by: ['status'],
+      _count: true
+    })
+    console.log(`\n📝 Submissions by status:`)
+    submissions.forEach(s => console.log(`   ${s.status}: ${s._count}`))
+    
+    // Check orphaned submissions
+    const submissionsWithoutAuthor = await prisma.submission.count({
+      where: { createdBy: null }
+    })
+    if (submissionsWithoutAuthor > 0) {
+      console.log(`   ⚠️  ${submissionsWithoutAuthor} submissions không có createdBy`)
+    }
+    
+    // 6. Kiểm tra Reviews
+    const reviewCount = await prisma.review.count()
+    const reviews = await prisma.review.groupBy({
+      by: ['status'],
+      _count: true
+    })
+    console.log(`\n⭐ Reviews: ${reviewCount}`)
+    reviews.forEach(r => console.log(`   ${r.status}: ${r._count}`))
+    
+    // Check reviews without reviewers
+    const reviewsWithoutReviewer = await prisma.review.count({
+      where: { reviewerId: null }
+    })
+    if (reviewsWithoutReviewer > 0) {
+      console.log(`   ⚠️  ${reviewsWithoutReviewer} reviews không có reviewer`)
+    }
+    
+    // 7. Kiểm tra Foreign Key Integrity
+    console.log(`\n🔗 Foreign Key Integrity Checks:`)
+    
+    // Articles without valid submission
+    const invalidArticles = await prisma.article.count({
+      where: {
+        submission: null
+      }
+    })
+    console.log(`   Articles với submission không tồn tại: ${invalidArticles}`)
+    
+    // Submissions without valid author
+    const invalidSubmissions = await prisma.submission.count({
+      where: {
+        author: null
+      }
+    })
+    console.log(`   Submissions với author không tồn tại: ${invalidSubmissions}`)
+    
+    // Reviews without valid submission
+    const invalidReviews = await prisma.review.count({
+      where: {
+        submission: null
+      }
+    })
+    console.log(`   Reviews với submission không tồn tại: ${invalidReviews}`)
+    
+    // 8. Kiểm tra UploadedFile
+    const fileCount = await prisma.uploadedFile.count()
+    console.log(`\n📎 UploadedFiles: ${fileCount}`)
+    
+    if (fileCount === 0) {
+      console.log(`   ⚠️  Không có file nào được tạo trong seed`)
+    }
+    
+    // 9. Kiểm tra Audit Logs
+    const auditCount = await prisma.auditLog.count()
+    console.log(`\n📋 Audit Logs: ${auditCount}`)
+    
+    // 10. Kiểm tra Messages/Conversations
+    const conversationCount = await prisma.conversation.count()
+    const messageCount = await prisma.message.count()
+    console.log(`\n💬 Conversations: ${conversationCount}`)
+    console.log(`💬 Messages: ${messageCount}`)
+    
+    console.log('\n' + '='.repeat(60))
+    console.log('✅ VERIFICATION COMPLETE\n')
+    
+  } catch (error) {
+    console.error('❌ Error during verification:', error)
+  } finally {
+    await prisma.$disconnect()
+  }
+}
+
+verify()

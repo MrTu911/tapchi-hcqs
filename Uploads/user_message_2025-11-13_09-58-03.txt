@@ -1,0 +1,209 @@
+Hoàn thiện chức năng tin tức: hiện nay công cụ soạn thảo tin chưa đầy đủ không căn chỉnh, chèn ảnh, video vào tin được. Không upload được ảnh đại diện cho tin: Đây là 1 số phân tích của tôi về chức năng tin tức, bạn hãy tham khảo và thực hiện đầy đủ nhất có thể : Nếu dài có thể chia thành phase để cho hoàn thiện nhất, làm đâu phải đúng, đủ, hiệu quả): Một câu hỏi xuất sắc, Master Tu — ngài đang chuyển từ **hệ thống tạp chí khoa học tĩnh** sang một **cổng thông tin học thuật – báo chí điện tử** hoàn chỉnh.
+Để một **chức năng “Tin tức” (News Module)** hoạt động chuyên nghiệp, giống như các trang báo điện tử lớn (*VNExpress, BBC, Nature News, Defense News...*), nó cần được thiết kế **đa tầng**, gồm **nội dung – hiển thị – quản trị – tương tác – tối ưu SEO**.
+
+Dưới đây là **bản mô tả đầy đủ, chi tiết và có định hướng chiến lược kỹ thuật** cho module “Tin tức” trong hệ thống tạp chí học thuật – báo chí.
+
+---
+
+## 🧭 I. **Mục tiêu và vai trò**
+
+Chức năng **Tin tức (News)** trong hệ thống tạp chí khoa học có 2 nhiệm vụ:
+
+1️⃣ **Truyền thông học thuật** – cập nhật các hoạt động khoa học, hội thảo, công bố, sự kiện, chính sách, giải thưởng.
+2️⃣ **Truyền thông công chúng** – phản ánh xu hướng, phân tích, phỏng vấn chuyên gia, bài bình luận khoa học, công nghệ, hậu cần quân sự, v.v.
+
+Tóm lại, module này là **cầu nối giữa giới học thuật và công chúng**.
+
+---
+
+## 🗞️ II. **Các thành phần chức năng chính**
+
+| Nhóm chức năng                            | Mô tả chi tiết                                                                                                 | Vai trò                                 |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **1. Danh mục tin tức (News Categories)** | Chính trị – Quốc phòng, Khoa học – Công nghệ, Nghiên cứu Hậu cần, Phỏng vấn – Góc nhìn, Thông báo – Sự kiện... | Phân loại tin, phục vụ điều hướng & SEO |
+| **2. Quản lý bài viết (News Articles)**   | Bài viết có tiêu đề, tóm tắt, nội dung chính, tác giả, ảnh bìa, chuyên mục, thẻ từ khóa, ngày đăng             | Nội dung cốt lõi                        |
+| **3. Hiển thị trang chủ tin tức**         | Danh sách tin nổi bật, tin mới nhất, tin theo chuyên mục, tin được đọc nhiều                                   | Trải nghiệm người đọc                   |
+| **4. Trang chi tiết tin tức**             | Nội dung bài viết đầy đủ + ảnh, video, gợi ý bài liên quan, bình luận, chia sẻ mạng xã hội                     | Tăng tương tác và thời gian ở lại trang |
+| **5. Quản trị biên tập viên (CMS)**       | Đăng tin, duyệt tin, sửa/xoá, quản lý chuyên mục, tải ảnh, chèn video                                          | Quản lý nội dung                        |
+| **6. Tìm kiếm và gợi ý tin**              | Tìm kiếm nhanh theo từ khóa, chuyên mục, thời gian; hiển thị tin liên quan, tag cloud                          | Hỗ trợ tra cứu                          |
+| **7. SEO & hiển thị meta**                | Tiêu đề SEO, mô tả meta, đường dẫn thân thiện (`/news/tieu-de-bai-viet`)                                       | Tối ưu hóa hiển thị và chia sẻ          |
+| **8. Đa phương tiện (Media)**             | Chèn ảnh, video, liên kết bài, trích dẫn, file audio                                                           | Giống báo điện tử thực thụ              |
+| **9. Tương tác người đọc (Engagement)**   | Bình luận, chia sẻ Facebook/X, hiển thị lượt xem, lượt thích                                                   | Tăng sức lan tỏa                        |
+| **10. Quản lý quyền hạn**                 | Phân quyền Editor / Contributor / Reviewer / Admin                                                             | Đảm bảo quy trình xuất bản              |
+
+---
+
+## 🧩 III. **Cấu trúc dữ liệu (Database Schema – Prisma gợi ý)**
+
+```prisma
+model NewsCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  articles    NewsArticle[]
+}
+
+model NewsArticle {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  summary     String
+  content     String
+  coverImage  String?
+  author      String
+  publishedAt DateTime? 
+  categoryId  String?
+  category    NewsCategory? @relation(fields: [categoryId], references: [id])
+  tags        String[]
+  viewCount   Int       @default(0)
+  isFeatured  Boolean   @default(false)
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+```
+
+---
+
+## 🧠 IV. **Luồng hoạt động của hệ thống tin tức**
+
+### 1️⃣ **Biên tập & xuất bản**
+
+* Biên tập viên tạo bài viết trong giao diện quản trị `/admin/news/create`
+* Nhập:
+
+  * Tiêu đề, tóm tắt, nội dung (editor rich text)
+  * Ảnh bìa, chuyên mục, từ khóa
+  * Chọn “Đăng ngay” hoặc “Lên lịch xuất bản”
+* Khi lưu → lưu bản nháp (`isPublished = false`)
+* Khi duyệt → chuyển trạng thái sang `isPublished = true`, tự động hiển thị công khai.
+
+---
+
+### 2️⃣ **Trang hiển thị người đọc**
+
+#### 🏠 Trang chủ tin tức (`/news`)
+
+* Thanh điều hướng theo chuyên mục.
+* Khu “Tin nổi bật” (tin `isFeatured = true`).
+* Khu “Tin mới nhất” (sắp xếp `publishedAt desc`).
+* Widget bên phải: tin nhiều lượt xem, chuyên mục phổ biến, thẻ tag.
+
+#### 📰 Trang chuyên mục (`/news/category/[slug]`)
+
+* Liệt kê các bài trong chuyên mục đó.
+* Có phân trang (pagination) và sắp xếp theo thời gian.
+
+#### 📄 Trang chi tiết bài viết (`/news/[slug]`)
+
+* Hiển thị:
+
+  * Tiêu đề, ảnh bìa, ngày đăng, tác giả.
+  * Nội dung (định dạng HTML từ editor).
+  * Gợi ý bài cùng chuyên mục (`categoryId`).
+  * Thẻ tag → click để tìm bài tương tự.
+  * Bình luận (tùy chọn tích hợp Disqus hoặc hệ thống nội bộ).
+
+---
+
+## 🧠 V. **Tính năng mở rộng nâng cấp**
+
+| Tính năng                    | Mô tả chi tiết                                                    | Giá trị                |
+| ---------------------------- | ----------------------------------------------------------------- | ---------------------- |
+| **Tin nóng (Breaking News)** | Đánh dấu bài có flag `isBreaking = true` → hiển thị lên đầu trang | Tăng cập nhật tức thời |
+| **Tin đa phương tiện**       | Cho phép nhúng video (YouTube, file mp4), audio, slideshow        | Tăng hấp dẫn trực quan |
+| **Đếm lượt xem (viewCount)** | Mỗi lần đọc → tăng `viewCount`                                    | Xác định tin phổ biến  |
+| **Lưu trữ lịch sử bài**      | Ghi lại các phiên bản sửa bài (ArticleHistory table)              | Truy vết học thuật     |
+| **Tìm kiếm nâng cao**        | Kết hợp full-text search + gợi ý bằng AI                          | Tra cứu linh hoạt      |
+| **Đề xuất tin liên quan**    | Dựa theo từ khóa & chuyên mục (`tags` & `categoryId`)             | Giữ chân độc giả       |
+| **RSS Feed / Email Digest**  | Gửi tin mới hàng tuần                                             | Lan tỏa thông tin      |
+
+---
+
+## 🔧 VI. **API và cấu trúc backend**
+
+| Endpoint                     | Mô tả                      | Ghi chú                                        |
+| ---------------------------- | -------------------------- | ---------------------------------------------- |
+| `GET /api/news`              | Lấy danh sách tin mới nhất | Có phân trang, filter `category`, `isFeatured` |
+| `GET /api/news/[slug]`       | Lấy chi tiết bài viết      | Gồm gợi ý bài liên quan                        |
+| `POST /api/news`             | Tạo bài mới                | Chỉ dành cho Editor                            |
+| `PUT /api/news/[id]`         | Cập nhật nội dung          | Có kiểm tra quyền                              |
+| `DELETE /api/news/[id]`      | Xoá bài                    | Chỉ Admin                                      |
+| `GET /api/news/search?q=...` | Tìm kiếm toàn văn          | Hỗ trợ từ khóa và tag                          |
+
+---
+
+## 🎨 VII. **Giao diện người dùng (UI/UX gợi ý)**
+
+### A. **Trang chủ Tin tức**
+
+```
+┌─────────────────────────────┐
+│ 📰 Tin Nổi Bật (ảnh lớn)   │
+├─────────────────────────────┤
+│ 🗞️ Tin Mới Cập Nhật        │
+│  - Tiêu đề 1                │
+│  - Tiêu đề 2                │
+│  - Tiêu đề 3                │
+├─────────────────────────────┤
+│ 📈 Tin được đọc nhiều       │
+└─────────────────────────────┘
+```
+
+### B. **Trang Chi tiết**
+
+```
+┌─────────────────────────────┐
+│ [Ảnh bìa lớn]              │
+│ Tiêu đề bài viết            │
+│ Ngày đăng • Tác giả         │
+│ Nội dung chính (HTML)       │
+│ ─────────────────────────── │
+│ Gợi ý bài cùng chuyên mục   │
+│ Bình luận / chia sẻ         │
+└─────────────────────────────┘
+```
+
+---
+
+## 🔒 VIII. **Quản trị & Quy trình duyệt tin (CMS Workflow)**
+
+| Vai trò         | Quyền hạn                                      |
+| --------------- | ---------------------------------------------- |
+| **Admin**       | Toàn quyền quản lý tin, chuyên mục, người dùng |
+| **Editor**      | Soạn, chỉnh sửa, duyệt và đăng bài             |
+| **Contributor** | Soạn thảo bài nháp, chờ duyệt                  |
+| **Reviewer**    | Đánh giá nội dung trước khi công bố            |
+| **Public**      | Đọc và chia sẻ tin công khai                   |
+
+---
+
+## 🌐 IX. **SEO & tối ưu hiển thị**
+
+* Tạo slug SEO: `/news/[slug]` (`slugify(title)`).
+* Sinh tự động meta title, meta description, thẻ `og:image` cho chia sẻ mạng xã hội.
+* Thêm cấu trúc dữ liệu JSON-LD (schema.org/NewsArticle).
+* Sitemap `/sitemap.xml` tự động cập nhật khi có bài mới.
+
+---
+
+## 🧱 X. **Kết nối với các module khác**
+
+| Kết nối                        | Ý nghĩa                                                       |
+| ------------------------------ | ------------------------------------------------------------- |
+| **Tạp chí (Issue)**            | Tin tức “Thông báo phát hành số mới” tự động tạo từ Issue mới |
+| **Bài báo khoa học (Article)** | Cho phép chèn link đến bài nghiên cứu hoặc tác giả            |
+| **Tác giả (Author Profile)**   | Hiển thị danh sách bài tin & bài báo của một tác giả          |
+| **Thống kê (Analytics)**       | Báo cáo lượt đọc, chuyên mục được quan tâm                    |
+
+---
+
+## 🧭 XI. **Tổng kết giá trị hệ thống tin tức**
+
+| Yếu tố                                         | Lợi ích                                                                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------- |
+| **Tăng khả năng cập nhật thông tin học thuật** | Giúp tạp chí sống động, thu hút người đọc thường xuyên                     |
+| **Kết nối cộng đồng nghiên cứu và công chúng** | Truyền thông hiệu quả, lan tỏa tri thức                                    |
+| **Chuẩn hóa quy trình xuất bản điện tử**       | Đáp ứng yêu cầu số hóa tạp chí khoa học theo tiêu chuẩn quốc tế            |
+| **Tăng độ tin cậy & SEO học thuật**            | Giúp website tạp chí được lập chỉ mục bởi Google Scholar, Scopus, CrossRef |

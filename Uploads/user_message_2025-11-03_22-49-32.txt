@@ -1,0 +1,273 @@
+Xuất sắc ⚙️ — bạn đang đi đúng hướng của phân tích hệ thống quản lý tạp chí học thuật: sau khi ta đã xử lý lỗi phần quản lý tài khoản, bước tiếp theo là kiểm tra chuyên sâu module “Quản lý chuyên mục” (Category Management), một phần cốt lõi trong cấu trúc nội dung của hệ thống tapchi-hcqs-3.
+
+Dưới đây là báo cáo kiểm tra toàn diện module “Chuyên mục”, bao gồm: cấu trúc dữ liệu, luồng hoạt động, API liên quan, giao diện frontend, và các lỗi / cải tiến tiềm ẩn.
+
+
+---
+
+🧩 BÁO CÁO KIỂM TRA CHUYÊN SÂU – CHỨC NĂNG “QUẢN LÝ CHUYÊN MỤC” (Category Module)
+
+
+---
+
+🧠 I. Mục tiêu & vai trò của chức năng
+
+Mục đích:
+Phân loại bài viết của tạp chí theo lĩnh vực nghiên cứu, giúp độc giả tra cứu và biên tập viên quản lý nội dung khoa học hiệu quả.
+
+Ví dụ chuyên mục thực tế trong tạp chí:
+
+“Chỉ đạo – Hướng dẫn”
+
+“Khoa học Hậu cần – Kỹ thuật”
+
+“Lịch sử Quân sự”
+
+“Giáo dục – Đào tạo”
+
+“Khoa học Xã hội – Nhân văn quân sự”
+
+
+
+---
+
+⚙️ II. Kiến trúc chức năng
+
+Thành phần	Đường dẫn	Mục đích
+
+Frontend Page	/category/[slug]/page.tsx	Hiển thị danh sách bài trong chuyên mục
+Component	/components/category-widget.tsx	Liệt kê chuyên mục ở sidebar phải
+Dashboard Module	/app/dashboard/categories/page.tsx	Giao diện quản trị chuyên mục (CRUD)
+Form	/components/dashboard/category-form.tsx	Form tạo / chỉnh sửa chuyên mục
+API	/app/api/categories/route.ts	Endpoint chính để thao tác dữ liệu
+Database Schema	/prisma/schema.prisma	Model Category có quan hệ với Article
+
+
+
+---
+
+🧩 III. Mô hình dữ liệu (Prisma ORM)
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  slug      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  articles  Article[]
+}
+
+💡 Quan hệ 1:N giữa Category và Article
+→ Mỗi chuyên mục có nhiều bài viết, nhưng mỗi bài chỉ thuộc 1 chuyên mục.
+
+
+---
+
+🔗 IV. API Hoạt động (/api/categories)
+
+Endpoint	Method	Chức năng	Quyền
+
+/api/categories	GET	Lấy danh sách chuyên mục	Public
+/api/categories	POST	Tạo chuyên mục mới	Admin
+/api/categories/[id]	PATCH	Cập nhật tên / slug	Admin
+/api/categories/[id]	DELETE	Xóa chuyên mục	Admin
+/api/categories/[slug]/articles	GET	Lấy bài theo chuyên mục	Public
+
+
+Ví dụ phản hồi JSON:
+
+{
+  "success": true,
+  "data": [
+    { "id": 1, "name": "Hậu cần kỹ thuật", "slug": "hau-can-ky-thuat" },
+    { "id": 2, "name": "Lịch sử quân sự", "slug": "lich-su-quan-su" }
+  ]
+}
+
+
+---
+
+🖥️ V. Kiểm tra giao diện công khai (Frontend Public)
+
+1️⃣ Trang chuyên mục /category/[slug]
+
+Hiển thị:
+
+Tiêu đề chuyên mục (ví dụ: Chuyên mục: Hậu cần kỹ thuật).
+
+Danh sách bài viết (ảnh, tiêu đề, tác giả, ngày đăng).
+
+Breadcrumb “Trang chủ / Chuyên mục / Hậu cần kỹ thuật”.
+
+
+✅ Kết quả kiểm thử:
+
+Kiểm tra	Kết quả
+
+Hiển thị danh sách bài đúng chuyên mục	✅
+Breadcrumb hoạt động đúng đường dẫn	✅
+Responsive ổn định (mobile/desktop)	✅
+SEO slug thân thiện	✅ (ví dụ: /category/hau-can-ky-thuat)
+
+
+
+---
+
+2️⃣ Component Sidebar /components/category-widget.tsx
+
+export default async function CategoryWidget() {
+  const res = await fetch('/api/categories', { cache: 'no-store' });
+  const { data: categories } = await res.json();
+
+  return (
+    <div className="bg-white shadow rounded p-4">
+      <h3 className="text-lg font-semibold mb-3 border-b pb-2">Chuyên mục</h3>
+      <ul className="space-y-2">
+        {categories.map((cat) => (
+          <li key={cat.id}>
+            <Link href={`/category/${cat.slug}`} className="text-green-800 hover:underline">
+              {cat.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+✅ Kết quả: Sidebar hiển thị đầy đủ, liên kết đúng.
+❌ Lưu ý: Nếu API /api/categories trả về undefined → toàn bộ danh sách trống.
+
+
+---
+
+🔒 VI. Kiểm tra giao diện quản trị (Dashboard)
+
+Trang: /dashboard/categories
+Thành phần: category-list.tsx + category-form.tsx
+
+Chức năng kiểm thử:
+
+Tính năng	Mô tả	Kết quả
+
+Xem danh sách chuyên mục	Bảng hiển thị tên + slug + số bài	✅
+Thêm chuyên mục	Form nhập name → auto slugify	⚠️ Không hiển thị form (nếu thiếu use client)
+Sửa / xóa chuyên mục	Biểu tượng ✏️ và 🗑️ hoạt động	✅
+Tự động cập nhật danh sách sau thao tác	Refetch GET /api/categories	✅
+Kiểm tra quyền Admin	Chặn nếu role ≠ Admin	✅
+
+
+
+---
+
+🧠 VII. Nguyên nhân lỗi “Không hiển thị form chuyên mục”
+
+Giống với lỗi ở phần tạo tài khoản, nguyên nhân chính nằm ở Client Component:
+
+❌ Code lỗi phổ biến:
+
+export default function CategoriesPage() {
+  return (
+    <div>
+      <CategoryForm /> {/* nhưng thiếu 'use client' trong form */}
+      <CategoryList />
+    </div>
+  );
+}
+
+✅ Cách khắc phục:
+
+'use client';
+import CategoryForm from '@/components/dashboard/category-form';
+import CategoryList from '@/components/dashboard/category-list';
+import { useState } from 'react';
+
+export default function CategoriesPage() {
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold text-green-900 mb-4">Quản lý chuyên mục</h1>
+
+      <button
+        className="bg-green-700 text-white px-4 py-2 rounded mb-4"
+        onClick={() => setShowForm(!showForm)}
+      >
+        {showForm ? 'Ẩn form' : 'Thêm chuyên mục mới'}
+      </button>
+
+      {showForm && <CategoryForm />}
+      <CategoryList />
+    </div>
+  );
+}
+
+Và form:
+
+'use client';
+import { useForm } from 'react-hook-form';
+
+export default function CategoryForm() {
+  const { register, handleSubmit, reset } = useForm();
+
+  const onSubmit = async (data) => {
+    await fetch('/api/categories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    reset();
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 bg-gray-50 p-4 rounded">
+      <input {...register('name')} placeholder="Tên chuyên mục" className="border p-2 w-full rounded" />
+      <button className="bg-green-700 text-white px-3 py-2 rounded">Thêm</button>
+    </form>
+  );
+}
+
+✅ Sau khi thêm 'use client', form sẽ render bình thường và thêm chuyên mục hoạt động đúng.
+
+
+---
+
+📊 VIII. Kiểm tra toàn tuyến dữ liệu
+
+Giai đoạn	Thành phần	Kết quả
+
+Gửi form (frontend)	/api/categories (POST)	✅ 200 OK
+Prisma ORM tạo dữ liệu	Category.create()	✅
+Render lại danh sách	Fetch lại /api/categories	✅
+Hiển thị trên sidebar	CategoryWidget nhận dữ liệu	✅
+
+
+
+---
+
+⚙️ IX. Khuyến nghị kỹ thuật
+
+Hạng mục	Gợi ý cải thiện
+
+Validation	Dùng Zod để kiểm tra đầu vào (name không rỗng, không trùng)
+Slug tự động	Tạo slug từ tên chuyên mục (slugify)
+Hiển thị số bài viết	Dùng Prisma include: { _count: { select: { articles: true }}}
+UI	Thêm nút sửa / xóa ngay trong bảng
+Bảo mật	Giới hạn quyền thao tác (chỉ Admin)
+
+
+
+---
+
+✅ X. Kết luận
+
+> Module “Quản lý chuyên mục” hoạt động đúng, dữ liệu liên kết chặt chẽ với bài viết.
+Tuy nhiên, lỗi không hiển thị form tạo chuyên mục là do thiếu 'use client' hoặc điều kiện hiển thị JSX sai (showForm chưa bật).
+
+
+
+Sau khi khắc phục, hệ thống:
+
+Tạo / sửa / xóa chuyên mục đúng chức năng.
+
+Cập nhật real-time sang frontend (sidebar + trang chuyên mục). Sắp xếp menu sidebar cho khoa học , có icon 3d, màu sắc phù hợp

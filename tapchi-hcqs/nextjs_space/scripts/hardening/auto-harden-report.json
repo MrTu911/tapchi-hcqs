@@ -1,0 +1,1819 @@
+{
+  "timestamp": "2025-12-28T07:15:36.528Z",
+  "dryRun": false,
+  "summary": {
+    "total": 176,
+    "modified": 174,
+    "errors": 0,
+    "unchanged": 2
+  },
+  "results": [
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/categories/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/comments/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/dashboard-stats/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/deadlines/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PATCH",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/featured-articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/monitor/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PATCH",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/role-escalation/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/approve/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/pending/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/stats/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/admin/users/toggle-active/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/analytics/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/approve/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/assign-issue/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/citation/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/pdf/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/[id]/versions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/audit-logs/stats/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/send-otp/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/2fa/verify-otp/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/[...nextauth]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/csrf/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/forgot-password/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/login/route.ts",
+      "modified": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/logout/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/me/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/callback/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/orcid/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/refresh/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/register/route.ts",
+      "modified": false,
+      "changes": [],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/reset-password/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/signin/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/auth/verify-email/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/autosave/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/author/statistics/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/analytics/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/image-url/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/bulk-update-order/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/reorder/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/banners/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/clear/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cache/revalidate/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/alias/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/by-slug/[slug]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/categories/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/conversations/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/chat/messages/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for DELETE",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/comments/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/history/[articleId]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/copyediting/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/check-overdue/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/reminders/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/cron/run-jobs/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/csrf/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/dashboard/summary/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/deadlines/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/excel/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/export/pdf/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PUT",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/featured-articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/download/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/files/upload/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/health/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/homepage-sections/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/images/proxy/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/download/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/add-articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/latest/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/publish/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/issues/upload/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/keywords/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/media/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/messages/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metadata/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/metrics/article/[articleId]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/bulk-update/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/navigation/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/slug-backup/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/news/upload-image/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/notifications/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/key-backup/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/reorder/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/page-blocks/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/role/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/permissions/seed/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/plagiarism/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/publish/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/production/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public/articles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/public-pages/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/push/subscribe/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/[id]/expertise/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PUT",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/match/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/profile/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviewers/suggest/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/complete/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/reviews/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/advanced/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/filter/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/search/semantic/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PATCH",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/alerts/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for DELETE",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/api-tokens/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/security/retention/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/sessions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/signup/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/[key]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/site-settings/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/dashboard/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/editor-performance/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/overview/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/review-monthly/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/reviewers-advanced/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/submissions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/system/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/trends/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/user-roles/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/users/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/statistics/workflow/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/assign-reviewers/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/comments/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/decision/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/[id]/status/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/revise/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/submissions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/ui-config/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/reset-password/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PUT",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/export/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/password/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PUT",
+        "Added logging for PUT",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/profile/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for PUT",
+        "Added logging for PUT",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/search/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/users/sessions/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/videos/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/[id]/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/volumes/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/auto-assign/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for POST",
+        "Added logging for POST",
+        "Replaced error handling"
+      ],
+      "errors": []
+    },
+    {
+      "filePath": "/home/ubuntu/tapchi-hcqs/nextjs_space/app/api/workflow/timeline/route.ts",
+      "modified": true,
+      "changes": [
+        "Added imports: handleApiError, logger",
+        "Added JSDoc for GET",
+        "Added logging for GET",
+        "Replaced error handling"
+      ],
+      "errors": []
+    }
+  ]
+}

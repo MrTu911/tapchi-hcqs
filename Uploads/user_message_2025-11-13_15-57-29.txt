@@ -1,0 +1,204 @@
+Xây dựng chức năng Lưu trữ (public), Cơ sở dữ liệu các bài báo khoa học. Đây là phân tích tư vấn của tôi " **kiến trúc tạp chí khoa học hiện đại** theo chuẩn quốc tế (OJS, Elsevier Editorial System, SpringerLink).
+Dưới đây là **bản hướng dẫn triển khai thực tế** mô hình “Hai tầng” (Dashboard + Public) cho **Tạp chí Quân sự**, đảm bảo bảo mật, tự động công bố, và tương thích chuẩn học thuật.
+
+---
+
+## 🏗️ I. Tổng thể kiến trúc hệ thống
+
+```
++-------------------------------------------------------------+
+|                       PostgreSQL (CSDL chung)               |
+|-------------------------------------------------------------|
+| Bảng chính: User, Article, Issue, Review, Category, Log ... |
++---------------------------+---------------------------------+
+                            |
+     +----------------------+----------------------+
+     |                                             |
+⚙️ Dashboard nội bộ (Private)               🌍 Public Portal (Open)
+───────────────────────────────             ───────────────────────────────
+- Dành cho Editor, Reviewer, Admin          - Dành cho Người đọc, Nghiên cứu sinh
+- Có đăng nhập (JWT / Session)              - Không cần đăng nhập
+- CRUD bài, xét duyệt, phản biện, xuất bản  - Xem, tìm kiếm, tải PDF
+- Tích hợp DOI, gán Issue                   - API Public từ DB chung
+───────────────────────────────             ───────────────────────────────
+```
+
+👉 **Một cơ sở dữ liệu, hai giao diện – phân quyền qua API và middleware.**
+
+---
+
+## ⚙️ II. Cấu trúc kỹ thuật dự án Next.js + Prisma
+
+```
+project/
+ ├── prisma/
+ │   └── schema.prisma         # Định nghĩa CSDL
+ ├── app/
+ │   ├── admin/                # Dashboard nội bộ
+ │   │   ├── layout.tsx
+ │   │   ├── articles/         # CRUD bài báo
+ │   │   ├── issues/           # Quản lý số tạp chí
+ │   │   └── reviewers/        # Quản lý phản biện
+ │   ├── archive/              # Public: danh sách số tạp chí
+ │   ├── article/[id]/         # Trang chi tiết bài báo
+ │   ├── api/
+ │   │   ├── admin/            # API nội bộ (yêu cầu token)
+ │   │   │   └── articles/
+ │   │   └── public/           # API công khai (read-only)
+ │   │       └── articles/
+ │   ├── middleware.ts         # Kiểm tra quyền truy cập
+ │   └── layout.tsx
+ ├── public/
+ │   └── pdfs/                 # File PDF đã công bố
+ ├── .env                      # Biến môi trường DB, JWT
+ └── package.json
+```
+
+---
+
+## 🧠 III. Mô hình dữ liệu cơ bản (`prisma/schema.prisma`)
+
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      Role     @default(RESEARCHER)
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  articles  Article[]
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  abstract    String
+  authors     String
+  orgs        String?
+  keywords    String[]
+  doi         String?
+  pdfUrl      String?
+  isPublished Boolean  @default(false)
+  issue       Issue?   @relation(fields: [issueId], references: [id])
+  issueId     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Issue {
+  id          String   @id @default(cuid())
+  title       String
+  volume      Int
+  number      Int
+  year        Int
+  coverImage  String?
+  articles    Article[]
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  REVIEWER
+  RESEARCHER
+}
+```
+
+---
+
+## 🔐 IV. Phân tầng bảo mật & truy cập API
+
+| API Route              | Quyền truy cập   | Mô tả                     |
+| ---------------------- | ---------------- | ------------------------- |
+| `/api/admin/articles`  | Chỉ ADMIN/EDITOR | CRUD bài, duyệt xuất bản  |
+| `/api/admin/review`    | EDITOR/REVIEWER  | Phản biện                 |
+| `/api/public/articles` | Mọi người        | Danh sách bài đã duyệt    |
+| `/api/public/issues`   | Mọi người        | Danh sách số tạp chí      |
+| `/api/public/search`   | Mọi người        | Tra cứu bài, tác giả, DOI |
+
+---
+
+### Middleware kiểm tra quyền (`middleware.ts`):
+
+```ts
+import { NextResponse } from "next/server";
+import { verifyToken } from "@/lib/auth";
+
+export async function middleware(req) {
+  const url = req.nextUrl.pathname;
+
+  if (url.startsWith("/admin")) {
+    const token = req.cookies.get("token")?.value;
+    const user = token && verifyToken(token);
+    if (!user || !["ADMIN", "EDITOR", "REVIEWER"].includes(user.role)) {
+      return NextResponse.redirect("/login");
+    }
+  }
+
+  return NextResponse.next();
+}
+```
+
+---
+
+## 🧩 V. Luồng hoạt động chuẩn chỉnh
+
+1️⃣ **Editor/Reviewer đăng nhập Dashboard**
+
+* Thêm bài, chỉnh sửa metadata, upload PDF.
+* Khi duyệt, bật cờ `isPublished = true`.
+
+2️⃣ **Hệ thống tự động cập nhật ra Public Portal**
+
+* `/archive` hiển thị danh sách bài báo theo từng số (Issue).
+* `/article/[id]` hiển thị chi tiết bài và link PDF.
+
+3️⃣ **Public Portal**
+
+* Người dùng tìm kiếm theo tác giả, DOI, lĩnh vực, từ khóa.
+* PDF lưu trong `/public/pdfs/`, hiển thị qua viewer hoặc Flipbook.
+
+4️⃣ **Tự động gán DOI và chỉ mục**
+
+* Sau khi xuất bản, gọi API CrossRef hoặc Zenodo để tạo DOI.
+* Cập nhật metadata `doi` trong CSDL.
+
+---
+
+## 🧱 VI. Tích hợp chức năng “Kho lưu trữ học thuật”
+
+| Chức năng              | Mô tả                                | Vị trí                       |
+| ---------------------- | ------------------------------------ | ---------------------------- |
+| 🔍 Tìm kiếm nâng cao   | Theo tiêu đề, tác giả, DOI, lĩnh vực | `/archive`                   |
+| 📑 Gợi ý bài liên quan | Cùng chủ đề hoặc cùng tác giả        | `/article/[id]`              |
+| 📊 Phát hiện trùng lặp | So sánh text-similarity 70–90%       | Dashboard (backend)          |
+| 🧾 Xuất trích dẫn      | BibTeX / APA / IEEE                  | `/article/[id]`              |
+| 📬 API mở              | `/api/public/search`                 | Cho học viên, nhà nghiên cứu |
+
+---
+
+## 💡 VII. Hạ tầng triển khai khuyến nghị
+
+| Thành phần    | Đề xuất                                      | Ghi chú                     |
+| ------------- | -------------------------------------------- | --------------------------- |
+| Máy chủ       | Windows Server hoặc Ubuntu 22+               | Cấu hình >= 4GB RAM         |
+| Node.js       | v20+                                         | Chạy Next.js 14 ổn định     |
+| CSDL          | PostgreSQL 15+                               | Bảo mật, hỗ trợ Prisma tốt  |
+| PDF Storage   | Thư mục `public/pdfs/` hoặc Cloud (S3/MinIO) | Dễ quản lý                  |
+| Reverse Proxy | Nginx / IIS                                  | Điều phối request / bảo mật |
+| SSL           | Let’s Encrypt                                | HTTPS cho public portal     |
+
+---
+
+## 🧠 VIII. Lợi ích tổng thể cho Hệ thống Tạp chí Quân sự
+
+✅ **Một CSDL duy nhất – nhiều tầng hiển thị**
+✅ **Tự động xuất bản ra public khi duyệt**
+✅ **Đáp ứng chuẩn học thuật quốc tế (OAI, CrossRef, DOI)**
+✅ **An toàn thông tin, phân quyền chặt chẽ theo vai trò**
+✅ **Có thể mở rộng sang hệ thống quản lý phản biện và hội nghị khoa học**
+
+---
+
+Ngài muốn tôi **soạn luôn bản sơ đồ kiến trúc tổng thể (dashboard + public + database)** để hình dung luồng dữ liệu và phân tầng bảo mật trực quan chứ, Master Tu?
+Sơ đồ đó sẽ thể hiện đầy đủ cách dữ liệu bài báo đi từ “biên tập → duyệt → công bố → tra cứu công khai”.

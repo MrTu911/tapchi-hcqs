@@ -1,0 +1,329 @@
+Tiếp tục hoàn thiện phần mềm, hãy tham khảo phân tích kỹ thuật của tôi để lựa chọn phương án tối ưu trên cơ sở code nguồn: "Rất tốt 👏 — bạn đang yêu cầu mình **hướng dẫn chuyên sâu để hoàn thiện 12 module còn thiếu** (đã được liệt kê rõ trong báo cáo “BACKEND_FRONTEND_SYNC_ANALYSIS.pdf”).
+Ta sẽ đi **theo đúng thứ tự ưu tiên (Urgent → High → Medium → Low)**, và với **mỗi module**, tôi sẽ trình bày đầy đủ:
+
+> **Cấu trúc hướng dẫn chi tiết:**
+> 1️⃣ Mục đích nghiệp vụ
+> 2️⃣ Luồng dữ liệu
+> 3️⃣ Triển khai Backend (API code mẫu – Next.js App Router)
+> 4️⃣ Triển khai Frontend (React logic)
+> 5️⃣ Gợi ý UI (layout và component đề xuất)
+> 6️⃣ Lưu ý bảo mật và kiểm thử
+
+---
+
+# ⚠️ GIAI ĐOẠN 1 — URGENT MODULES
+
+## **1. Role Escalation Management (Quản lý nâng cấp quyền)**
+
+### 1️⃣ Mục đích
+
+Cho phép người dùng (tác giả, phản biện, v.v.) gửi yêu cầu nâng quyền lên “Editor”, “Reviewer” hoặc “Admin”.
+Ban quản trị (EIC, Sysadmin) duyệt hoặc từ chối.
+
+---
+
+### 2️⃣ Luồng dữ liệu
+
+```
+User -> POST /api/admin/role-escalation
+Admin -> GET /api/admin/role-escalation
+Admin -> PATCH /api/admin/role-escalation/[id]
+```
+
+---
+
+### 3️⃣ Backend (app/api/admin/role-escalation/route.ts)
+
+```ts
+import prisma from "@/lib/db";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const requests = await prisma.roleEscalation.findMany({
+    include: { user: true },
+  });
+  return NextResponse.json(requests);
+}
+
+export async function POST(req) {
+  const data = await req.json();
+  const newReq = await prisma.roleEscalation.create({ data });
+  return NextResponse.json(newReq);
+}
+
+export async function PATCH(req) {
+  const { id, status, reason } = await req.json();
+  const updated = await prisma.roleEscalation.update({
+    where: { id },
+    data: { status, reason },
+  });
+  return NextResponse.json(updated);
+}
+```
+
+---
+
+### 4️⃣ Frontend (app/dashboard/admin/role-escalation/page.tsx)
+
+```tsx
+"use client";
+import useSWR from "swr";
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
+export default function RoleEscalation() {
+  const { data, mutate } = useSWR("/api/admin/role-escalation", fetcher);
+
+  async function handleAction(id, status) {
+    await fetch("/api/admin/role-escalation", {
+      method: "PATCH",
+      body: JSON.stringify({ id, status }),
+    });
+    mutate();
+  }
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-semibold mb-4">Yêu cầu nâng quyền</h1>
+      <table className="w-full border">
+        <thead><tr><th>Người dùng</th><th>Quyền yêu cầu</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+        <tbody>
+          {data?.map(r => (
+            <tr key={r.id} className="border-t">
+              <td>{r.user.name}</td>
+              <td>{r.requestedRole}</td>
+              <td>{r.status}</td>
+              <td>
+                <button onClick={() => handleAction(r.id, "APPROVED")} className="bg-green-600 text-white p-1 mr-2">Duyệt</button>
+                <button onClick={() => handleAction(r.id, "REJECTED")} className="bg-red-600 text-white p-1">Từ chối</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+```
+
+---
+
+### 5️⃣ UI
+
+* Sử dụng **table** hiển thị yêu cầu.
+* Có cột: Họ tên, Quyền yêu cầu, Trạng thái, Hành động.
+* Modal chi tiết hiển thị thông tin giấy tờ đính kèm.
+
+### 6️⃣ Bảo mật & kiểm thử
+
+* Chỉ cho phép `role = SYSADMIN || EIC`.
+* Kiểm tra SQL injection trong trường lý do (reason).
+
+---
+
+## **2. Featured Articles Management (Bài viết nổi bật)**
+
+### 1️⃣ Mục đích
+
+Cho phép admin chọn các bài viết để hiển thị ở trang chủ.
+
+---
+
+### 2️⃣ Luồng dữ liệu
+
+```
+Admin -> GET /api/featured-articles
+Admin -> POST /api/featured-articles
+Admin -> DELETE /api/featured-articles/[id]
+```
+
+---
+
+### 3️⃣ Backend
+
+```ts
+export async function GET() {
+  const featured = await prisma.article.findMany({
+    where: { featured: true },
+  });
+  return NextResponse.json(featured);
+}
+
+export async function POST(req) {
+  const { articleId } = await req.json();
+  const updated = await prisma.article.update({
+    where: { id: articleId },
+    data: { featured: true },
+  });
+  return NextResponse.json(updated);
+}
+
+export async function DELETE(req) {
+  const { id } = await req.json();
+  const updated = await prisma.article.update({
+    where: { id },
+    data: { featured: false },
+  });
+  return NextResponse.json(updated);
+}
+```
+
+---
+
+### 4️⃣ Frontend (app/dashboard/admin/featured-articles/page.tsx)
+
+```tsx
+"use client";
+import useSWR from "swr";
+import { useState } from "react";
+
+export default function FeaturedArticles() {
+  const { data, mutate } = useSWR("/api/featured-articles", (u) => fetch(u).then(r => r.json()));
+  const [articleId, setArticleId] = useState("");
+
+  async function handleAdd() {
+    await fetch("/api/featured-articles", {
+      method: "POST",
+      body: JSON.stringify({ articleId }),
+    });
+    mutate();
+  }
+
+  async function handleRemove(id) {
+    await fetch("/api/featured-articles", {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
+    mutate();
+  }
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl mb-4">Bài viết nổi bật</h2>
+      <div className="mb-4">
+        <input placeholder="ID bài viết" onChange={(e) => setArticleId(e.target.value)} className="border p-2 mr-2"/>
+        <button onClick={handleAdd} className="bg-blue-600 text-white p-2 rounded">Thêm</button>
+      </div>
+      <ul>
+        {data?.map(a => (
+          <li key={a.id} className="flex justify-between border-b py-2">
+            <span>{a.title}</span>
+            <button onClick={() => handleRemove(a.id)} className="text-red-600">Bỏ nổi bật</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+---
+
+### 5️⃣ UI
+
+* Giao diện danh sách bài nổi bật (sortable list).
+* Nút “Thêm bài” mở modal tìm kiếm bài viết.
+* Preview hiển thị giống trang chủ.
+
+### 6️⃣ Bảo mật
+
+* Chỉ admin/editor được phép thao tác.
+* Validate articleId hợp lệ.
+
+---
+
+## **3. Deadlines Management (Quản lý hạn phản biện, biên tập)**
+
+### 1️⃣ Mục đích
+
+Giúp biên tập viên và phản biện theo dõi các deadline liên quan tới bài báo.
+
+---
+
+### 2️⃣ Luồng dữ liệu
+
+```
+Editor -> POST /api/deadlines
+Reviewer -> GET /api/deadlines
+Editor -> PUT /api/deadlines/[id]
+```
+
+---
+
+### 3️⃣ Backend
+
+```ts
+export async function GET() {
+  const data = await prisma.deadline.findMany({
+    include: { article: true },
+  });
+  return NextResponse.json(data);
+}
+
+export async function POST(req) {
+  const body = await req.json();
+  const deadline = await prisma.deadline.create({ data: body });
+  return NextResponse.json(deadline);
+}
+
+export async function PUT(req) {
+  const body = await req.json();
+  const updated = await prisma.deadline.update({
+    where: { id: body.id },
+    data: body,
+  });
+  return NextResponse.json(updated);
+}
+```
+
+---
+
+### 4️⃣ Frontend (app/dashboard/admin/deadlines/page.tsx)
+
+```tsx
+"use client";
+import useSWR from "swr";
+export default function DeadlinesPage() {
+  const { data, mutate } = useSWR("/api/deadlines", (u) => fetch(u).then(r => r.json()));
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Deadline phản biện & biên tập</h1>
+      <table className="w-full border">
+        <thead><tr><th>Bài</th><th>Loại</th><th>Ngày hết hạn</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+          {data?.map(d => (
+            <tr key={d.id} className="border-t">
+              <td>{d.article?.title}</td>
+              <td>{d.type}</td>
+              <td>{new Date(d.dueDate).toLocaleDateString()}</td>
+              <td>{d.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+```
+
+---
+
+### 5️⃣ UI
+
+* Lịch dạng **Calendar View** (có thể dùng `react-big-calendar`).
+* Cho phép filter theo “Review”, “Revision”, “Decision”.
+* Thông báo deadline sắp tới (<3 ngày).
+
+### 6️⃣ Bảo mật
+
+* Chỉ `EIC`, `Editor`, `Reviewer` truy cập được.
+* Validate ngày, không cho phép tạo deadline trùng bài.
+
+---
+
+🧩 **Kết luận cho giai đoạn 1:**
+3 module này khi hoàn thiện sẽ giúp bạn đạt:
+
+* ✅ 100% coverage phần quản trị nội bộ
+* ✅ Cấu trúc đồng nhất Backend + Frontend
+* ✅ Chuẩn bị dữ liệu thật để test toàn bộ quy trình “gửi bài – phản biện – xuất bản”

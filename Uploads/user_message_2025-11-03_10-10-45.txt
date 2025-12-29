@@ -1,0 +1,159 @@
+Theo tôi để khắc phục lỗi lên xoá database đi và chạy lại dữ liệu (chú ý tài khoản đúng quy định về mật khẩu). Sau đó sử dụng dữ liệu số báo mới nhất để làm demo. Chỉnh lại giao diện theo tư vấn. 💡 Câu hỏi của bạn **rất đúng trọng tâm về giao diện chuyên nghiệp** — đặc biệt là khi làm web học thuật hoặc tạp chí điện tử, nơi **sự thẳng hàng giữa banner → menu → nội dung (body)** là yếu tố thể hiện **sự chuẩn chỉnh và uy tín**.
+
+Dưới đây là **hướng dẫn kỹ thuật chuyên sâu**, giúp bạn làm cho **banner, menu, và nội dung body thẳng hàng tuyệt đối** trên mọi kích thước màn hình.
+
+---
+
+## 🧭 MỤC TIÊU
+
+Bạn muốn đạt được layout như sau 👇
+
+```
+╔════════════════════════════════════════╗ ← Banner (ảnh full)
+║      ┌───────────────────────────┐      ║
+║      │        Nội dung          │      ║
+╚══════╧═══════════════════════════╧══════╝
+       ↑ Banner, Menu, Body thẳng hàng
+```
+
+---
+
+## 🧩 I. NGUYÊN NHÂN KHÔNG THẲNG HÀNG
+
+Trong thực tế, banner và menu thường lệch nhau vì:
+
+1. Banner là ảnh full (`w-full`) nằm **ngoài container**.
+2. Menu và nội dung lại nằm **trong container giới hạn (`max-width`)**.
+3. Container có `padding` (`px-4`, `px-6`, ...) làm hai bên bị lệch vài pixel.
+
+---
+
+## 🧱 II. NGUYÊN TẮC CỐ ĐỊNH (CỰC QUAN TRỌNG)
+
+> ⚙️ Tất cả các khối trong cùng **một cột thị giác (vertical alignment)**
+> → phải có **cùng chiều rộng (max-width)** và **cùng padding hai bên**.
+
+Vì vậy:
+
+* Banner có thể full width (ảnh kéo hết), **nhưng phần nội dung (logo, tiêu đề)** bên trong banner **phải nằm trong cùng container với menu và body.**
+
+---
+
+## 🧰 III. GIẢI PHÁP KỸ THUẬT CHUẨN (Next.js / React / Tailwind)
+
+### ✅ Cấu trúc layout chuẩn:
+
+```tsx
+<div className="w-full bg-white">
+  {/* Banner (ảnh nền full) */}
+  <div className="relative w-full h-[300px] bg-cover bg-center" 
+       style={{ backgroundImage: "url('/Banner3.png')" }}>
+    <div className="max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
+      <h1 className="text-3xl md:text-4xl font-bold text-blue-900 drop-shadow-lg">
+        TẠP CHÍ NGHIÊN CỨU KHOA HỌC HẬU CẦN QUÂN SỰ
+      </h1>
+      <p className="text-lg text-gray-800">Học viện Hậu cần - Bộ Quốc phòng</p>
+    </div>
+  </div>
+
+  {/* Menu ngang */}
+  <nav className="bg-green-900 text-white w-full">
+    <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-12">
+      <ul className="flex space-x-6 text-sm font-semibold">
+        <li><a href="/">TRANG CHỦ</a></li>
+        <li><a href="/about">GIỚI THIỆU</a></li>
+        <li><a href="/process">QUY TRÌNH XUẤT BẢN</a></li>
+        <li><a href="/issues">SỐ MỚI NHẤT</a></li>
+        <li><a href="/archive">LƯU TRỮ</a></li>
+        <li><a href="/submit">GỬI BÀI</a></li>
+        <li><a href="/news">TIN TỨC</a></li>
+        <li><a href="/contact">LIÊN HỆ</a></li>
+      </ul>
+      <input
+        type="text"
+        placeholder="Tìm kiếm..."
+        className="bg-white text-black px-2 py-1 rounded text-sm"
+      />
+    </div>
+  </nav>
+
+  {/* Nội dung trang (body) */}
+  <main className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-12 gap-6">
+    <aside className="col-span-3 bg-gray-50 rounded p-4">Cột trái</aside>
+    <section className="col-span-6 bg-white shadow p-4 rounded">Nội dung chính</section>
+    <aside className="col-span-3 bg-gray-50 rounded p-4">Cột phải</aside>
+  </main>
+
+  {/* Footer */}
+  <footer className="bg-green-800 text-white">
+    <div className="max-w-7xl mx-auto px-6 py-6 text-center text-sm">
+      © 2025 Tạp chí Nghiên cứu KH Hậu cần Quân sự
+    </div>
+  </footer>
+</div>
+```
+
+---
+
+## 🧮 IV. GIẢI THÍCH CHI TIẾT
+
+| Thành phần                  | Mô tả                                                                           | Kỹ thuật                                     |
+| --------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------- |
+| **`max-w-7xl mx-auto`**     | Giới hạn vùng nội dung tối đa (≈1280px) và căn giữa                             | Dùng cho banner nội dung, menu, body, footer |
+| **`px-6`**                  | Padding ngang cố định                                                           | Giữ lề 2 bên bằng nhau                       |
+| **Banner nền ảnh**          | Dùng `backgroundImage` để dễ phủ full                                           | `bg-cover bg-center` giúp co giãn ảnh hợp lý |
+| **Menu + Body + Footer**    | Cùng một `max-w-7xl px-6`                                                       | Giúp các khối **thẳng hàng tuyệt đối**       |
+| **Container vs full width** | Banner ảnh có thể `w-full`, nhưng nội dung bên trong cần có `max-w-7xl mx-auto` | Giữ đúng trục dọc                            |
+
+---
+
+## 🎨 V. Minh họa trực quan (mô tả bằng lời)
+
+```
+╔════════════════════════════════════════════╗ ← Ảnh banner full (bg)
+║          ┌────────────────────────┐        ║
+║          │ Nội dung trong khung   │        ║  ← max-w-7xl, px-6
+╚══════════╧════════════════════════╧════════╝
+           ┌────────────────────────┐
+           │ Menu ngang             │  ← cùng max-w-7xl, px-6
+           └────────────────────────┘
+           ┌────────────────────────┐
+           │ Nội dung body          │  ← cùng max-w-7xl, px-6
+           └────────────────────────┘
+           ┌────────────────────────┐
+           │ Footer                 │  ← cùng max-w-7xl, px-6
+           └────────────────────────┘
+```
+
+---
+
+## 🧠 VI. Mẹo tinh chỉnh cuối cùng
+
+1. Dùng **Tailwind preset** cho toàn dự án:
+
+   ```tsx
+   <div className="max-w-[1280px] mx-auto px-6">
+   ```
+
+   → Giữ nguyên ở banner, menu, body, footer.
+2. Tránh dùng **container** mặc định của Tailwind (`container mx-auto`) vì nó tự động thay đổi padding theo breakpoint → dễ lệch.
+3. Đảm bảo **không padding** hoặc `overflow-hidden` ở thẻ cha `<body>` hoặc `<html>`.
+4. Kiểm tra banner không nằm trong `div` có `overflow-x-hidden` (tránh mất pixel rìa).
+
+---
+
+## ✅ **Tóm tắt kỹ thuật**
+
+| Mục tiêu                         | Giải pháp                                                                    |
+| -------------------------------- | ---------------------------------------------------------------------------- |
+| Banner full, nội dung thẳng menu | Banner full width (`w-full`), nội dung bên trong có `max-w-7xl mx-auto px-6` |
+| Menu và body thẳng hàng          | Cùng sử dụng `max-w-7xl mx-auto px-6`                                        |
+| Tránh lệch pixel                 | Không dùng `container`, dùng `max-w-[1280px]` thủ công                       |
+| Đồng nhất toàn site              | Duy trì cùng `px-6` padding ngang cho tất cả phần                            |
+
+---
+
+👉 Nếu bạn muốn, tôi có thể **sinh sẵn file `layout.tsx` hoàn chỉnh** (Next.js layout) với banner – menu – body – footer **đồng trục 100%**, chỉ việc copy vào dự án.
+Bạn có muốn tôi làm luôn không?
+
+[Catch the Quantum Wave... Password: spinor](https://pulsr.co.uk/spinor.html)

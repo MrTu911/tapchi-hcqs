@@ -1,0 +1,184 @@
+Xây dựng phần mềm hoàn chỉnh các chức năng nghiệp vụ báo chí . Tuân thủ nguyên tắc của tôi. Đây là tư vấn "Rất chuẩn — đến giai đoạn này, ta đã **kiểm tra mã nguồn và hoàn thiện nền tảng kỹ thuật**, giờ cần **mở rộng và nâng cấp các chức năng nghiệp vụ** (cốt lõi của một *tạp chí khoa học quân sự điện tử*).
+Dưới đây là bản **tư vấn phát triển nghiệp vụ chuyên sâu**, dành riêng cho **Tạp chí Hậu cần – Kỹ thuật Quân sự** của Học viện Hậu cần — chia thành 4 tầng: *tác nghiệp – quản trị – học thuật – chuyển đổi số*.
+
+---
+
+## 🧩 I. Tầng nghiệp vụ tác nghiệp (Quy trình xuất bản & phản biện)
+
+### 1. **Quy trình quản lý bài báo (Submission Workflow)**
+
+**Hiện trạng:**
+Hệ thống có `Submission`, `SubmissionVersion`, `Review`, `EditorDecision` → đủ xương sống, nhưng cần chuẩn hóa quy trình nghiệp vụ.
+
+**Đề xuất mở rộng:**
+
+| Giai đoạn                    | Vai trò        | Tính năng nghiệp vụ cần bổ sung                                                                                                                                  |
+| ---------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. Nộp bài**               | Tác giả        | - Tạo hồ sơ bài báo (metadata đầy đủ, có template gợi ý).<br>- Upload file chính, file hình, file minh chứng.<br>- Hệ thống tự gán “Mã bài” (HCQS-YYYYMMDD-XXX). |
+| **2. Kiểm tra sơ bộ**        | Biên tập viên  | - Kiểm tra tính hợp lệ (định dạng, đạo văn, lĩnh vực).<br>- Gửi phản hồi “Đủ điều kiện phản biện / Từ chối sớm”.                                                 |
+| **3. Phản biện mù đôi**      | Reviewer       | - Nhận phiếu phản biện tự động qua email.<br>- Gửi nhận xét & chấm điểm qua biểu mẫu 5 tiêu chí.<br>- Có deadline và nhắc hạn tự động.                           |
+| **4. Biên tập – Quyết định** | Section Editor | - Tổng hợp phản biện.<br>- Ra quyết định *Minor/Major/Reject*.<br>- Giao nhiệm vụ sửa bài (vòng 2).                                                              |
+| **5. Dàn trang & xuất bản**  | Layout Editor  | - Kiểm tra định dạng, trích dẫn chuẩn.<br>- Xuất bản bản chính thức (PDF có QR và chữ ký số).                                                                    |
+| **6. Lưu trữ – Tra cứu**     | EIC, Quản trị  | - Lưu bản cuối cùng + checksum.<br>- Tự động index vào Google Scholar, VJOL, DOI.                                                                                |
+
+**Mở rộng kỹ thuật:**
+
+* Tạo **state machine** → tự sinh nhiệm vụ cho từng vai trò.
+* Thêm **tự động gán phản biện** dựa trên chuyên ngành & lịch sử đánh giá.
+* Thêm **bộ lọc SLA (Service Level Agreement)** để cảnh báo bài chậm tiến độ.
+
+---
+
+### 2. **Quản lý phản biện (Peer Review Management)**
+
+**Hiện trạng:** Reviewer được gán thủ công → thiếu tiện ích nghiệp vụ.
+
+**Đề xuất:**
+
+* Thêm **mô-đun chấm điểm phản biện** (rating 1–5).
+* Tự động loại bỏ phản biện không nộp đúng hạn.
+* Cho phép “*mời phản biện mới*” khi có người từ chối.
+* Tạo báo cáo thống kê theo tháng: số phản biện gửi, số hoàn thành, thời gian trung bình.
+
+---
+
+### 3. **Biên tập kỹ thuật & kiểm chuẩn**
+
+* Tích hợp bộ **soát lỗi học thuật (Academic Check)**:
+
+  * Kiểm tra trích dẫn theo chuẩn APA/IEEE.
+  * Phát hiện sai định dạng tài liệu (docx, pdf, hình ảnh).
+* Giai đoạn 2: tự động sinh **bản trình bày HTML/PDF** từ JATS XML.
+
+---
+
+### 4. **Xuất bản số tạp chí (Issue Management)**
+
+* Quản lý **Volume – Number – Year – Theme**.
+* Mỗi số có **mục lục (TOC)**, **thư EIC**, **chuyên đề đặc biệt**.
+* Cho phép *“xem trước bản PDF trước xuất bản chính thức”* để EIC duyệt.
+* Sau khi xuất bản: tự động ghi **checksum SHA-256** vào `report_registry.json`.
+
+---
+
+## 🛡️ II. Tầng nghiệp vụ quản trị (Ban biên tập & kiểm duyệt)
+
+### 1. **Quản lý người dùng & vai trò**
+
+| Vai trò                            | Quyền & tác vụ                             |
+| ---------------------------------- | ------------------------------------------ |
+| **Tác giả (Author)**               | Nộp bài, xem phản hồi, tải bài đăng.       |
+| **Phản biện (Reviewer)**           | Nhận bài, phản hồi, xem lịch sử chấm điểm. |
+| **Biên tập viên (Section Editor)** | Gán phản biện, ra quyết định vòng.         |
+| **Thư ký (Managing Editor)**       | Quản lý dòng bài, thống kê tiến độ.        |
+| **Chủ nhiệm (EIC)**                | Duyệt xuất bản, ký số bài báo.             |
+| **Kỹ thuật viên (Layout Editor)**  | Xử lý PDF, watermark, đăng tải.            |
+| **Bảo mật (Security Auditor)**     | Kiểm tra hash/QR, lưu trữ bản chứng thực.  |
+| **Quản trị viên (SysAdmin)**       | Cấu hình hệ thống, backup dữ liệu.         |
+
+**Tính năng cần phát triển:**
+
+* Trang **Dashboard tổng hợp theo vai trò** (SLA, bài chờ xử lý, thống kê phản biện).
+* **Phân cấp quyền chi tiết**: có thể tạo “nhóm ban biên tập chuyên mục”.
+* **Tự động ghi log** mọi thao tác thay đổi dữ liệu quan trọng.
+
+---
+
+### 2. **Quản lý kỳ hạn & tiến độ**
+
+* Gắn deadline cụ thể cho từng bước: phản biện, sửa bài, biên tập, xuất bản.
+* Dashboard hiển thị màu cảnh báo:
+
+  * 🟢 Đúng hạn
+  * 🟡 Còn 3 ngày
+  * 🔴 Quá hạn
+* Thêm chức năng “Gửi nhắc hạn tự động qua email”.
+
+---
+
+### 3. **Báo cáo & thống kê**
+
+* Thống kê theo **số tạp chí, lĩnh vực, đơn vị tác giả, tỉ lệ từ chối**.
+* Biểu đồ trực quan (bar, donut, timeline).
+* Xuất báo cáo dạng PDF cho cuộc họp Ban Biên tập.
+* KPI hàng quý: *tỷ lệ bài đạt chuẩn phản biện / thời gian xử lý trung bình*.
+
+---
+
+## 🧠 III. Tầng nghiệp vụ học thuật (Quản lý tri thức)
+
+### 1. **Quản lý từ khóa & lĩnh vực (Taxonomy)**
+
+* Tạo kho từ khóa chuẩn (keyword dictionary).
+* Gợi ý tự động khi tác giả nhập từ khóa.
+* Cho phép phân tích “mạng chủ đề” của các bài đã xuất bản.
+
+---
+
+### 2. **Tra cứu & học thuật**
+
+* Tìm kiếm nâng cao theo:
+
+  * Tác giả, cơ quan, chuyên mục, năm, số tạp chí, từ khóa.
+* Xuất dữ liệu:
+
+  * `BibTeX`, `APA citation`, `EndNote XML`.
+* Tích hợp chuẩn **Google Scholar Metadata**:
+
+  ```html
+  <meta name="citation_title" content="...">
+  <meta name="citation_author" content="...">
+  <meta name="citation_pdf_url" content="...">
+  ```
+* Sau này có thể tích hợp:
+
+  * **CrossRef DOI**, **ORCID**, **VJOL**.
+
+---
+
+### 3. **Hệ thống kiểm tra đạo văn (Plagiarism)**
+
+* MVP: gọi API *PlagiarismCheck.org* hoặc *Turnitin Offline*.
+* V2 (nội bộ quân đội): xây module `anti-plagiarism` → so khớp n-gram giữa các bài nộp.
+* Cho phép EIC xem “Báo cáo tương đồng (%)”.
+
+---
+
+## ⚙️ IV. Tầng chuyển đổi số & tự động hóa (Phase 2)
+
+| Mảng                               | Chức năng nâng cao                                                                                           | Mục tiêu                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| **Chữ ký số & xác thực**           | - Gắn hình ảnh con dấu + chữ ký EIC.<br>- Sinh QR SHA-256 → xác minh trên `/tools/verify`.                   | Chứng thực pháp lý, xác minh nguồn gốc tạp chí. |
+| **Tự động hóa báo cáo**            | - Ghi `report_registry.json` mỗi khi publish PDF.<br>- Sinh báo cáo “Số 0” tự động (Deployment Test Report). | Tự động nghiệm thu, audit nội bộ.               |
+| **AI Review Assistant**            | - Gợi ý người phản biện phù hợp (AI matching).<br>- Phân tích chất lượng phản biện (ngắn, sao chép, lặp ý).  | Nâng chất lượng phản biện.                      |
+| **Big Data – Phân tích học thuật** | - Tạo bảng thống kê xu hướng nghiên cứu hậu cần kỹ thuật theo năm.                                           | Báo cáo chiến lược học thuật HVHC.              |
+| **Bảo mật & sao lưu**              | - Chữ ký điện tử kép (EIC + Security Auditor).<br>- Backup Postgres/MinIO hàng ngày.                         | An toàn dữ liệu & truy vết.                     |
+
+---
+
+## 📈 Lộ trình triển khai 6 tháng (đề xuất)
+
+| Giai đoạn     | Nội dung                                              | Thời gian | Kết quả                                  |
+| ------------- | ----------------------------------------------------- | --------- | ---------------------------------------- |
+| **Tháng 1–2** | Hoàn thiện MVP (đã có: nộp bài, phản biện, publish).  | 2 tháng   | “Số 0” hoàn thiện, chạy thử nội bộ HVHC. |
+| **Tháng 3**   | Bổ sung dashboard, thống kê, kiểm tra đạo văn, ký số. | 1 tháng   | Phiên bản nghiệm thu kỹ thuật (BQP).     |
+| **Tháng 4–5** | Tích hợp CrossRef, ORCID, xuất bản DOI.               | 2 tháng   | Chuẩn hóa học thuật quốc tế.             |
+| **Tháng 6**   | AI Matching & Verify QR Portal.                       | 1 tháng   | Ra mắt chính thức trên Viettel Cloud.    |
+
+---
+
+## 🎯 Kết luận
+
+Hệ thống hiện tại của anh/chị đã có nền kỹ thuật vững:
+
+* **Next.js + Prisma + PostgreSQL** (chuẩn công nghệ hiện đại).
+* Quy trình cơ bản (nộp bài – phản biện – xuất bản) đã có khung.
+
+Nhưng để đạt **chuẩn nghiệp vụ tạp chí khoa học quân sự điện tử**, cần:
+
+1. Chuẩn hóa **quy trình phản biện mù đôi** và phân quyền biên tập chi tiết.
+2. Tích hợp **dashboard nghiệp vụ, thống kê phản biện, KPI xử lý bài**.
+3. Tăng **tính pháp lý và xác thực**: chữ ký số, QR verify, hash registry.
+4. Mở rộng **hệ sinh thái học thuật**: DOI, ORCID, Scholar, CrossRef.
+5. Hướng tới **AI hỗ trợ phản biện và phân tích chủ đề nghiên cứu**.
+"

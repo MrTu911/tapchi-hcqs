@@ -1,0 +1,250 @@
+Rất tốt — bạn đã cung cấp **log lỗi chi tiết khi tác giả nộp bài**, điều này giúp xác định chính xác nguyên nhân.
+Dựa trên các log `/dashboard/author` và `/api/submissions`, tôi sẽ **phân tích sâu nguyên nhân**, **đưa ra biện pháp khắc phục triệt để**, **đồng thời tối ưu hệ thống cho mạng nội bộ quân đội** mà bạn đang vận hành.
+
+---
+
+## 🧩 I. Tổng hợp lỗi thực tế từ log
+
+| Nhóm                                          | Mô tả                                   | Mức độ                    |
+| --------------------------------------------- | --------------------------------------- | ------------------------- |
+| ⚠️ CSP (Cloudflare)                           | Script ngoài bị chặn bởi chính sách CSP | Không ảnh hưởng chức năng |
+| 🔴 `/api/submissions` 500                     | Lỗi khi tác giả nộp bài                 | Quan trọng                |
+| 🔴 “Có lỗi xảy ra khi tạo bài nộp”            | UI báo lỗi chung do backend 500         | Quan trọng                |
+| ⚙️ `[Messages] fetchConversations` hoạt động  | Module chat chạy bình thường            | OK                        |
+| ⚙️ `[Messages] fetchSession response: Object` | Session hoạt động đúng                  | OK                        |
+
+---
+
+## 🧠 II. Giải thích kỹ thuật lỗi `/api/submissions` (500 Internal Server Error)
+
+### 📍 Triệu chứng:
+
+* Khi tác giả bấm “Nộp bài” → xuất hiện:
+
+  ```
+  POST /api/submissions → 500 (Internal Server Error)
+  Error: Có lỗi xảy ra khi tạo bài nộp.
+  ```
+* Log không có phản hồi JSON hợp lệ → nghĩa là backend ném lỗi runtime chưa bắt.
+
+---
+
+### 🔍 Phân tích nguyên nhân có thể:
+
+#### **1️⃣ Lỗi khi tạo bản ghi Submission (Prisma)**
+
+Đường dẫn lỗi nằm trong:
+
+```
+/app/api/submissions/route.ts
+```
+
+Lệnh thường dùng:
+
+```ts
+await prisma.submission.create({
+  data: {
+    title,
+    abstract,
+    authorId,
+    fileId,
+    ...
+  },
+});
+```
+
+👉 Nếu một trường `authorId` hoặc `fileId` là `undefined`, Prisma sẽ ném lỗi `500 Internal Server Error`.
+
+**Xác nhận:**
+Lỗi `"Có lỗi xảy ra khi tạo bài nộp"` trong mã của bạn được sinh ra từ:
+
+```ts
+catch (error) {
+  console.error("Submission error:", error);
+  return new Response("Có lỗi xảy ra...", { status: 500 });
+}
+```
+
+→ Không phải lỗi mạng, mà là **lỗi logic dữ liệu**.
+
+---
+
+#### **2️⃣ Lỗi thiếu trường bắt buộc**
+
+Kiểm tra model trong `prisma/schema.prisma`:
+
+```prisma
+model Submission {
+  id          String   @id @default(uuid())
+  title       String
+  abstract    String
+  authorId    String
+  fileId      String?
+  createdAt   DateTime @default(now())
+  status      SubmissionStatus @default(DRAFT)
+}
+```
+
+Nếu frontend không gửi `authorId` (hoặc backend không lấy từ session), Prisma sẽ lỗi:
+
+```
+Invalid `prisma.submission.create()` invocation:
+Argument `authorId` is missing.
+```
+
+---
+
+#### **3️⃣ Lỗi do Upload file (file chưa được lưu hoặc không có ID)**
+
+* Nếu quá trình upload file chưa hoàn tất (S3 hoặc nội bộ `/upload/` server), backend không nhận `fileId`.
+* Hệ thống gọi `submission.create` trước khi upload kết thúc → `fileId = undefined`.
+
+---
+
+#### **4️⃣ Lỗi kết nối cơ sở dữ liệu**
+
+Nếu 503/500 xảy ra đồng thời nhiều API, có thể do **connection pool Prisma hoặc DB** bị reset.
+Trong mạng nội bộ có timeout thấp, DB disconnect sau vài phút idle.
+
+---
+
+## ⚙️ III. Cách khắc phục triệt để
+
+### ✅ 1️⃣ Sửa backend `/api/submissions/route.ts`
+
+Thêm kiểm tra dữ liệu đầu vào và session:
+
+```ts
+export async function POST(req: Request) {
+  try {
+    const session = await getSession(req);
+    if (!session?.user?.id) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    const { title, abstract, fileId } = await req.json();
+
+    if (!title || !abstract) {
+      return new Response("Thiếu thông tin bắt buộc", { status: 400 });
+    }
+
+    const submission = await prisma.submission.create({
+      data: {
+        title,
+        abstract,
+        authorId: session.user.id,
+        fileId: fileId ?? null,
+      },
+    });
+
+    return Response.json(submission);
+  } catch (err) {
+    console.error("[API_SUBMISSION_CREATE]", err);
+    return new Response("Lỗi tạo bài nộp. Kiểm tra dữ liệu hoặc kết nối DB.", { status: 500 });
+  }
+}
+```
+
+✅ **Lợi ích:**
+
+* Không còn 500 mù mờ, luôn có thông báo chi tiết.
+* Bảo đảm `authorId` lấy đúng từ session, không từ client.
+
+---
+
+### ✅ 2️⃣ Sửa frontend (trang `/dashboard/author/submission/new.tsx`)
+
+Thêm kiểm tra trước khi gửi:
+
+```ts
+if (!form.title || !form.abstract) {
+  setError("Vui lòng nhập đầy đủ tiêu đề và tóm tắt.");
+  return;
+}
+
+try {
+  const res = await fetch("/api/submissions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(form),
+  });
+
+  if (!res.ok) throw new Error(await res.text());
+  toast.success("Bài nộp đã được tạo thành công!");
+} catch (err) {
+  toast.error(err.message || "Không thể tạo bài nộp. Kiểm tra kết nối.");
+}
+```
+
+---
+
+### ✅ 3️⃣ Tối ưu cho **môi trường nội bộ**
+
+* Nếu máy chủ upload riêng biệt, hãy đảm bảo:
+
+  * Upload server mount vào app qua NFS hoặc symbolic link `/mnt/uploads/`.
+  * `fileId` thực ra là tên file / đường dẫn cục bộ, không cần dùng S3.
+
+Cấu hình `.env`:
+
+```env
+UPLOAD_STORAGE_PATH=/mnt/uploads
+DISABLE_EXTERNAL_CDN=true
+```
+
+---
+
+### ✅ 4️⃣ Thêm cơ chế kiểm tra tự động (Health Check)
+
+Tạo `/api/health`:
+
+```ts
+export async function GET() {
+  try {
+    await prisma.$queryRaw`SELECT 1;`;
+    return Response.json({ ok: true });
+  } catch {
+    return new Response("Database Unavailable", { status: 503 });
+  }
+}
+```
+
+→ Có thể chạy cron nội bộ:
+
+```bash
+curl -s http://localhost:3000/api/health || systemctl restart tapchi
+```
+
+---
+
+## 🧾 IV. Kiểm tra sau khi khắc phục
+
+| Bước | Kiểm tra                        | Kết quả mong đợi                      |
+| ---- | ------------------------------- | ------------------------------------- |
+| 1    | Gửi bài mới có đầy đủ thông tin | ✅ API trả 200, submission được tạo    |
+| 2    | Gửi thiếu tiêu đề               | ⚠️ Trả 400 “Thiếu thông tin bắt buộc” |
+| 3    | Upload file PDF                 | ✅ File lưu tại `/upload/`             |
+| 4    | Mở lại trang “Bài của tôi”      | ✅ Thấy bài mới xuất hiện ngay         |
+| 5    | Kiểm tra log                    | ✅ Không có lỗi 500                    |
+
+---
+
+## 🛡️ V. Tổng kết
+
+| Vấn đề                   | Nguyên nhân                    | Giải pháp                   |
+| ------------------------ | ------------------------------ | --------------------------- |
+| 500 khi nộp bài          | Thiếu `authorId` hoặc `fileId` | Xử lý dữ liệu trong backend |
+| Upload file chưa đồng bộ | Gửi request quá sớm            | Chờ upload hoàn tất         |
+| DB disconnect nội bộ     | Prisma idle timeout            | Dùng Prisma singleton       |
+| CSP chặn Cloudflare      | Script ngoài mạng              | Xóa hoặc disable            |
+
+---
+
+## ✅ Kết luận
+
+Giao diện tác giả hiện tại **đã tốt**, chỉ cần:
+
+1. Hoàn thiện backend `/api/submissions` để tránh lỗi dữ liệu.
+2. Gỡ script ngoài Cloudflare.
+3. Giữ ổn định kết nối DB trong môi trường nội bộ.
+4. Thêm kiểm tra đầu vào (frontend + backend).

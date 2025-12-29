@@ -1,0 +1,363 @@
+Rất tuyệt vời 💎 — bạn đang yêu cầu **tổng hợp toàn bộ báo cáo phân tích & đề xuất nâng cấp hệ thống (phiên bản hoàn thiện)**, đồng thời muốn **bổ sung thêm chức năng tìm kiếm & lọc bài viết** vào module quản lý bài báo (metadata cũ).
+
+Dưới đây là bản **🧠 BÁO CÁO PHÂN TÍCH & ĐỀ XUẤT NÂNG CẤP – TỔNG HỢP HOÀN CHỈNH**, có bổ sung tính năng “🔍 Tìm kiếm & Lọc nâng cao bài viết” cùng các đề xuất kỹ thuật cụ thể.
+
+---
+
+# 🧠 BÁO CÁO PHÂN TÍCH & ĐỀ XUẤT NÂNG CẤP
+
+### **Hệ thống Tạp chí điện tử – Học viện Hậu cần (tapchi-hcqs-3)**
+
+*(Phiên bản kỹ thuật đề xuất tháng 11/2025)*
+
+---
+
+## 🧩 01️⃣ NÂNG CẤP: “Upload ảnh bìa trực tiếp” trong **Quản lý Số Tạp chí**
+
+### 🎯 **Hiện trạng**
+
+Hiện tại module `/dashboard/issues` chỉ hỗ trợ nhập URL ảnh bìa và PDF thủ công:
+
+```tsx
+<input {...register('coverUrl')} placeholder="URL ảnh bìa" />
+```
+
+Điều này khiến người biên tập phải tự upload ảnh tĩnh và dán đường dẫn, rất bất tiện.
+
+---
+
+### 💡 **Giải pháp đề xuất**
+
+Thay thế input URL bằng **chức năng upload file ảnh trực tiếp**, lưu vào thư mục:
+
+```
+/public/uploads/issues/
+```
+
+và trả về URL tự động cập nhật vào DB.
+
+---
+
+### 🧩 **Giải pháp kỹ thuật**
+
+#### 1️⃣ API Upload file mới – `/app/api/upload/route.ts`
+
+```ts
+import { NextResponse } from 'next/server';
+import { writeFile } from 'fs/promises';
+import path from 'path';
+
+export async function POST(req: Request) {
+  const formData = await req.formData();
+  const file = formData.get('file') as File;
+  if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const uploadDir = path.join(process.cwd(), 'public/uploads/issues');
+  const filePath = path.join(uploadDir, file.name);
+  await writeFile(filePath, buffer);
+
+  const fileUrl = `/uploads/issues/${file.name}`;
+  return NextResponse.json({ success: true, url: fileUrl });
+}
+```
+
+---
+
+#### 2️⃣ Form tạo số báo (IssueForm)
+
+```tsx
+'use client';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+export default function IssueForm() {
+  const { register, handleSubmit, setValue } = useForm();
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.url) setValue('coverUrl', data.url);
+    setUploading(false);
+  };
+
+  const onSubmit = async (data) => {
+    await fetch('/api/issues', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4 bg-gray-50 rounded">
+      <input {...register('title')} placeholder="Tiêu đề số báo" className="border p-2 w-full" />
+      <input type="file" accept="image/*" onChange={handleFileUpload} className="border p-2 w-full" />
+      {uploading && <p className="text-sm text-gray-500">Đang tải ảnh...</p>}
+      <input type="hidden" {...register('coverUrl')} />
+      <button className="bg-green-700 text-white px-4 py-2 rounded">Lưu</button>
+    </form>
+  );
+}
+```
+
+✅ **Ưu điểm:**
+
+* Dễ dùng, upload ảnh ngay trong form.
+* URL tự động sinh ra và lưu.
+* Có thể áp dụng tương tự cho file PDF ruột tạp chí.
+* Dễ nâng cấp lên Cloud Storage (S3 / MinIO / GDrive).
+
+---
+
+## 🧩 02️⃣ NÂNG CẤP: Đổi tên & tái cấu trúc **“Quản lý Metadata” → “Quản lý Bài báo”**
+
+### 🧭 **Hiện trạng**
+
+Tên “Metadata” gây nhầm lẫn — thực chất module này quản lý:
+
+* Tiêu đề bài báo
+* Tác giả
+* DOI
+* Chuyên mục
+* Trạng thái phản biện / xuất bản
+
+---
+
+### 💡 **Giải pháp**
+
+#### 1️⃣ Đổi tên menu và đường dẫn
+
+```tsx
+{
+  label: 'Quản lý bài báo',
+  href: '/dashboard/articles',
+  icon: FileTextIcon,
+}
+```
+
+#### 2️⃣ Cập nhật cấu trúc thư mục
+
+```
+/app/dashboard/metadata/ → /app/dashboard/articles/
+```
+
+#### 3️⃣ Nâng cấp giao diện hiển thị
+
+Thêm bảng bài báo với badge, filter và liên kết:
+
+```tsx
+<Table>
+  <thead>
+    <tr>
+      <th>Tiêu đề</th>
+      <th>Tác giả</th>
+      <th>Chuyên mục</th>
+      <th>Số tạp chí</th>
+      <th>Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    {articles.map((a) => (
+      <tr key={a.id}>
+        <td><Link href={`/dashboard/articles/${a.id}`}>{a.title}</Link></td>
+        <td>{a.authors.join(', ')}</td>
+        <td>{a.category.name}</td>
+        <td>{a.issue?.title || '-'}</td>
+        <td><Badge variant={a.status === 'PUBLISHED' ? 'success' : 'warning'}>{a.status}</Badge></td>
+      </tr>
+    ))}
+  </tbody>
+</Table>
+```
+
+---
+
+## 🧩 03️⃣ BỔ SUNG: “🔍 Tìm kiếm & Lọc bài viết”
+
+### 🎯 **Mục tiêu**
+
+Biên tập viên cần nhanh chóng lọc và tìm bài viết theo:
+
+* Tác giả
+* Tiêu đề
+* Chuyên mục
+* Số tạp chí
+* Trạng thái phản biện
+
+---
+
+### 💡 **Giải pháp kỹ thuật**
+
+#### 1️⃣ Thêm thanh tìm kiếm & bộ lọc vào Dashboard
+
+```tsx
+'use client';
+import { useState, useEffect } from 'react';
+
+export default function ArticleList() {
+  const [articles, setArticles] = useState([]);
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [category, setCategory] = useState('');
+
+  useEffect(() => {
+    fetch(`/api/articles?search=${search}&status=${status}&category=${category}`)
+      .then((res) => res.json())
+      .then((data) => setArticles(data.data));
+  }, [search, status, category]);
+
+  return (
+    <div>
+      <div className="flex space-x-3 mb-4">
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo tiêu đề hoặc tác giả"
+          className="border p-2 flex-1"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select onChange={(e) => setStatus(e.target.value)} className="border p-2">
+          <option value="">Trạng thái</option>
+          <option value="DRAFT">Bản nháp</option>
+          <option value="REVIEW">Đang phản biện</option>
+          <option value="PUBLISHED">Đã xuất bản</option>
+        </select>
+        <select onChange={(e) => setCategory(e.target.value)} className="border p-2">
+          <option value="">Chuyên mục</option>
+          {/* Map từ API categories */}
+        </select>
+      </div>
+      {/* Render bảng bài báo */}
+    </div>
+  );
+}
+```
+
+#### 2️⃣ API hỗ trợ tìm kiếm `/api/articles`
+
+```ts
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const search = searchParams.get('search') || '';
+  const status = searchParams.get('status');
+  const category = searchParams.get('category');
+
+  const articles = await prisma.article.findMany({
+    where: {
+      AND: [
+        search
+          ? {
+              OR: [
+                { title: { contains: search, mode: 'insensitive' } },
+                { authors: { hasSome: [search] } },
+              ],
+            }
+          : {},
+        status ? { status } : {},
+        category ? { categoryId: Number(category) } : {},
+      ],
+    },
+    include: { category: true, issue: true },
+    orderBy: { updatedAt: 'desc' },
+  });
+
+  return NextResponse.json({ data: articles });
+}
+```
+
+✅ **Tính năng đạt được:**
+
+* Tìm theo từ khóa (tiêu đề / tác giả)
+* Lọc theo chuyên mục, trạng thái, số báo
+* Kết quả realtime khi thay đổi bộ lọc
+
+---
+
+## 🧩 04️⃣ NÂNG CẤP MODULE METADATA
+
+**Tự động sinh DOI, thêm Zod validation, preview trước khi lưu.**
+
+```ts
+function generateDOI(articleId: number, year: number) {
+  return `10.5567/hcqs.${year}.${articleId}`;
+}
+```
+
+Zod Schema:
+
+```ts
+import { z } from 'zod';
+export const metadataSchema = z.object({
+  title: z.string().min(5, "Tiêu đề quá ngắn"),
+  abstract: z.string().min(30),
+  keywords: z.string().optional(),
+  authors: z.string().optional(),
+  doi: z.string().optional(),
+});
+```
+
+Preview trước khi lưu:
+
+```tsx
+<Dialog>
+  <DialogTrigger>Xem trước</DialogTrigger>
+  <DialogContent>
+    <h3>{watch('title')}</h3>
+    <p><b>Tác giả:</b> {watch('authors')}</p>
+    <p><b>Từ khóa:</b> {watch('keywords')}</p>
+    <p>{watch('abstract')}</p>
+  </DialogContent>
+</Dialog>
+```
+
+---
+
+## 🧩 05️⃣ BỔ SUNG SEO JSON-LD SCHOLARLYARTICLE
+
+Trang công khai `/articles/[id]/page.tsx`
+
+```tsx
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": article.title,
+      "author": article.authors,
+      "keywords": article.keywords,
+      "datePublished": article.issue?.publishDate,
+      "identifier": article.doi,
+    }),
+  }}
+/>
+```
+
+---
+
+## 🧩 06️⃣ KẾT LUẬN & ẢNH HƯỞNG HỆ THỐNG
+
+| Chức năng               | Trước             | Sau nâng cấp                |
+| ----------------------- | ----------------- | --------------------------- |
+| Upload ảnh bìa          | Nhập URL thủ công | Upload trực tiếp (auto URL) |
+| Metadata                | Gây nhầm lẫn      | Đổi thành “Quản lý bài báo” |
+| Tìm kiếm / lọc bài viết | Không có          | Có thanh tìm kiếm + filter  |
+| DOI                     | Nhập thủ công     | Tự động sinh                |
+| Validate                | Không có          | Dùng Zod Schema             |
+| Preview metadata        | Không có          | Có modal xem trước          |
+| SEO JSON-LD             | Chưa tích hợp     | Tích hợp chuẩn học thuật    |
+
+✅ **Kết quả:**
+
+* Giao diện dashboard hiện đại hơn.
+* Nghiệp vụ biên tập chuẩn OJS (Open Journal System).
+* Hỗ trợ indexing học thuật (Google Scholar, Scopus).
+* Nâng cao trải nghiệm người dùng & quản lý nội dung.

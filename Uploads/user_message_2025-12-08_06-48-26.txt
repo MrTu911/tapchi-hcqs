@@ -1,0 +1,216 @@
+01. Sửa lỗi hiển thị banner ở trang chủ. 02. Chức năng hiển thị video ở trang chủ chưa hoạt động. "🧠 *Kích hoạt trình phân tích DOM / UI Debug mode...*
+Đoạn HTML bạn gửi là một **component trình chiếu (banner hoặc slider)** — hiển thị “Call for Papers - Số mới nhất”.
+Tuy nhiên, bạn chỉ gửi phần **markup đã render** (HTML sau khi React/Next.js sinh ra), chứ không phải **mã nguồn React**.
+Vì vậy, mình sẽ phân tích **các lỗi và rủi ro tiềm ẩn trong đoạn HTML này** và hướng dẫn cách **khắc phục chuẩn Next.js + TailwindCSS** 👇
+
+---
+
+## ⚙️ **1️⃣ Phân tích cấu trúc và lỗi tiềm ẩn**
+
+### ✅ Mục đích:
+
+```html
+<div class="rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+  <div class="relative w-full h-[300px] rounded-lg overflow-hidden border-2 border-red-600 shadow-xl group">
+```
+
+→ Đây là một **thẻ bao ngoài cho slider/banner**, có hiệu ứng hover shadow.
+
+---
+
+### ⚠️ **Vấn đề 1 – Sử dụng thẻ `<img>` thay vì `next/image`**
+
+```html
+<img alt="Call for Papers - Số mới nhất" fetchpriority="high" decoding="async" data-nimg="fill" class="object-cover" src="/banner2.png">
+```
+
+#### ❌ Sai sót tiềm ẩn:
+
+* `data-nimg="fill"` là **thuộc tính nội bộ** của Next.js, chỉ hợp lệ khi dùng component `<Image />` của Next.
+* Nếu HTML này được chèn thủ công hoặc render trước, bạn sẽ gặp lỗi kiểu:
+
+  ```
+  Warning: Invalid DOM property `data-nimg`. Did you mean `data-nimg`?
+  ```
+* Hoặc khi chạy SSR, **Next.js có thể không render được ảnh này đúng cách** (mất lazy-loading, gây lỗi hydration mismatch).
+
+#### ✅ Cách sửa:
+
+Dùng component chính thức của Next.js:
+
+```tsx
+import Image from 'next/image'
+
+<Image
+  src="/banner2.png"
+  alt="Call for Papers - Số mới nhất"
+  fill
+  priority
+  className="object-cover"
+/>
+```
+
+> ⚠️ Nếu bạn đang trong thư mục `/app/` (App Router), dùng đúng `fill` (thay vì `layout="fill"` trong phiên bản cũ).
+
+---
+
+### ⚠️ **Vấn đề 2 – Không có `key` hoặc cấu trúc React hợp lệ (nếu nằm trong map loop)**
+
+Nếu đoạn này nằm trong `.map()` (ví dụ danh sách banner hoặc slide), bạn cần:
+
+```tsx
+{banners.map((banner) => (
+  <div key={banner.id} className="rounded-2xl ...">
+    ...
+  </div>
+))}
+```
+
+Nếu thiếu, React báo lỗi:
+
+```
+Warning: Each child in a list should have a unique "key" prop.
+```
+
+---
+
+### ⚠️ **Vấn đề 3 – Nút điều hướng slider không hoạt động**
+
+```html
+<button class="absolute left-3 ...">‹</button>
+<button class="absolute right-3 ...">›</button>
+```
+
+Hai nút này chỉ có **giao diện (UI)**, không có logic để chuyển ảnh.
+
+✅ Giải pháp:
+Dùng state `currentSlide` + `setCurrentSlide`:
+
+```tsx
+const [index, setIndex] = useState(0)
+
+const handlePrev = () => setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
+const handleNext = () => setIndex((prev) => (prev + 1) % slides.length)
+```
+
+Sau đó gán:
+
+```tsx
+<button onClick={handlePrev} aria-label="Previous slide">‹</button>
+<button onClick={handleNext} aria-label="Next slide">›</button>
+```
+
+---
+
+### ⚠️ **Vấn đề 4 – Border màu đỏ `border-red-600`**
+
+Đây có thể là **debug style** hoặc tạm thời dùng để kiểm tra layout.
+Nếu không phải ý đồ thiết kế, hãy đổi thành `border-transparent` hoặc `border-neutral-200` để hợp thẩm mỹ.
+
+---
+
+### ⚠️ **Vấn đề 5 – Accessibility (Truy cập cho người khiếm thị)**
+
+Hiện chỉ có `alt` trong `<img>` nhưng thiếu:
+
+* `aria-label` cho các nút chuyển slide (`‹`, `›`).
+* `role="region"` hoặc `aria-roledescription="carousel"` để trình đọc màn hình hiểu đây là slider.
+
+✅ Bổ sung:
+
+```html
+<div role="region" aria-roledescription="carousel" aria-label="Call for Papers slider">
+```
+
+---
+
+## 🧩 **2️⃣ Cách viết đúng chuẩn Next.js + Tailwind**
+
+Dưới đây là phiên bản React/Next.js tương đương **đã sửa lỗi và tối ưu**:
+
+```tsx
+'use client'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+
+const slides = [
+  {
+    id: 1,
+    title: 'Call for Papers - Số mới nhất',
+    image: '/banner2.png',
+    link: '/dashboard/author/submit',
+  },
+]
+
+export default function BannerCarousel() {
+  const [index, setIndex] = useState(0)
+
+  const handlePrev = () =>
+    setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
+  const handleNext = () =>
+    setIndex((prev) => (prev + 1) % slides.length)
+
+  const slide = slides[index]
+
+  return (
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Banner quảng cáo tạp chí"
+      className="rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 relative"
+    >
+      <div className="relative w-full h-[300px] group">
+        <Image
+          src={slide.image}
+          alt={slide.title}
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute bottom-5 left-5 right-5 z-10">
+          <div className="bg-black/55 backdrop-blur-sm px-4 py-3 rounded-lg">
+            <h2 className="text-white text-xl font-bold mb-2">
+              {slide.title}
+            </h2>
+            <Link
+              href={slide.link}
+              className="inline-block bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+            >
+              Xem thêm
+            </Link>
+          </div>
+        </div>
+        <button
+          onClick={handlePrev}
+          aria-label="Previous slide"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity hover:text-blue-900 z-20"
+        >
+          ‹
+        </button>
+        <button
+          onClick={handleNext}
+          aria-label="Next slide"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity hover:text-blue-900 z-20"
+        >
+          ›
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+## 🧠 **3️⃣ Tổng kết các lỗi phát hiện**
+
+| Loại lỗi                     | Mức độ        | Giải pháp                        |
+| ---------------------------- | ------------- | -------------------------------- |
+| Sai cú pháp `<img>` của Next | 🔥 Nặng       | Dùng `<Image />` component       |
+| Thiếu logic điều hướng       | ⚠️ Trung bình | Thêm `useState` và hàm prev/next |
+| CSS debug (`border-red-600`) | 🔧 Nhẹ        | Xóa hoặc đổi màu                 |
+| Thiếu accessibility          | ℹ️ Nhẹ        | Thêm `aria-*` attributes         |
+| Lỗi CSP (Cloudflare script)  | 🔒 Bảo mật    | Thêm domain vào CSP header/meta  |

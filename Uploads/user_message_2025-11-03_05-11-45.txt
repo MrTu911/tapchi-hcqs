@@ -1,0 +1,242 @@
+Tiếp tục phase 3. Đây là phân tích của tôi hãy triển khai ngay. "Tuyệt vời! 🌟
+Bạn vừa hoàn thành **Phase 2 - Account & Security Layer** ở **cấp độ production enterprise**, với đầy đủ 6 mô-đun nền tảng bảo mật mà ngay cả nhiều hệ thống editorial chuyên nghiệp (như *OJS 3.x* hay *ScholarOne Manuscripts*) cũng phải cấu hình thủ công.
+
+Dưới đây là **đánh giá chiến lược + đề xuất chi tiết triển khai Phase 3: “Editorial Intelligence”**, bao gồm workflow, AI-assisted reviewer matching, metrics, và analytics dashboard cho EIC (Editor-in-Chief).
+
+---
+
+# ⚙️ Tổng quan Phase 3 — *Editorial Intelligence & Automation Layer*
+
+🎯 **Mục tiêu:**
+Tăng hiệu quả vận hành tạp chí khoa học bằng **tự động hóa biên tập, phân tích reviewer, và AI reviewer-suggestion**, giúp:
+
+* EIC giảm thời gian gán phản biện
+* Reviewer có workload hợp lý
+* Cả hệ thống có thể **“tự học”** từ hành vi phản biện thực tế
+
+---
+
+## 🧩 I. Thành phần chính trong Phase 3
+
+| Thành phần                          | Mục tiêu                                                                                                      | Output                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| **1️⃣ Reviewer Finder**             | Gợi ý reviewer phù hợp với bài nộp dựa trên từ khóa, chuyên ngành, workload, và lịch sử phản biện             | API `/api/reviewers/suggest` + UI reviewer picker |
+| **2️⃣ Reviewer Metrics Dashboard**  | Đánh giá hiệu suất reviewer (tốc độ, chất lượng, độ tin cậy, workload trung bình)                             | `/dashboard/admin/reviewers/metrics`              |
+| **3️⃣ Editor Analytics Dashboard**  | Tổng hợp dữ liệu toàn hệ thống: submissions theo trạng thái, thời gian review trung bình, tỉ lệ accept/reject | `/dashboard/eic/analytics`                        |
+| **4️⃣ Email & Workflow Automation** | Tự động gửi thông báo theo sự kiện workflow (invitation, deadline approaching, decision made)                 | `/lib/email/workflow-automator.ts`                |
+| **5️⃣ Reviewer Match AI**           | Dùng ML hoặc semantic similarity để tìm reviewer tiềm năng                                                    | `/lib/ai/reviewer-match.ts`                       |
+
+---
+
+## 🧠 II. Mô hình dữ liệu (schema bạn đã có)
+
+Các model trong `schema.prisma` đã sẵn sàng cho triển khai Phase 3:
+
+| Model             | Vai trò                                                        |
+| ----------------- | -------------------------------------------------------------- |
+| `Submission`      | Bài nộp, có `keywords[]`, `categoryId`, `status`               |
+| `Review`          | Kết quả phản biện, chứa `recommendation`, `score`, `formJson`  |
+| `ReviewerProfile` | Thông tin chuyên môn, thống kê phản biện, trạng thái, keywords |
+| `EditorDecision`  | Quyết định biên tập cuối cùng                                  |
+| `Deadline`        | Quản lý thời hạn review, revision, production                  |
+| `Notification`    | Hệ thống thông báo workflow                                    |
+
+💡 Không cần thay đổi schema — chỉ cần **kích hoạt logic và chỉ số phân tích.**
+
+---
+
+## 🔍 III. Module chi tiết
+
+### 🧩 1. Reviewer Finder
+
+**API**: `/api/reviewers/suggest`
+
+**Logic:**
+
+```ts
+- Nhận submissionId
+- Lấy keywords + category từ Submission
+- Tìm ReviewerProfile có overlap keywords >= 30%
+- Loại bỏ reviewer đang có quá nhiều review pending
+- Sắp xếp theo điểm tương đồng, workload, và lastReviewAt
+```
+
+**Output:**
+
+```json
+[
+  {
+    "id": "uuid",
+    "name": "Dr. Nguyễn Văn A",
+    "matchScore": 0.82,
+    "expertise": ["Machine Learning", "Deep Learning"],
+    "currentLoad": 2,
+    "available": true
+  }
+]
+```
+
+**UI:**
+
+* Modal “Gán phản biện tự động”
+* Tag reviewer theo mức phù hợp (⭐ High / ⚙ Medium / ⛔ Low)
+* Tự động thêm reviewer được chọn vào Submission
+
+---
+
+### 📊 2. Reviewer Metrics Dashboard
+
+**API**: `/api/statistics/reviewers`
+
+**Tính toán trong `/lib/reviewer-metrics.ts`:**
+
+```ts
+{
+  totalReviews: count(),
+  avgCompletionDays: avg(submittedAt - invitedAt),
+  onTimeRate: percent(submittedAt <= deadline),
+  recommendationDistribution: count by type,
+  qualityRatingAvg: avg(qualityRating),
+  declineRate: percent(declinedAt != null)
+}
+```
+
+**UI (`/dashboard/admin/reviewers/metrics`):**
+
+* Chart 1: Pie – Recommendation distribution (ACCEPT, MINOR, MAJOR, REJECT)
+* Chart 2: Bar – Average completion time per reviewer
+* Chart 3: Line – Review trend (last 6 months)
+* Table – Reviewer Performance Table
+
+---
+
+### 📈 3. Editor Analytics Dashboard
+
+**API**: `/api/statistics/editor`
+
+**Tính toán trong `/lib/editor-analytics.ts`:**
+
+* Tổng bài theo trạng thái (`SubmissionStatus`)
+* Thời gian trung bình từ “NEW” đến “ACCEPTED”
+* Tỉ lệ `ACCEPTED` / `REJECTED`
+* Số lượng bài mỗi chuyên mục
+* Reviewer load trung bình toàn hệ thống
+
+**UI:**
+Dashboard `/dashboard/eic/analytics` gồm:
+
+* KPI cards (Tổng bài, trung bình ngày review, tỉ lệ accept)
+* Line chart: Số bài nộp theo tháng
+* Bar chart: Distribution theo trạng thái
+* Pie chart: Bài theo category
+
+---
+
+### 💌 4. Email & Workflow Automation
+
+**File:** `/lib/email/workflow-automator.ts`
+
+**Sự kiện trigger:**
+
+| Event                         | Email tới         |
+| ----------------------------- | ----------------- |
+| Reviewer invited              | Reviewer          |
+| Reviewer deadline approaching | Reviewer          |
+| Review completed              | Editor            |
+| Decision made                 | Author            |
+| Revision requested            | Author            |
+| Paper published               | Author + Reviewer |
+
+**Kết nối Notification API:**
+Mỗi email cũng tạo `Notification` record để hiển thị trong UI `/dashboard/notifications`.
+
+---
+
+### 🤖 5. Reviewer Match AI (Optional nhưng quan trọng)
+
+**File:** `/lib/ai/reviewer-match.ts`
+
+#### Input:
+
+```json
+{
+  "submissionTitle": "Deep Learning for Cardiac Image Segmentation",
+  "abstract": "...",
+  "keywords": ["AI", "Cardiology", "Segmentation"]
+}
+```
+
+#### Output:
+
+```json
+[
+  { "reviewerId": "r1", "matchScore": 0.91 },
+  { "reviewerId": "r2", "matchScore": 0.85 }
+]
+```
+
+**Kỹ thuật:**
+
+* Sử dụng `cosine similarity` giữa embeddings của submission và reviewer expertise
+* Thư viện gợi ý: `@tensorflow-models/universal-sentence-encoder`
+* Cache embeddings vào Redis hoặc JSON file (`ReviewerProfileEmbedding`)
+
+---
+
+## 🧰 IV. Thư viện và file cần tạo
+
+| File                                          | Chức năng                      |
+| --------------------------------------------- | ------------------------------ |
+| `/lib/reviewer-metrics.ts`                    | Tính toán hiệu suất reviewer   |
+| `/lib/editor-analytics.ts`                    | Tổng hợp chỉ số hệ thống       |
+| `/lib/email/workflow-automator.ts`            | Tự động gửi email theo sự kiện |
+| `/lib/ai/reviewer-match.ts`                   | AI matching engine             |
+| `/api/reviewers/suggest/route.ts`             | API gợi ý reviewer             |
+| `/api/statistics/reviewers/route.ts`          | Reviewer metrics               |
+| `/api/statistics/editor/route.ts`             | Editor analytics               |
+| `/dashboard/eic/analytics/page.tsx`           | Dashboard EIC                  |
+| `/dashboard/admin/reviewers/metrics/page.tsx` | Reviewer performance UI        |
+
+---
+
+## 🧭 V. Lộ trình triển khai Phase 3
+
+| Giai đoạn | Hạng mục                         | Ưu tiên |
+| --------- | -------------------------------- | ------- |
+| **3.1**   | Reviewer Finder + Suggestion API | ⭐⭐      |
+| **3.2**   | Reviewer Metrics Dashboard       | ⭐⭐⭐     |
+| **3.3**   | Editor Analytics Dashboard       | ⭐⭐⭐⭐    |
+| **3.4**   | Email Workflow Automation        | ⭐⭐      |
+| **3.5**   | AI Reviewer Match Engine         | ⭐⭐⭐⭐⭐   |
+
+---
+
+## 💡 VI. Đề xuất kỹ thuật
+
+* **Caching layer**: Redis hoặc file-based cache để lưu reviewer metrics & embeddings
+* **Background tasks**: Cron jobs cho email reminder, data refresh
+* **Realtime update**: Revalidate metrics khi submission status thay đổi
+* **Visualization**: Dùng `recharts` (đã có trong hệ thống) hoặc `@tremor/react` cho dashboard UI
+
+---
+
+## ✅ VII. Kết quả kỳ vọng sau Phase 3
+
+> Sau khi hoàn tất Phase 3, hệ thống của bạn trở thành **“Intelligent Editorial Platform”**, với khả năng:
+>
+> * Tự động gợi ý reviewer phù hợp
+> * Theo dõi hiệu suất reviewer theo thời gian
+> * Hỗ trợ EIC bằng dashboard toàn cảnh
+> * Gửi thông báo và email tự động khi có sự kiện quan trọng
+
+---
+
+📍 **Tóm tắt định hướng triển khai Phase 3**
+
+```
+Phase 3: Editorial Intelligence
+├── Reviewer Finder (AI Suggestion)
+├── Reviewer Metrics (Performance Dashboard)
+├── Editor Analytics (Global Overview)
+├── Workflow Automation (Email/Notifications)
+└── AI Reviewer Match Engine (Semantic Matching)

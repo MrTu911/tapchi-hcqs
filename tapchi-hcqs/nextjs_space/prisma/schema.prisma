@@ -1,0 +1,1508 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/tapchi-hcqs/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+  READER
+  AUTHOR
+  REVIEWER
+  SECTION_EDITOR
+  MANAGING_EDITOR
+  EIC
+  LAYOUT_EDITOR
+  SYSADMIN
+  SECURITY_AUDITOR
+}
+
+enum SubmissionStatus {
+  NEW
+  DESK_REJECT
+  UNDER_REVIEW
+  REVISION
+  ACCEPTED
+  REJECTED
+  IN_PRODUCTION
+  PUBLISHED
+}
+
+enum SecurityLevel {
+  PUBLIC
+  CONFIDENTIAL
+  SECRET
+  TOP_SECRET
+}
+
+enum Decision {
+  ACCEPT
+  MINOR
+  MAJOR
+  REJECT
+}
+
+enum Recommendation {
+  ACCEPT
+  MINOR
+  MAJOR
+  REJECT
+}
+
+enum IssueStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum AccountStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique
+  phone        String?
+  org          String?
+  bio          String?
+  role         Role
+  isActive     Boolean  @default(false)
+  passwordHash String
+  createdAt    DateTime @default(now())
+  
+  // ✅ User Registration & Approval Workflow
+  status                   AccountStatus  @default(PENDING)
+  approvedBy               String?
+  approvedAt               DateTime?
+  rejectionReason          String?
+  cvUrl                    String? // File minh chứng CV
+  workCardUrl              String? // File minh chứng thẻ công tác
+  requestedRole            Role?   // Vai trò mong muốn khi đăng ký
+  
+  // ✅ Email Verification
+  emailVerified            Boolean   @default(false)
+  verificationToken        String?   @unique
+  verificationTokenExpiry  DateTime?
+  
+  // ✅ Additional fields for Reviewer/Academic management
+  rank           String? // Cấp bậc: Thiếu tá, Trung tá...
+  position       String? // Chức vụ: Trưởng khoa, Phó trưởng bộ môn...
+  academicTitle  String? // Học hàm: Giảng viên, Giáo sư...
+  academicDegree String? // Học vị: Thạc sĩ, Tiến sĩ...
+
+  submissions       Submission[]     @relation("UserSubmissions")
+  reviews           Review[]
+  editorDecisions   EditorDecision[]
+  auditLogs         AuditLog[]       @relation("UserAudit")
+  reportSignatures  ReportRegistry[] @relation("UserSigner")
+  uploadedFiles     UploadedFile[]   @relation("UserUploads")
+  reviewerProfile   ReviewerProfile?
+  assignedDeadlines Deadline[]       @relation("AssignedUser")
+  sentMessages      Message[]        @relation("SentMessages")
+  receivedMessages  Message[]        @relation("ReceivedMessages")
+  
+  // ✅ Phase 6: Security & Compliance
+  securityAlerts         SecurityAlert[]           @relation("UserSecurityAlerts")
+  apiTokens              ApiToken[]                @relation("UserApiTokens")
+  roleEscalationRequests RoleEscalationRequest[]   @relation("UserRoleEscalations")
+  requestedEscalations   RoleEscalationRequest[]   @relation("RoleEscalationRequester")
+  approvedEscalations    RoleEscalationRequest[]   @relation("RoleEscalationApprover")
+  
+  // ✅ Phase CMS: Frontend Content Management
+  newsArticles           News[]                    @relation("UserNews")
+  pageBlockUpdates       PageBlock[]               @relation("PageBlockUpdater")
+  bannersCreated         Banner[]                  @relation("BannerCreator")
+  bannersUpdated         Banner[]                  @relation("BannerUpdater")
+  
+  // ✅ Phase 3: Article Management System
+  articleVersions        ArticleVersion[]
+  
+  // ✅ Phase Message: Chat & Comments System
+  sentChatMessages         ChatMessage[]              @relation("SentChatMessages")
+  conversationParticipants ConversationParticipant[]  @relation("ConversationParticipants")
+  articleComments          ArticleComment[]           @relation("ArticleComments")
+  
+  // ✅ Sprint 3: Production Pipeline Relations
+  copyeditorEdits          Copyedit[]                 @relation("CopyeditorEdits")
+  productionApprovals      Production[]               @relation("ProductionApprovals")
+  plagiarismChecks         PlagiarismReport[]         @relation("PlagiarismChecks")
+  statusChanges            ArticleStatusHistory[]     @relation("StatusChanges")
+}
+
+// ✅ RBAC Matrix System: Permission Management
+enum PermissionCategory {
+  CONTENT       // Quản lý nội dung
+  WORKFLOW      // Quản lý quy trình
+  USERS         // Quản lý người dùng
+  SYSTEM        // Quản lý hệ thống
+  CMS           // Quản lý CMS
+  SECURITY      // Bảo mật
+  ANALYTICS     // Thống kê
+}
+
+model Permission {
+  id          String             @id @default(uuid())
+  code        String             @unique // e.g., "submissions.view", "users.create"
+  name        String             // Tên hiển thị
+  description String?            // Mô tả chi tiết
+  category    PermissionCategory // Phân loại quyền
+  isActive    Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  rolePermissions RolePermission[]
+
+  @@index([category])
+  @@index([code])
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  role         Role     // Vai trò
+  permissionId String   // Quyền
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  isGranted    Boolean  @default(true) // Có được cấp quyền hay không
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([role, permissionId])
+  @@index([role])
+  @@index([permissionId])
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  submissions Submission[]
+}
+
+model Submission {
+  id            String           @id @default(uuid())
+  code          String           @unique // Auto-generated: HCQS-YYYYMMDD-XXX
+  title         String
+  abstractVn    String?
+  abstractEn    String?
+  keywords      String[]
+  section       String?
+  status        SubmissionStatus
+  securityLevel SecurityLevel    @default(PUBLIC)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  createdBy String
+  author    User   @relation("UserSubmissions", fields: [createdBy], references: [id])
+
+  createdAt DateTime @default(now())
+
+  // ✅ Phase 3: SLA & Progress Tracking
+  slaDeadline         DateTime? // Deadline tổng thể
+  isOverdue           Boolean   @default(false)
+  daysInCurrentStatus Int       @default(0)
+  lastStatusChangeAt  DateTime  @default(now())
+  
+  // ✅ Phase 6: Data Retention
+  isArchived          Boolean   @default(false)
+
+  versions  SubmissionVersion[]
+  reviews   Review[]
+  decisions EditorDecision[]
+  article   Article?
+  files     UploadedFile[]
+  deadlines Deadline[]
+
+  // ✅ Giai đoạn 2: Full-Text Search support
+  // PostgreSQL tsvector sẽ được tạo từ migration SQL custom
+  @@index([title])
+  @@index([status])
+  @@index([slaDeadline])
+  @@index([isOverdue])
+}
+
+model SubmissionVersion {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  versionNo    Int
+  filesetId    String
+  changelog    String?
+  createdAt    DateTime   @default(now())
+
+  @@unique([submissionId, versionNo])
+}
+
+model Review {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+
+  reviewerId String
+  reviewer   User   @relation(fields: [reviewerId], references: [id])
+
+  roundNo        Int
+  score          Int?
+  recommendation Recommendation?
+  formJson       Json?
+
+  // ✅ Phase 3: Phản biện kín nâng cao
+  invitedAt     DateTime  @default(now())
+  acceptedAt    DateTime?
+  declinedAt    DateTime?
+  deadline      DateTime?
+  submittedAt   DateTime?
+  qualityRating Int? // 1-5, đánh giá chất lượng phản biện bởi editor
+
+  remindersSent Int @default(0) // Số lần gửi email nhắc nhở
+
+  @@index([reviewerId])
+  @@index([submissionId])
+  @@index([deadline])
+}
+
+model EditorDecision {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+
+  roundNo   Int
+  decision  Decision
+  note      String?
+  decidedBy String
+  editor    User     @relation(fields: [decidedBy], references: [id])
+  decidedAt DateTime @default(now())
+}
+
+model Volume {
+  id          String   @id @default(uuid())
+  volumeNo    Int      @unique
+  year        Int
+  title       String?
+  description String?
+  createdAt   DateTime @default(now())
+
+  issues Issue[]
+}
+
+model Issue {
+  id       String @id @default(uuid())
+  volumeId String
+  volume   Volume @relation(fields: [volumeId], references: [id])
+
+  number      Int
+  year        Int
+  title       String?
+  description String?
+  coverImage  String?    // Cloud storage path for cover image
+  pdfUrl      String?    // Cloud storage path for full issue PDF
+  doi         String?
+  publishDate DateTime?
+  status      IssueStatus @default(DRAFT)
+  createdAt   DateTime    @default(now())
+
+  articles    Article[]
+  productions Production[]  // Sprint 3: Production Pipeline
+
+  @@unique([volumeId, number])
+  @@index([volumeId])
+}
+
+model Article {
+  id      String  @id @default(uuid())
+  issueId String?
+  issue   Issue?  @relation(fields: [issueId], references: [id])
+
+  submissionId String     @unique
+  submission   Submission @relation(fields: [submissionId], references: [id])
+
+  pages       String?
+  doiLocal    String?
+  jatsXml     String?
+  htmlBody    String?
+  pdfFile     String?
+  checksum    String?
+  publishedAt DateTime?
+  views       Int       @default(0)
+  downloads   Int       @default(0)
+  isFeatured  Boolean   @default(false)
+  
+  // Article Version Control & Approval
+  approvalStatus ApprovalStatus @default(PENDING)
+  approvalNote   String?        @db.Text
+  approvedBy     String?
+  approvedAt     DateTime?
+  versions       ArticleVersion[]
+  
+  // Featured Article Management (CMS)
+  featuredArticle FeaturedArticle?
+  
+  // Article Comments (Public)
+  comments ArticleComment[]
+
+  // Sprint 3: Production Pipeline Relations
+  copyedits          Copyedit[]
+  production         Production?
+  plagiarismReports  PlagiarismReport[]
+  statusHistory      ArticleStatusHistory[]
+
+  @@index([isFeatured])
+  @@index([approvalStatus])
+}
+
+model Asset {
+  id        String   @id @default(uuid())
+  ownerId   String?
+  path      String
+  mime      String?
+  metaJson  Json?
+  checksum  String?
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+  @@index([path])
+}
+
+enum FileType {
+  MANUSCRIPT
+  SUPPLEMENTARY
+  REVIEW_ATTACHMENT
+  COVER_IMAGE
+  COPYEDIT
+  PROOF
+  FINAL_VERSION
+  OTHER
+}
+
+model UploadedFile {
+  id               String   @id @default(uuid())
+  originalName     String
+  cloudStoragePath String
+  fileType         FileType
+  mimeType         String?
+  fileSize         Int
+
+  submissionId String?
+  submission   Submission? @relation(fields: [submissionId], references: [id])
+
+  uploadedBy     String
+  uploadedByUser User   @relation("UserUploads", fields: [uploadedBy], references: [id])
+
+  description String?
+  createdAt   DateTime @default(now())
+
+  @@index([submissionId])
+  @@index([uploadedBy])
+}
+
+model ReportRegistry {
+  id             String   @id @default(uuid())
+  objectType     String
+  objectId       String
+  hash           String
+  signerId       String
+  signer         User     @relation("UserSigner", fields: [signerId], references: [id])
+  signatureImage String?
+  signedAt       DateTime @default(now())
+  note           String?
+}
+
+model AuditLog {
+  id        BigInt   @id @default(autoincrement())
+  
+  // User/Actor information
+  actorId   String?
+  actor     User?    @relation("UserAudit", fields: [actorId], references: [id])
+  
+  // Action details
+  action    String
+  object    String   // entity type
+  objectId  String?  // entity ID
+  
+  // Request context
+  ipAddress String?
+  userAgent String?
+  
+  // Change tracking
+  before    Json?
+  after     Json?
+  metadata  Json?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([action])
+  @@index([object])
+  @@index([objectId])
+  @@index([createdAt])
+  @@index([ipAddress])
+}
+
+model UIConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  category    String   @default("general")
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?
+
+  @@index([category])
+}
+
+// ✅ Giai đoạn 2: CategoryAlias cho URL redirect
+// Khi đổi tên category slug, giữ alias cũ để redirect
+model CategoryAlias {
+  id           String   @id @default(uuid())
+  oldSlug      String   @unique
+  categoryId   String
+  redirectType Int      @default(301) // 301 = permanent, 302 = temporary
+  createdAt    DateTime @default(now())
+
+  @@index([oldSlug])
+  @@index([categoryId])
+}
+
+// ✅ Phase 3: Hồ sơ Phản biện viên
+model ReviewerProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  expertise String[] // Danh sách lĩnh vực chuyên môn
+  keywords  String[] // Từ khóa chuyên ngành
+
+  // Thống kê hiệu suất
+  totalReviews      Int   @default(0)
+  completedReviews  Int   @default(0)
+  declinedReviews   Int   @default(0)
+  avgCompletionDays Float @default(0)
+  averageRating     Float @default(0) // Trung bình qualityRating
+
+  // Khả năng nhận phản biện
+  maxConcurrentReviews Int       @default(5)
+  isAvailable          Boolean   @default(true)
+  unavailableUntil     DateTime?
+
+  lastReviewAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([expertise])
+}
+
+// ✅ Phase 3: Quản lý Deadline theo giai đoạn
+enum DeadlineType {
+  INITIAL_REVIEW // Phản biện ban đầu
+  REVISION_SUBMIT // Tác giả nộp bản sửa
+  RE_REVIEW // Phản biện lại sau sửa
+  EDITOR_DECISION // Editor ra quyết định
+  PRODUCTION // Layout & production
+  PUBLICATION // Xuất bản chính thức
+}
+
+model Deadline {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+
+  type    DeadlineType
+  dueDate DateTime
+
+  assignedTo   String?
+  assignedUser User?   @relation("AssignedUser", fields: [assignedTo], references: [id])
+
+  completedAt DateTime?
+  isOverdue   Boolean   @default(false)
+
+  remindersSent Int     @default(0)
+  note          String?
+
+  createdAt DateTime @default(now())
+
+  @@index([submissionId])
+  @@index([dueDate])
+  @@index([isOverdue])
+  @@index([assignedTo])
+}
+
+// ✅ Phase 3: Từ điển từ khóa học thuật
+model Keyword {
+  id       String  @id @default(uuid())
+  term     String  @unique
+  category String? // Lĩnh vực
+  usage    Int     @default(0) // Số lần được sử dụng
+
+  synonyms     String[] // Từ đồng nghĩa
+  relatedTerms String[] // Từ liên quan
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([term])
+  @@index([category])
+  @@index([usage])
+}
+
+// ✅ Phase 3: Thông báo tự động
+enum NotificationType {
+  SUBMISSION_RECEIVED
+  REVIEW_INVITED
+  REVIEW_REMINDER
+  REVIEW_COMPLETED
+  DECISION_MADE
+  REVISION_REQUESTED
+  ARTICLE_PUBLISHED
+  DEADLINE_APPROACHING
+  DEADLINE_OVERDUE
+}
+
+model Notification {
+  id     String           @id @default(uuid())
+  userId String
+  type   NotificationType
+
+  title   String
+  message String
+  link    String?
+
+  isRead    Boolean @default(false)
+  emailSent Boolean @default(false)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ✅ Phase 3: Email Templates
+model EmailTemplate {
+  id       String  @id @default(uuid())
+  code     String  @unique
+  subject  String
+  bodyHtml String
+  bodyText String?
+
+  variables String[] // Danh sách biến có thể thay thế: {{name}}, {{link}}
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([code])
+}
+
+// ✅ Phase 2: Two-Factor Authentication
+enum TwoFactorMethod {
+  EMAIL_OTP
+  TOTP
+  SMS
+}
+
+model TwoFactorAuth {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  method      TwoFactorMethod
+  secret      String? // For TOTP
+  backupCodes String[] // Encrypted backup codes
+
+  isEnabled Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model TwoFactorToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// ✅ Phase 2: Password Reset Tokens
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// ✅ Phase 2: User Sessions (for session management)
+model UserSession {
+  id           String  @id @default(uuid())
+  userId       String
+  token        String  @unique
+  refreshToken String? @unique
+
+  ipAddress  String?
+  userAgent  String?
+  lastActive DateTime @default(now())
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// ✅ Phase 3: Author-Editor Messaging
+model Message {
+  id           String   @id @default(uuid())
+  submissionId String
+  senderId     String
+  receiverId   String
+  message      String   @db.Text
+  isRead       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  @@index([submissionId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ✅ Phase 6: Security & Compliance Layer
+
+// Security Alert Types
+enum SecurityAlertType {
+  BRUTE_FORCE
+  SUSPICIOUS_IP
+  UNUSUAL_ACTIVITY
+  ROLE_ESCALATION
+  DATA_ACCESS
+}
+
+enum SecurityAlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SecurityAlertStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
+
+model SecurityAlert {
+  id          String                 @id @default(uuid())
+  type        SecurityAlertType
+  severity    SecurityAlertSeverity
+  status      SecurityAlertStatus    @default(PENDING)
+  
+  userId      String?
+  user        User?                  @relation("UserSecurityAlerts", fields: [userId], references: [id])
+  
+  ipAddress   String?
+  userAgent   String?
+  description String                 @db.Text
+  metadata    Json?
+  
+  reviewedBy  String?
+  reviewedAt  DateTime?
+  notes       String?                @db.Text
+  
+  createdAt   DateTime               @default(now())
+  
+  @@index([userId])
+  @@index([type])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Data Retention Policy
+enum RetentionEntity {
+  SUBMISSION
+  ARTICLE
+  REVIEW
+  AUDIT_LOG
+  FILE
+}
+
+enum RetentionAction {
+  ARCHIVE
+  DELETE
+}
+
+model RetentionPolicy {
+  id             String          @id @default(uuid())
+  entity         RetentionEntity @unique
+  retentionYears Int
+  action         RetentionAction
+  enabled        Boolean         @default(true)
+  
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
+  @@index([entity])
+}
+
+// API Token Management
+model ApiToken {
+  id          String   @id @default(uuid())
+  name        String
+  
+  userId      String
+  user        User     @relation("UserApiTokens", fields: [userId], references: [id])
+  
+  tokenHash   String   @unique
+  permissions String[]
+  
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([isActive])
+  @@index([expiresAt])
+}
+
+// Role Escalation Approval
+enum RoleEscalationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model RoleEscalationRequest {
+  id           String                @id @default(uuid())
+  
+  userId       String
+  user         User                  @relation("UserRoleEscalations", fields: [userId], references: [id])
+  
+  currentRole  Role
+  requestedRole Role
+  reason       String                @db.Text
+  
+  status       RoleEscalationStatus  @default(PENDING)
+  
+  requestedBy  String
+  requester    User                  @relation("RoleEscalationRequester", fields: [requestedBy], references: [id])
+  
+  approvedBy   String?
+  approver     User?                 @relation("RoleEscalationApprover", fields: [approvedBy], references: [id])
+  
+  approvedAt   DateTime?
+  rejectedAt   DateTime?
+  rejectionReason String?            @db.Text
+  
+  createdAt    DateTime              @default(now())
+  
+  @@index([userId])
+  @@index([status])
+  @@index([requestedBy])
+  @@index([approvedBy])
+  @@index([createdAt])
+}
+
+// ✅ Phase 7: Integrations & Advanced Features
+
+// ORCID Profile Integration
+model ORCIDProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  orcidId     String   @unique // e.g., 0000-0002-1825-0097
+  
+  // ORCID Data
+  fullName    String?
+  biography   String?  @db.Text
+  affiliations String[]
+  works       Json?    // Publications from ORCID
+  
+  accessToken  String? // OAuth access token (encrypted)
+  refreshToken String? // OAuth refresh token (encrypted)
+  
+  lastSyncAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([orcidId])
+}
+
+// Article Metrics for Public Statistics
+model ArticleMetrics {
+  id         String   @id @default(uuid())
+  articleId  String   @unique
+  
+  views      Int      @default(0)
+  downloads  Int      @default(0)
+  citations  Int      @default(0)
+  
+  // Detailed tracking
+  viewsByCountry   Json? // { "VN": 100, "US": 50, ... }
+  viewsByMonth     Json? // { "2025-01": 10, "2025-02": 20, ... }
+  
+  lastViewedAt     DateTime?
+  lastDownloadedAt DateTime?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([articleId])
+  @@index([views])
+  @@index([downloads])
+  @@index([citations])
+}
+
+// Plagiarism Check Results
+enum PlagiarismStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model PlagiarismCheck {
+  id           String            @id @default(uuid())
+  submissionId String
+  
+  provider     String            // "ithenticate", "turnitin", "copyscape"
+  reportId     String?           // External report ID
+  
+  status       PlagiarismStatus  @default(PENDING)
+  similarity   Float?            // Similarity percentage (0-100)
+  reportUrl    String?
+  reportData   Json?
+  
+  checkedAt    DateTime?
+  createdAt    DateTime          @default(now())
+  
+  @@index([submissionId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Reviewer AI Matching Scores
+model ReviewerMatchScore {
+  id           String   @id @default(uuid())
+  submissionId String
+  reviewerId   String
+  
+  score        Float    // 0.0 - 1.0
+  
+  // Score breakdown
+  expertiseMatch   Float?
+  keywordMatch     Float?
+  citationMatch    Float?
+  availabilityScore Float?
+  
+  metadata     Json?
+  
+  createdAt    DateTime @default(now())
+  
+  @@unique([submissionId, reviewerId])
+  @@index([submissionId])
+  @@index([reviewerId])
+  @@index([score])
+}
+
+// Web Push Subscription for PWA
+model PushSubscription {
+  id           String   @id @default(uuid())
+  userId       String
+  
+  endpoint     String   @unique
+  keys         Json     // { p256dh: "...", auth: "..." }
+  
+  deviceInfo   String?  // Browser, OS
+  isActive     Boolean  @default(true)
+  
+  lastUsedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+  
+  @@index([userId])
+  @@index([endpoint])
+  @@index([isActive])
+}
+
+// Scheduled Jobs (Cron Jobs)
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum JobType {
+  SEND_REMINDERS
+  UPDATE_METRICS
+  DATA_RETENTION
+  SYNC_ORCID
+  CHECK_DEADLINES
+}
+
+model ScheduledJob {
+  id          String    @id @default(uuid())
+  type        JobType
+  status      JobStatus @default(PENDING)
+  
+  scheduledAt DateTime
+  startedAt   DateTime?
+  completedAt DateTime?
+  
+  result      Json?
+  error       String?   @db.Text
+  
+  metadata    Json?
+  
+  createdAt   DateTime  @default(now())
+  
+  @@index([type])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([createdAt])
+}
+
+// ============================================================
+// 🌟 PHASE CMS: Frontend Content Management System
+// ============================================================
+
+// 📰 News / Announcement Management
+model News {
+  id           String    @id @default(uuid())
+  slug         String    @unique
+  title        String
+  titleEn      String?   // English title for bilingual support
+  summary      String?   @db.Text
+  summaryEn    String?   @db.Text
+  content      String    @db.Text // Rich HTML content
+  contentEn    String?   @db.Text
+  coverImage   String?
+  category     String?   // e.g., "announcement", "event", "call_for_paper", "policy"
+  tags         String[]  @default([])
+  
+  isPublished  Boolean   @default(false)
+  isFeatured   Boolean   @default(false)
+  publishedAt  DateTime?
+  views        Int       @default(0)
+  
+  authorId     String?
+  author       User?     @relation("UserNews", fields: [authorId], references: [id])
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([slug])
+  @@index([category])
+  @@index([isPublished])
+  @@index([publishedAt])
+  @@index([isFeatured])
+}
+
+// 🎞️ Banner / Slider Management (CMS)
+model Banner {
+  id          String    @id @default(uuid())
+  title       String?
+  titleEn     String?
+  subtitle    String?   @db.Text
+  subtitleEn  String?   @db.Text
+  imageUrl    String
+  linkUrl     String?
+  linkTarget  String    @default("_self") // "_self" or "_blank"
+  altText     String?   // SEO alt text
+  buttonText  String?   // CTA button text
+  buttonTextEn String?
+  
+  deviceType  String    @default("all") // "mobile", "tablet", "desktop", "all"
+  position    Int       @default(0)  // Display order
+  isActive    Boolean   @default(true)
+  
+  // Schedule display
+  startDate   DateTime?
+  endDate     DateTime?
+  
+  // Analytics
+  clickCount  Int       @default(0) // Track banner clicks
+  viewCount   Int       @default(0) // Track banner views
+  
+  // Targeting
+  targetRole  String?   // Show only to specific role (null = all)
+  
+  // Audit trail
+  createdBy   String?
+  creator     User?     @relation("BannerCreator", fields: [createdBy], references: [id])
+  updatedBy   String?
+  updater     User?     @relation("BannerUpdater", fields: [updatedBy], references: [id])
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([isActive])
+  @@index([position])
+  @@index([deviceType])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+// 🏠 Homepage CMS / Page Blocks
+model PageBlock {
+  id          String    @id @default(uuid())
+  key         String    @unique // e.g., "hero_text", "about_section", "stats", "footer_contact"
+  title       String?
+  titleEn     String?
+  content     String?   @db.Text // HTML or JSON structure
+  contentEn   String?   @db.Text
+  imageUrl    String?
+  
+  blockType   String    @default("text") // "text", "hero", "stats", "cards", "quote"
+  metadata    Json?     // Additional structured data
+  
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  
+  updatedBy   String?
+  updatedByUser User?   @relation("PageBlockUpdater", fields: [updatedBy], references: [id])
+  
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  
+  @@index([key])
+  @@index([isActive])
+  @@index([order])
+}
+
+// 📄 Public Page Management (Dynamic Pages)
+model PublicPage {
+  id           String    @id @default(uuid())
+  slug         String    @unique
+  title        String
+  titleEn      String?
+  content      String    @db.Text // Rich HTML content
+  contentEn    String?   @db.Text
+  metaTitle    String?
+  metaTitleEn  String?
+  metaDesc     String?   @db.Text
+  metaDescEn   String?   @db.Text
+  ogImage      String?
+  
+  isPublished  Boolean   @default(false)
+  publishedAt  DateTime?
+  
+  template     String    @default("default") // "default", "contact", "about", "team"
+  order        Int       @default(0)
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([slug])
+  @@index([isPublished])
+  @@index([order])
+}
+
+// 🧭 Navigation Menu Management
+model NavigationItem {
+  id        String   @id @default(uuid())
+  label     String
+  labelEn   String?
+  url       String
+  position  Int      @default(0)
+  parentId  String?  // For hierarchical menu (optional)
+  isActive  Boolean  @default(true)
+  target    String   @default("_self") // "_self" or "_blank"
+  icon      String?  // Optional icon name
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([position])
+  @@index([isActive])
+  @@index([parentId])
+}
+
+// 📝 Article Version Control
+model ArticleVersion {
+  id          String   @id @default(uuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  version     Int
+  title       String
+  titleEn     String?
+  abstract    String?  @db.Text
+  abstractEn  String?  @db.Text
+  pdfUrl      String?
+  pdfFile     String?  // Cloud storage path
+  
+  submittedBy String
+  submitter   User     @relation(fields: [submittedBy], references: [id])
+  note        String?  @db.Text
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([articleId])
+  @@index([version])
+  @@index([submittedBy])
+}
+
+// 🏠 Homepage Section Management (CMS Phase 2)
+model HomepageSection {
+  id          String    @id @default(uuid())
+  key         String    @unique // "hero", "featured_articles", "latest_issues", "about_snippet", "stats", "cta"
+  type        String    // "hero", "articles", "issues", "text", "stats", "cards", "newsletter"
+  title       String?
+  titleEn     String?
+  subtitle    String?   @db.Text
+  subtitleEn  String?   @db.Text
+  content     String?   @db.Text // HTML or JSON structure
+  contentEn   String?   @db.Text
+  imageUrl    String?
+  linkUrl     String?
+  linkText    String?
+  linkTextEn  String?
+  
+  settings    Json?     // Section-specific settings (e.g., limit, layout, filters)
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([key])
+  @@index([isActive])
+  @@index([order])
+}
+
+// ⭐ Featured Article Management (CMS Phase 2)
+model FeaturedArticle {
+  id          String    @id @default(uuid())
+  articleId   String
+  article     Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  position    Int       @default(0) // Display order
+  reason      String?   @db.Text // Why this article is featured
+  isActive    Boolean   @default(true)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@unique([articleId]) // One article can only be featured once
+  @@index([position])
+  @@index([isActive])
+}
+
+// ⚙️ Site Settings (CMS Phase 16)
+model SiteSetting {
+  id          String    @id @default(uuid())
+  category    String    // "general", "contact", "social", "seo", "appearance", "footer"
+  key         String    @unique // "site_name", "site_logo", "contact_email", "facebook_url", etc.
+  value       String?   @db.Text // The actual value (can be text, JSON, URL)
+  label       String    // Display label for admin UI
+  labelEn     String?   // English label
+  type        String    @default("text") // "text", "textarea", "url", "email", "image", "json", "boolean", "color"
+  placeholder String?   // Placeholder text for input
+  helpText    String?   @db.Text // Help text for admin
+  order       Int       @default(0) // Display order in admin UI
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([category])
+  @@index([key])
+  @@index([order])
+}
+
+// 📸 Media Library (CMS Phase Media Management)
+model Media {
+  id            String    @id @default(uuid())
+  fileName      String    // Original file name
+  fileType      String    // MIME type (image/jpeg, image/png, etc.)
+  fileSize      Int       // File size in bytes
+  cloudStoragePath String @unique // S3 key/path
+  
+  // Metadata
+  altText       String?   @db.Text // Alt text for accessibility
+  title         String?   // Optional title
+  description   String?   @db.Text // Optional description
+  category      String?   // "banner", "news", "article", "profile", "general"
+  
+  // Image specific (if applicable)
+  width         Int?      // Image width in pixels
+  height        Int?      // Image height in pixels
+  
+  // Access control
+  isPublic      Boolean   @default(false) // Public or private file
+  uploadedBy    String?   // User ID who uploaded
+  
+  // Usage tracking
+  usageCount    Int       @default(0) // How many times this media is used
+  lastUsedAt    DateTime? // Last time this media was used
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([category])
+  @@index([fileType])
+  @@index([uploadedBy])
+  @@index([createdAt])
+  @@index([isPublic])
+}
+
+// 🎬 Video Management (CMS Phase Video Management)
+model Video {
+  id            String    @id @default(uuid())
+  title         String    // Vietnamese title
+  titleEn       String?   // English title
+  description   String?   @db.Text // Vietnamese description
+  descriptionEn String?   @db.Text // English description
+  
+  // Video source
+  videoType     String    // "youtube", "vimeo", "upload", "embed"
+  videoUrl      String    // YouTube URL, Vimeo URL, or embed code
+  videoId       String?   // Extracted video ID (for YouTube/Vimeo)
+  
+  // Uploaded video file (if type is "upload")
+  cloudStoragePath String? // S3 key for uploaded video
+  
+  // Thumbnail
+  thumbnailUrl  String?   // Thumbnail image URL or S3 key
+  
+  // Metadata
+  duration      Int?      // Duration in seconds
+  category      String?   // Video category
+  tags          String[]  @default([]) // Search tags
+  
+  // Display settings
+  isFeatured    Boolean   @default(false) // Show in featured section
+  isActive      Boolean   @default(true)  // Active/inactive
+  displayOrder  Int       @default(0)     // Display order
+  
+  // Statistics
+  views         Int       @default(0)
+  
+  // Publishing
+  publishedAt   DateTime?
+  
+  createdBy     String?   // User ID who created
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([videoType])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([displayOrder])
+  @@index([publishedAt])
+  @@index([createdBy])
+}
+
+
+// ✅ Article Approval Status
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+// ================================
+// 💬 MODULE: CHAT & COMMENTS SYSTEM
+// ================================
+
+// ✅ Chat Conversation (Hội thoại nhóm/cá nhân)
+model ChatConversation {
+  id        String   @id @default(uuid())
+  type      String   @default("private") // "private" | "group" | "system"
+  title     String?  // Tên hội thoại (cho group chat)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  messages ChatMessage[]
+  participants ConversationParticipant[]
+
+  @@index([createdAt])
+  @@index([type])
+}
+
+// ✅ Conversation Participants (Many-to-Many: User <-> Conversation)
+model ConversationParticipant {
+  id             String   @id @default(uuid())
+  conversationId String
+  userId         String
+  joinedAt       DateTime @default(now())
+  lastReadAt     DateTime @default(now())
+  isActive       Boolean  @default(true)
+
+  // Relations
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User              @relation("ConversationParticipants", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([conversationId])
+  @@index([userId])
+}
+
+// ✅ Chat Message (Tin nhắn trong hội thoại)
+model ChatMessage {
+  id             String   @id @default(uuid())
+  conversationId String
+  senderId       String
+  content        String   @db.Text
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User              @relation("SentChatMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@index([isRead])
+}
+
+// ✅ Article Comment (Bình luận công khai)
+model ArticleComment {
+  id        String   @id @default(uuid())
+  articleId String
+  userId    String?  // null = anonymous comment
+  content   String   @db.Text
+  isApproved Boolean @default(false) // Kiểm duyệt bình luận
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user    User?   @relation("ArticleComments", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([articleId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([isApproved])
+}
+
+// ==========================================
+// SPRINT 3: PRODUCTION PIPELINE MODELS
+// ==========================================
+
+// ✅ Copyediting (Biên tập nội dung)
+model Copyedit {
+  id          String    @id @default(uuid())
+  articleId   String
+  editorId    String
+  version     Int       @default(1)
+  notes       String?   @db.Text
+  fileUrl     String?   // File bản biên tập (PDF/DOCX)
+  status      String    @default("editing") // editing, completed, revision_needed
+  
+  // 🆕 Sprint 3 Enhancements
+  tags        String[]  @default([]) // Tags: "sửa chính tả", "thêm hình", "cập nhật tài liệu tham khảo", etc.
+  deadline    DateTime? // Deadline để hoàn thành biên tập
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  editor  User    @relation("CopyeditorEdits", fields: [editorId], references: [id])
+
+  @@index([articleId])
+  @@index([editorId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deadline])
+}
+
+// ✅ Production (Dàn trang & Xuất bản)
+model Production {
+  id          String    @id @default(uuid())
+  articleId   String    @unique // Mỗi bài chỉ có một production record
+  issueId     String?
+  layoutUrl   String    // File PDF layout chính thức
+  doi         String?
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  approvedBy  String?
+  notes       String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  article    Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  issue      Issue?  @relation(fields: [issueId], references: [id])
+  approver   User?   @relation("ProductionApprovals", fields: [approvedBy], references: [id])
+
+  @@index([articleId])
+  @@index([issueId])
+  @@index([published])
+  @@index([publishedAt])
+}
+
+// ✅ Plagiarism Report (Kiểm tra đạo văn)
+model PlagiarismReport {
+  id          String   @id @default(uuid())
+  articleId   String
+  score       Float    // Similarity score (0-100%)
+  reportUrl   String?  // Link to detailed report (nếu có)
+  method      String   @default("simhash") // simhash, cosine, external_api
+  matches     Json?    // JSON array of similar articles found
+  checkedBy   String?
+  checkedAt   DateTime @default(now())
+  notes       String?  @db.Text
+
+  // Relations
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  checker User?   @relation("PlagiarismChecks", fields: [checkedBy], references: [id])
+
+  @@index([articleId])
+  @@index([score])
+  @@index([checkedAt])
+}
+
+// ✅ Article Status History (Lịch sử thay đổi trạng thái)
+model ArticleStatusHistory {
+  id          String           @id @default(uuid())
+  articleId   String
+  status      SubmissionStatus
+  changedBy   String?
+  notes       String?          @db.Text
+  changedAt   DateTime         @default(now())
+
+  // Relations
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  changer User?   @relation("StatusChanges", fields: [changedBy], references: [id])
+
+  @@index([articleId])
+  @@index([status])
+  @@index([changedAt])
+}

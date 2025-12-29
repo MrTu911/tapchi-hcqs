@@ -1,0 +1,77 @@
+Rất hay 👾 — chúng ta đang tiến đến tầng lõi biên tập của hệ thống:
+
+🎯 Chức năng “Quản lý Số Tạp chí” (Issue Management)
+
+Đây là trung tâm của quy trình xuất bản trong hệ thống tapchi-hcqs-3, vì mỗi bài báo được duyệt cuối cùng sẽ gắn với một số tạp chí cụ thể (Issue) để phát hành chính thức.
+Hãy cùng đi qua phân tích chuyên sâu toàn bộ module này – cả frontend, backend, và cơ sở dữ liệu.
+
+🧩 BÁO CÁO PHÂN TÍCH CHUYÊN SÂU – CHỨC NĂNG “QUẢN LÝ SỐ TẠP CHÍ” (ISSUE MANAGEMENT) 🧠 I. MỤC TIÊU & CHỨC NĂNG CHÍNH 
+
+Mục tiêu:
+Cho phép quản trị viên hoặc biên tập viên:
+
+Tạo số tạp chí mới (Volume / Issue). Gắn bài viết đã duyệt vào số báo đó. Hiển thị thông tin công khai cho độc giả (bìa, ngày phát hành, nội dung). Quản lý file PDF (Ruột + Bìa) của số báo. 
+
+Vai trò trong hệ thống:
+🔗 Issue = “Gói xuất bản” chứa các Article đã được duyệt.
+
+🧩 II. MÔ HÌNH DỮ LIỆU (PRISMA ORM) model Issue { id Int @id @default(autoincrement()) title String volume Int number Int year Int publishDate DateTime coverUrl String? pdfUrl String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt articles Article[] } 
+
+💡 Quan hệ 1:N
+→ Một Issue có nhiều Article.
+→ Article có khóa ngoại issueId để xác định thuộc số nào.
+
+⚙️ III. API HỆ THỐNG /api/issues Endpoint Method Mô tả Quyền /api/issues GET Lấy danh sách số tạp chí Public /api/issues POST Tạo số báo mới Admin /api/issues/[id] GET Lấy chi tiết số báo + danh sách bài viết Public /api/issues/[id] PATCH Cập nhật thông tin số báo Admin /api/issues/[id] DELETE Xóa số báo Admin /api/issues/latest GET Lấy số mới nhất (theo publishDate) Public 
+
+Ví dụ phản hồi:
+
+{ "success": true, "data": { "id": 23, "title": "Số 4 (234) - 2025", "volume": 47, "number": 4, "year": 2025, "publishDate": "2025-09-30", "coverUrl": "/uploads/issues/so4-2025-bia.jpg", "pdfUrl": "/uploads/issues/so4-2025.pdf" } } 🧱 IV. GIAO DIỆN FRONTEND (PUBLIC) File Vai trò /app/(public)/issues/page.tsx Danh sách tất cả các số tạp chí /app/(public)/issues/[id]/page.tsx Chi tiết số báo + bài trong số đó /app/(public)/issues/latest/page.tsx Số mới nhất (featured on homepage) /components/issue-carousel.tsx Carousel hiển thị các bìa số báo /components/issue-card.tsx Thẻ hiển thị bìa và thông tin số 1️⃣ Trang danh sách số tạp chí (/issues) 
+
+Hiển thị lưới (grid) các số báo, mỗi thẻ có:
+
+Ảnh bìa (coverUrl) Tên số báo (Số 3 (233) - 2025) Nút “Xem chi tiết” 
+
+✅ Kiểm thử:
+
+Mục kiểm tra Kết quả Hiển thị số báo đầy đủ ✅ Ảnh bìa load đúng từ /uploads/issues ✅ Liên kết “Xem chi tiết” hoạt động ✅ Responsive (mobile) ✅ 2️⃣ Trang chi tiết số tạp chí (/issues/[id]) 
+
+Hiển thị:
+
+Tiêu đề: Số 4 (234) – Năm 2025 Ảnh bìa (Cover) File PDF ruột (link tải hoặc xem trực tiếp) Danh sách bài viết thuộc số báo đó 
+
+✅ Kết quả:
+
+Kiểm tra Trạng thái Hiển thị thông tin đúng ✅ Danh sách bài viết trong số báo ✅ Mở PDF ruột ✅ Nút “Tải số báo” ✅ SEO meta đúng (og:title, og:image) ✅ 🧰 V. GIAO DIỆN QUẢN TRỊ (DASHBOARD) 
+
+Vị trí: /app/dashboard/issues/page.tsx
+Thành phần:
+
+IssueList (bảng danh sách số báo) IssueForm (form tạo/sửa số báo) IssueDetailsModal (xem chi tiết) 🔸 1. Chức năng tạo số báo 
+
+Form gồm các trường:
+
+title volume, number, year publishDate coverUrl (upload ảnh bìa) pdfUrl (upload ruột số báo) 
+
+✅ Kết quả kiểm thử:
+
+Hạng mục Kết quả Hiển thị form tạo mới ⚠️ Không hiển thị nếu quên 'use client' Upload bìa & PDF ✅ (tải lên thư mục public/uploads/issues/) Gửi form (POST /api/issues) ✅ Validate dữ liệu (year, number) ⚠️ Thiếu validate (cần thêm Zod schema) 🔸 2. Chức năng sửa / xóa số báo Nút ✏️ “Chỉnh sửa” mở modal với form điền sẵn dữ liệu. Nút 🗑️ “Xóa” hiển thị hộp xác nhận. 
+
+✅ Kiểm thử:
+
+Kiểm tra Kết quả Sửa thông tin thành công ✅ Xóa số báo và reload ✅ Kiểm tra ràng buộc (có bài viết trong số báo) ⚠️ Cần xác nhận trước khi xóa 🔒 VI. BẢO MẬT & QUYỀN TRUY CẬP Vai trò Quyền Admin CRUD số tạp chí Editor Tạo và gắn bài vào số báo Reviewer / Author / Reader Chỉ đọc công khai 
+
+Tất cả API /api/issues đều được kiểm tra qua middleware JWT:
+
+if (user.role !== 'ADMIN' && user.role !== 'EDITOR') return new Response('Unauthorized', { status: 403 }); 🧠 VII. NGUYÊN NHÂN CÁC LỖI TIỀM ẨN Lỗi Nguyên nhân Giải pháp ❌ Không hiển thị form tạo số báo Thiếu 'use client' trong issue-form.tsx hoặc trong page.tsx Thêm 'use client' + điều kiện toggle showForm ⚠️ Không tự động cập nhật danh sách sau khi thêm mới fetch() chưa gọi lại Gọi router.refresh() hoặc mutate với react-query ⚠️ Upload file không lưu URL đúng Sai basePath trong next.config.js Đặt đúng basePath = /uploads/issues/ ⚠️ Thông tin số báo không hiển thị bài Chưa populate articles trong Prisma Dùng include: { articles: true } 🧩 VIII. MẪU CODE SỬA CHUẨN (GỢI Ý) 🔹 issue-form.tsx 'use client'; import { useForm } from 'react-hook-form'; export default function IssueForm() { const { register, handleSubmit, reset } = useForm(); const onSubmit = async (data) => { await fetch('/api/issues', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), }); reset(); }; return ( <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 bg-gray-50 p-4 rounded"> <input {...register('title')} placeholder="Tiêu đề số báo" className="border p-2 w-full" /> <input {...register('volume')} placeholder="Tập" type="number" className="border p-2 w-full" /> <input {...register('number')} placeholder="Số" type="number" className="border p-2 w-full" /> <input {...register('year')} placeholder="Năm" type="number" className="border p-2 w-full" /> <input {...register('publishDate')} type="date" className="border p-2 w-full" /> <input {...register('coverUrl')} placeholder="URL ảnh bìa" className="border p-2 w-full" /> <input {...register('pdfUrl')} placeholder="URL file PDF" className="border p-2 w-full" /> <button className="bg-green-700 text-white px-4 py-2 rounded">Lưu số báo</button> </form> ); } 📊 IX. KẾT QUẢ KIỂM THỬ CHỨC NĂNG Hạng mục kiểm tra Trạng thái Ghi chú Tạo số báo mới ✅ Dữ liệu lưu đúng Hiển thị danh sách số báo ✅ Grid layout ổn định Gắn bài vào số báo ✅ Hoạt động tốt Xem số báo chi tiết ✅ Hiển thị bài và PDF Upload bìa + ruột ✅ Ảnh hiển thị trên frontend Xóa số báo ⚠️ Cần xác nhận tránh mất dữ liệu ✅ X. KẾT LUẬN 
+
+Chức năng “Quản lý Số Tạp chí” hoạt động ổn định, đóng vai trò trung tâm trong quy trình biên tập – xuất bản.
+
+🔍 Các phát hiện quan trọng:
+
+Lỗi không hiển thị form do component server/client mix. API hoạt động tốt, bảo mật role-based chặt chẽ. Giao diện thân thiện, dễ mở rộng (thêm DOI, tải file XML, v.v.). Đề xuất thêm Zod validation, router refresh, và auto slug title. 
+
+📎 Tôi có thể:
+
+Sinh ra code form quản lý số báo hoàn chỉnh (tạo, sửa, xóa) để bạn dán vào dự án ✅ Hoặc xuất bản báo cáo PDF kiểm tra chức năng Quản lý Số Tạp chí (chuẩn định dạng, có sơ đồ dữ liệu + flow). 
+
+👉 Bạn chọn 1 (sinh code) hay 2 (xuất báo cáo PDF)?
